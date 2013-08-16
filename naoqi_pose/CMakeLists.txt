@@ -4,6 +4,9 @@ project(nao_pose)
 # Find all required modules for compilation
 find_package(catkin REQUIRED COMPONENTS )
 
+# This will install python libraries
+catkin_python_setup()
+
 # Declare info that other packages need to import messages generated here
 catkin_package( CATKIN_DEPENDS trajectory_msgs )
 
