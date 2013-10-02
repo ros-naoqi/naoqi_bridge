@@ -107,6 +107,7 @@ private:
   ros::NodeHandle priv_nh_;             // private node handle
   ros::NodeHandle camera_nh_;           // camera name space handle
   std::string camera_name_;             // camera name
+  std::string frame_id_;                // TF frame_id, either CameraTop_frame or CameraBottom_frame
   ros::Rate cycle_;                     // polling rate when closed
   uint32_t retries_;                    // count of openCamera() retries
 

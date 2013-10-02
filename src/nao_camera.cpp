@@ -32,6 +32,8 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
+#include <sstream>
+
 #include <boost/format.hpp>
 
 #include <driver_base/SensorLevels.h>
@@ -74,6 +76,7 @@ pipeline similar to the other ROS camera drivers.
 
 */
 
+using namespace std;
 using namespace AL;
 
 namespace naocamera_driver
@@ -153,6 +156,13 @@ namespace naocamera_driver
     {
         cameraProxy = boost::shared_ptr<ALVideoDeviceProxy>(new ALVideoDeviceProxy(m_broker));
 
+        // build a unique name for the camera that will be used to
+        // store calibration informations.
+        stringstream canonical_name;
+        canonical_name << "nao_camera" 
+                       << "_src" << newconfig.source 
+                       << "_res" << newconfig.resolution;
+
         camera_name_ = cameraProxy->subscribeCamera(
                                     camera_name_, 
                                     newconfig.source,
@@ -160,7 +170,7 @@ namespace naocamera_driver
                                     newconfig.colorspace,
                                     newconfig.frame_rate);
 
-        if (!cinfo_->setCameraName(camera_name_))
+        if (!cinfo_->setCameraName(canonical_name.str()))
         {
             // GUID is 16 hex digits, which should be valid.
             // If not, use it for log messages anyway.
@@ -169,8 +179,8 @@ namespace naocamera_driver
                             << " for camera_info_manger");
         }
 
-        ROS_INFO_STREAM("[" << camera_name_ << "] opened: "
-                        << newconfig.resolution << "@"
+        ROS_INFO_STREAM("[" << camera_name_ << "] opened: resolution "
+                        << newconfig.resolution << " @"
                         << newconfig.frame_rate << " fps");
         state_ = Driver::OPENED;
         calibration_matches_ = true;
@@ -247,14 +257,16 @@ namespace naocamera_driver
    */
   void NaoCameraDriver::publish(const sensor_msgs::ImagePtr &image)
   {
-    image->header.frame_id = config_.frame_id;
+    image->header.frame_id = frame_id_;
 
     // get current CameraInfo data
     sensor_msgs::CameraInfoPtr
       ci(new sensor_msgs::CameraInfo(cinfo_->getCameraInfo()));
 
     // check whether CameraInfo matches current video mode
-    if (image->width == ci->width && image->height == ci->height)
+    //TODO: attention! we do not check that the camera source has not changed (top camera <-> bottom camera)
+    if (image->width != ci->width || 
+        image->height != ci->height)
       {
         // image size does not match: publish a matching uncalibrated
         // CameraInfo instead
@@ -278,7 +290,7 @@ namespace naocamera_driver
                         << "] calibration matches video mode now");
       }
 
-    ci->header.frame_id = config_.frame_id;
+    ci->header.frame_id = frame_id_;
     ci->header.stamp = image->header.stamp;
 
     // Publish via image_transport
@@ -369,11 +381,18 @@ namespace naocamera_driver
     ROS_DEBUG("dynamic reconfigure level 0x%x", level);
 
     // resolve frame ID using tf_prefix parameter
-    if (newconfig.frame_id == "")
-      newconfig.frame_id = "camera";
-    std::string tf_prefix = tf::getPrefixParam(priv_nh_);
+    if (newconfig.source == kTopCamera)
+      frame_id_ = "CameraTop_frame";
+    else if (newconfig.source == kBottomCamera)
+      frame_id_ = "CameraBottom_frame";
+    else {
+        ROS_ERROR("Unknown video source! (neither top nor bottom camera).");
+        frame_id_ = "camera";
+    }
+
+    string tf_prefix = tf::getPrefixParam(priv_nh_);
     ROS_DEBUG_STREAM("tf_prefix: " << tf_prefix);
-    newconfig.frame_id = tf::resolve(tf_prefix, newconfig.frame_id);
+    frame_id_ = tf::resolve(tf_prefix, frame_id_);
 
     if (state_ != Driver::CLOSED && (level & Levels::RECONFIGURE_CLOSE))
       {
@@ -454,7 +473,7 @@ namespace naocamera_driver
     reconfiguring_ = false;             // let poll() run again
 
     ROS_DEBUG_STREAM("[" << camera_name_
-                     << "] reconfigured: frame_id " << newconfig.frame_id
+                     << "] reconfigured: frame_id " << frame_id_
                      << ", camera_info_url " << newconfig.camera_info_url);
   }
 
