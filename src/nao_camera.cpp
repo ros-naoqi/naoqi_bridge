@@ -110,7 +110,6 @@ namespace naocamera_driver
   {
     if ( !connectNaoQi() )
     {
-      // TODO: retry the connection?
       ROS_ERROR("Could not connect to NAOqi! Make sure NAOqi is running and you passed the right host/port.");
       throw naocamera_driver::Exception("Connection to NAOqi failed");
     }
@@ -129,7 +128,7 @@ namespace naocamera_driver
     if (state_ != Driver::CLOSED)
       {
         ROS_INFO_STREAM("[" << camera_name_ << "] closing device");
-        //TODO NAOqi
+        cameraProxy->unsubscribe(camera_name_);
         state_ = Driver::CLOSED;
       }
   }
@@ -156,10 +155,10 @@ namespace naocamera_driver
 
         camera_name_ = cameraProxy->subscribeCamera(
                                     camera_name_, 
-                                    kTopCamera,
-                                    kQVGA,
-                                    kBGRColorSpace,
-                                    20); //FPS
+                                    newconfig.source,
+                                    newconfig.resolution,
+                                    newconfig.colorspace,
+                                    newconfig.frame_rate);
 
         if (!cinfo_->setCameraName(camera_name_))
         {
@@ -171,9 +170,8 @@ namespace naocamera_driver
         }
 
         ROS_INFO_STREAM("[" << camera_name_ << "] opened: "
-                        << newconfig.video_mode << ", "
-                        << newconfig.frame_rate << " fps, "
-                        << newconfig.iso_speed << " Mb/s");
+                        << newconfig.resolution << "@"
+                        << newconfig.frame_rate << " fps");
         state_ = Driver::OPENED;
         calibration_matches_ = true;
         newconfig.guid = camera_name_; // update configuration parameter
@@ -280,10 +278,6 @@ namespace naocamera_driver
                         << "] calibration matches video mode now");
       }
 
-    // fill in operational parameters
-    //TODO NAOqi
-    //dev_->setOperationalParameters(*ci);
-
     ci->header.frame_id = config_.frame_id;
     ci->header.stamp = image->header.stamp;
 
@@ -323,7 +317,7 @@ namespace naocamera_driver
         image->step = image->width * (int) al_image[2];
 
         switch ((int) al_image[3]) {
-            case kYUVColorSpace:
+            case kYuvColorSpace:
                 image->encoding = sensor_msgs::image_encodings::MONO8;
                 break;
             case kRGBColorSpace:
@@ -338,10 +332,12 @@ namespace naocamera_driver
 
         int image_size = image->height * image->step;
         image->data.resize(image_size);
-        const unsigned char* capture_buffer = static_cast<const unsigned char*>(al_image[6].GetBinary());
+
         memcpy(&(image->data)[0], 
-                capture_buffer,
+                al_image[6].GetBinary(),
                 image_size);
+
+        cameraProxy->releaseImage(camera_name_);
 
         success = true;
         ROS_DEBUG_STREAM("[" << camera_name_ << "] read returned");
@@ -406,31 +402,53 @@ namespace naocamera_driver
       }
 
     if (state_ != Driver::CLOSED)       // openCamera() succeeded?
-      {
-        // configure IIDC features
-        if (level & Levels::RECONFIGURE_CLOSE)
-          {
-            // initialize all features for newly opened device
-            //TODO NAOqi
-            /*
-            if (false == dev_->features_->initialize(&newconfig))
-              {
-                ROS_ERROR_STREAM("[" << camera_name_
-                                 << "] feature initialization failure");
-                closeCamera();          // can't continue
-              }
-            */
-          }
-        else
-          {
-            // update any features that changed
-            // TODO replace this with a direct call to
-            //   Feature::reconfigure(&newconfig);
-            
-            //TODO NAOqi
-            //dev_->features_->reconfigure(&newconfig);
-          }
-      }
+    {
+
+        if (config_.auto_exposition != newconfig.auto_exposition)
+            cameraProxy->setParam(kCameraAutoExpositionID, newconfig.auto_exposition);
+
+        if (config_.auto_exposure_algo != newconfig.auto_exposure_algo)
+            cameraProxy->setParam(kCameraExposureAlgorithmID, newconfig.auto_exposure_algo);
+
+        if (config_.exposure != newconfig.exposure) {
+            newconfig.auto_exposition = 0;
+            cameraProxy->setParam(kCameraAutoExpositionID, 0);
+            cameraProxy->setParam(kCameraExposureID, newconfig.exposure);
+        }
+
+        if (config_.gain != newconfig.gain) {
+            newconfig.auto_exposition = 0;
+            cameraProxy->setParam(kCameraAutoExpositionID, 0);
+            cameraProxy->setParam(kCameraGainID, newconfig.gain);
+        }
+
+        if (config_.brightness != newconfig.brightness) {
+            newconfig.auto_exposition = 1;
+            cameraProxy->setParam(kCameraAutoExpositionID, 1);
+            cameraProxy->setParam(kCameraBrightnessID, newconfig.brightness);
+        }
+
+        if (config_.contrast != newconfig.contrast)
+            cameraProxy->setParam(kCameraContrastID, newconfig.contrast);
+
+        if (config_.saturation != newconfig.saturation)
+            cameraProxy->setParam(kCameraSaturationID, newconfig.saturation);
+ 
+        if (config_.hue != newconfig.hue)
+            cameraProxy->setParam(kCameraHueID, newconfig.hue);
+
+        if (config_.sharpness != newconfig.sharpness)
+            cameraProxy->setParam(kCameraSharpnessID, newconfig.sharpness);
+
+        if (config_.auto_white_balance != newconfig.auto_white_balance)
+            cameraProxy->setParam(kCameraAutoWhiteBalanceID, newconfig.auto_white_balance);
+
+        if (config_.white_balance != newconfig.white_balance) {
+            newconfig.auto_white_balance = 0;
+            cameraProxy->setParam(kCameraAutoWhiteBalanceID, 0);
+            cameraProxy->setParam(kCameraWhiteBalanceID, newconfig.white_balance);
+        }
+    }
 
     config_ = newconfig;                // save new parameters
     reconfiguring_ = false;             // let poll() run again
