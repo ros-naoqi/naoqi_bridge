@@ -225,24 +225,35 @@ namespace naocamera_driver
     // seconds before getting to run.  So, we avoid acquiring the lock
     // if there is a reconfig() pending.
     bool do_sleep = true;
-    if (!reconfiguring_)
-      {
+    
+    // publish images only if someone subscribe to the topic
+    uint32_t nbSubscribers = image_pub_.getNumSubscribers();
+
+    if (nbSubscribers == 0)
+    {
+        if (state_ == Driver::OPENED)
+        {
+            closeCamera();
+        }
+    }
+    else if (!reconfiguring_)
+    {
         boost::mutex::scoped_lock lock(mutex_);
         if (state_ == Driver::CLOSED)
-          {
+        {
             openCamera(config_);        // open with current configuration
-          }
+        }
         do_sleep = (state_ == Driver::CLOSED);
         if (!do_sleep)                  // openCamera() succeeded?
-          {
+        {
             // driver is open, read the next image still holding lock
             sensor_msgs::ImagePtr image(new sensor_msgs::Image);
             if (read(image))
-              {
+            {
                 publish(image);
-              }
-          }
-      } // release mutex lock
+            }
+        }
+    } // release mutex lock
 
     // Always run the diagnostics updater: no lock required.
     diagnostics_.update();
@@ -389,16 +400,10 @@ namespace naocamera_driver
     frame_id_ = tf::resolve(tf_prefix, frame_id_);
 
     if (state_ != Driver::CLOSED && (level & Levels::RECONFIGURE_CLOSE))
-      {
+    {
         // must close the device before updating these parameters
         closeCamera();                  // state_ --> CLOSED
-      }
-
-    if (state_ == Driver::CLOSED)
-      {
-        // open with new values
-        openCamera(newconfig);
-      }
+    }
 
     if (config_.camera_info_url != newconfig.camera_info_url)
       {
@@ -481,6 +486,7 @@ namespace naocamera_driver
   void NaoCameraDriver::setup(void)
   {
     srv_.setCallback(boost::bind(&NaoCameraDriver::reconfig, this, _1, _2));
+    ROS_INFO("Ready to publish Nao cameras. Waiting for someone to subscribe...");
   }
 
 
