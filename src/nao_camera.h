@@ -110,7 +110,7 @@ private:
 
 
   /** NAOqi proxy **/
-  boost::shared_ptr<AL::ALVideoDeviceProxy> cameraProxy;
+  boost::shared_ptr<AL::ALVideoDeviceProxy> camera_proxy_;
 
   /** dynamic parameter configuration */
   naocamera::NaoCameraConfig config_;

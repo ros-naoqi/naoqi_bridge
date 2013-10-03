@@ -131,7 +131,7 @@ namespace naocamera_driver
     if (state_ != Driver::CLOSED)
       {
         ROS_INFO_STREAM("[" << camera_name_ << "] closing device");
-        cameraProxy->unsubscribe(camera_name_);
+        camera_proxy_->unsubscribe(camera_name_);
         state_ = Driver::CLOSED;
       }
   }
@@ -154,9 +154,9 @@ namespace naocamera_driver
 
     try
     {
-        cameraProxy = boost::shared_ptr<ALVideoDeviceProxy>(new ALVideoDeviceProxy(m_broker));
+        camera_proxy_ = boost::shared_ptr<ALVideoDeviceProxy>(new ALVideoDeviceProxy(m_broker));
 
-        if (cameraProxy->getGenericProxy()->isLocal())
+        if (camera_proxy_->getGenericProxy()->isLocal())
             ROS_INFO("nao_camera runs directly on the robot.");
         else
             ROS_WARN("nao_camera runs remotely.");
@@ -167,7 +167,7 @@ namespace naocamera_driver
                        << "_src" << newconfig.source 
                        << "_res" << newconfig.resolution;
 
-        camera_name_ = cameraProxy->subscribeCamera(
+        camera_name_ = camera_proxy_->subscribeCamera(
                                     camera_name_, 
                                     newconfig.source,
                                     newconfig.resolution,
@@ -332,7 +332,7 @@ namespace naocamera_driver
         //TODO: support local image access. This first suppose
         // to write a MAOqi 'local' module.
         // cf: http://www.aldebaran-robotics.com/documentation/dev/cpp/tutos/create_module.html#how-to-create-a-local-module
-        ALValue al_image = cameraProxy->getImageRemote(camera_name_);
+        ALValue al_image = camera_proxy_->getImageRemote(camera_name_);
 
         if (config_.use_ros_time)
             image->header.stamp = ros::Time::now();
@@ -353,7 +353,7 @@ namespace naocamera_driver
                 al_image[6].GetBinary(),
                 image_size);
 
-        cameraProxy->releaseImage(camera_name_);
+        camera_proxy_->releaseImage(camera_name_);
 
         success = true;
         ROS_DEBUG_STREAM("[" << camera_name_ << "] read returned");
@@ -421,48 +421,48 @@ namespace naocamera_driver
     {
 
         if (config_.auto_exposition != newconfig.auto_exposition)
-            cameraProxy->setParam(kCameraAutoExpositionID, newconfig.auto_exposition);
+            camera_proxy_->setParam(kCameraAutoExpositionID, newconfig.auto_exposition);
 
         if (config_.auto_exposure_algo != newconfig.auto_exposure_algo)
-            cameraProxy->setParam(kCameraExposureAlgorithmID, newconfig.auto_exposure_algo);
+            camera_proxy_->setParam(kCameraExposureAlgorithmID, newconfig.auto_exposure_algo);
 
         if (config_.exposure != newconfig.exposure) {
             newconfig.auto_exposition = 0;
-            cameraProxy->setParam(kCameraAutoExpositionID, 0);
-            cameraProxy->setParam(kCameraExposureID, newconfig.exposure);
+            camera_proxy_->setParam(kCameraAutoExpositionID, 0);
+            camera_proxy_->setParam(kCameraExposureID, newconfig.exposure);
         }
 
         if (config_.gain != newconfig.gain) {
             newconfig.auto_exposition = 0;
-            cameraProxy->setParam(kCameraAutoExpositionID, 0);
-            cameraProxy->setParam(kCameraGainID, newconfig.gain);
+            camera_proxy_->setParam(kCameraAutoExpositionID, 0);
+            camera_proxy_->setParam(kCameraGainID, newconfig.gain);
         }
 
         if (config_.brightness != newconfig.brightness) {
             newconfig.auto_exposition = 1;
-            cameraProxy->setParam(kCameraAutoExpositionID, 1);
-            cameraProxy->setParam(kCameraBrightnessID, newconfig.brightness);
+            camera_proxy_->setParam(kCameraAutoExpositionID, 1);
+            camera_proxy_->setParam(kCameraBrightnessID, newconfig.brightness);
         }
 
         if (config_.contrast != newconfig.contrast)
-            cameraProxy->setParam(kCameraContrastID, newconfig.contrast);
+            camera_proxy_->setParam(kCameraContrastID, newconfig.contrast);
 
         if (config_.saturation != newconfig.saturation)
-            cameraProxy->setParam(kCameraSaturationID, newconfig.saturation);
+            camera_proxy_->setParam(kCameraSaturationID, newconfig.saturation);
  
         if (config_.hue != newconfig.hue)
-            cameraProxy->setParam(kCameraHueID, newconfig.hue);
+            camera_proxy_->setParam(kCameraHueID, newconfig.hue);
 
         if (config_.sharpness != newconfig.sharpness)
-            cameraProxy->setParam(kCameraSharpnessID, newconfig.sharpness);
+            camera_proxy_->setParam(kCameraSharpnessID, newconfig.sharpness);
 
         if (config_.auto_white_balance != newconfig.auto_white_balance)
-            cameraProxy->setParam(kCameraAutoWhiteBalanceID, newconfig.auto_white_balance);
+            camera_proxy_->setParam(kCameraAutoWhiteBalanceID, newconfig.auto_white_balance);
 
         if (config_.white_balance != newconfig.white_balance) {
             newconfig.auto_white_balance = 0;
-            cameraProxy->setParam(kCameraAutoWhiteBalanceID, 0);
-            cameraProxy->setParam(kCameraWhiteBalanceID, newconfig.white_balance);
+            camera_proxy_->setParam(kCameraAutoWhiteBalanceID, 0);
+            camera_proxy_->setParam(kCameraWhiteBalanceID, newconfig.white_balance);
         }
     }
 
