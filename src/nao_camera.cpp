@@ -156,6 +156,10 @@ namespace naocamera_driver
     {
         cameraProxy = boost::shared_ptr<ALVideoDeviceProxy>(new ALVideoDeviceProxy(m_broker));
 
+        if (cameraProxy->getGenericProxy()->isLocal())
+            ROS_INFO("nao_camera runs directly on the robot.");
+        else
+            ROS_WARN("nao_camera runs remotely.");
         // build a unique name for the camera that will be used to
         // store calibration informations.
         stringstream canonical_name;
@@ -314,7 +318,10 @@ namespace naocamera_driver
       {
         // Read data from the Camera
         ROS_DEBUG_STREAM("[" << camera_name_ << "] reading data");
-        //TODO: use getImageLocal on the robot!
+
+        //TODO: support local image access. This first suppose
+        // to write a MAOqi 'local' module.
+        // cf: http://www.aldebaran-robotics.com/documentation/dev/cpp/tutos/create_module.html#how-to-create-a-local-module
         ALValue al_image = cameraProxy->getImageRemote(camera_name_);
 
         if (config_.use_ros_time)
