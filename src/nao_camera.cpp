@@ -238,7 +238,6 @@ namespace naocamera_driver
     }
     else if (!reconfiguring_)
     {
-        boost::mutex::scoped_lock lock(mutex_);
         if (state_ == Driver::CLOSED)
         {
             openCamera(config_);        // open with current configuration
@@ -382,7 +381,6 @@ namespace naocamera_driver
     // Do not run concurrently with poll().  Tell it to stop running,
     // and wait on the lock until it does.
     reconfiguring_ = true;
-    boost::mutex::scoped_lock lock(mutex_);
     ROS_DEBUG("dynamic reconfigure level 0x%x", level);
 
     // resolve frame ID using tf_prefix parameter

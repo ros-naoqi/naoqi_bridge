@@ -98,9 +98,6 @@ private:
   bool read(sensor_msgs::ImagePtr &image);
   void reconfig(naocamera::NaoCameraConfig &newconfig, uint32_t level);
 
-  /** Non-recursive mutex for serializing callbacks with device polling. */
-  boost::mutex mutex_;
-
   /** driver state variables */
   volatile driver_base::Driver::state_t state_; // current driver state
   volatile bool reconfiguring_;         // true when reconfig() running
