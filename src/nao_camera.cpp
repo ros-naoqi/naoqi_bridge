@@ -167,7 +167,7 @@ namespace naocamera_driver
                                     camera_name_, 
                                     newconfig.source,
                                     newconfig.resolution,
-                                    newconfig.colorspace,
+                                    kRGBColorSpace,
                                     newconfig.frame_rate);
 
         if (!cinfo_->setCameraName(canonical_name.str()))
@@ -327,20 +327,7 @@ namespace naocamera_driver
         image->width = (int) al_image[0];
         image->height = (int) al_image[1];
         image->step = image->width * (int) al_image[2];
-
-        switch ((int) al_image[3]) {
-            case kYuvColorSpace:
-                image->encoding = sensor_msgs::image_encodings::MONO8;
-                break;
-            case kRGBColorSpace:
-                image->encoding = sensor_msgs::image_encodings::RGB8;
-                break;
-            case kBGRColorSpace:
-                image->encoding = sensor_msgs::image_encodings::BGR8;
-                break;
-            default:
-                ROS_ERROR_STREAM("Unknown encoding for NAOqi frame: " << (int) al_image[3]);
-        }
+        image->encoding = sensor_msgs::image_encodings::RGB8;
 
         int image_size = image->height * image->step;
         image->data.resize(image_size);
