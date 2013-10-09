@@ -106,6 +106,7 @@ private:
   std::string camera_name_;             // camera name
   std::string frame_id_;                // TF frame_id, either CameraTop_frame or CameraBottom_frame
   ros::Rate cycle_;                     // polling rate when closed
+  ros::Rate real_frame_rate_;           // requested fps, to cap publishing rate
   uint32_t retries_;                    // count of openCamera() retries
 
 

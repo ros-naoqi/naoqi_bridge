@@ -96,6 +96,7 @@ namespace naocamera_driver
     camera_nh_(camera_nh),
     camera_name_("camera"),
     cycle_(1.0),                        // slow poll when closed
+    real_frame_rate_(30.0),
     retries_(0),
     srv_(priv_nh),
     cinfo_(new camera_info_manager::CameraInfoManager(camera_nh_)),
@@ -250,6 +251,7 @@ namespace naocamera_driver
             if (read(image))
             {
                 publish(image);
+                real_frame_rate_.sleep();
             }
         }
     } // release mutex lock
@@ -467,6 +469,8 @@ namespace naocamera_driver
     }
 
     config_ = newconfig;                // save new parameters
+    real_frame_rate_ = ros::Rate(newconfig.frame_rate);
+
     reconfiguring_ = false;             // let poll() run again
 
     ROS_DEBUG_STREAM("[" << camera_name_
