@@ -1,0 +1,20 @@
+<!-- -*- mode: XML -*- -->
+
+<!-- Start a standalone nodelet driver for Nao cameras.
+
+     this is a test script: NOT FOR GENERAL USE
+
+-->
+
+<launch>
+
+  <!-- nodelet manager process -->
+  <node pkg="nodelet" type="nodelet" name="camera_nodelet_manager"
+        args="manager" />
+
+  <!-- camera driver nodelet -->
+  <node pkg="nodelet" type="nodelet" name="naocamera_nodelet"
+        args="load naocamera/driver camera_nodelet_manager" >
+  </node>
+
+</launch>

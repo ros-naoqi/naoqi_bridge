@@ -3,7 +3,7 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
 *
-*  Copyright (c) 2010 Jack O'Quin
+*  Copyright (c) 2010 Jack O'Quin, 2013 Séverin Lemaignan
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without
@@ -42,23 +42,23 @@
 #include <pluginlib/class_list_macros.h>
 #include <nodelet/nodelet.h>
 
-#include "driver1394.h"
+#include "nao_camera.h"
 
 /** @file
 
-    @brief ROS driver nodelet for IIDC-compatible IEEE 1394 digital cameras.
+    @brief ROS driver nodelet for Aldebaran's NAO cameras.
 
 */
 
-/** IEEE 1394 camera driver nodelet implementation. */
-class Camera1394Nodelet: public nodelet::Nodelet
+/** Nao camera driver nodelet implementation. */
+class NaoCameraNodelet: public nodelet::Nodelet
 {
 public:
-  Camera1394Nodelet():
+  NaoCameraNodelet():
     running_(false)
   {}
 
-  ~Camera1394Nodelet()
+  ~NaoCameraNodelet()
   {
     if (running_)
       {
@@ -75,7 +75,7 @@ private:
   virtual void devicePoll();
 
   volatile bool running_;               ///< device is running
-  boost::shared_ptr<camera1394_driver::Camera1394Driver> dvr_;
+  boost::shared_ptr<naocamera_driver::NaoCameraDriver> dvr_;
   boost::shared_ptr<boost::thread> deviceThread_;
 };
 
@@ -83,22 +83,25 @@ private:
  *
  *  @note MUST return immediately.
  */
-void Camera1394Nodelet::onInit()
+void NaoCameraNodelet::onInit()
 {
   ros::NodeHandle priv_nh(getPrivateNodeHandle());
   ros::NodeHandle node(getNodeHandle());
   ros::NodeHandle camera_nh(node, "camera");
-  dvr_.reset(new camera1394_driver::Camera1394Driver(priv_nh, camera_nh));
+  //TODO: allow for passing host/port of broker!
+  int argc = 0;
+  char* argv = "";
+  dvr_.reset(new naocamera_driver::NaoCameraDriver(argc, &argv, priv_nh, camera_nh));
   dvr_->setup();
 
   // spawn device thread
   running_ = true;
   deviceThread_ = boost::shared_ptr< boost::thread >
-    (new boost::thread(boost::bind(&Camera1394Nodelet::devicePoll, this)));
+    (new boost::thread(boost::bind(&NaoCameraNodelet::devicePoll, this)));
 }
 
 /** Nodelet device poll thread main function. */
-void Camera1394Nodelet::devicePoll()
+void NaoCameraNodelet::devicePoll()
 {
   while (running_)
     {
@@ -109,5 +112,5 @@ void Camera1394Nodelet::devicePoll()
 // Register this plugin with pluginlib.  Names must match nodelet_velodyne.xml.
 //
 // parameters are: package, class name, class type, base class type
-PLUGINLIB_DECLARE_CLASS(camera1394, driver,
-                        Camera1394Nodelet, nodelet::Nodelet);
+PLUGINLIB_DECLARE_CLASS(naocamera, driver,
+                        NaoCameraNodelet, nodelet::Nodelet);

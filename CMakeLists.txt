@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   driver_base
   dynamic_reconfigure
   image_transport
-#  nodelet
+  nodelet
   roscpp
   sensor_msgs
   tf)
@@ -35,11 +35,11 @@ catkin_package(CATKIN_DEPENDS
                  diagnostic_updater
                  dynamic_reconfigure
                  image_transport
- #                nodelet
+                 nodelet
                  roscpp
                  tf
-               DEPENDS Boost)
-			   #LIBRARIES src/nodes/camera1394_nodelet)
+               DEPENDS Boost
+               LIBRARIES src/naocamera_nodelet)
 
 if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
     include_directories(
@@ -47,7 +47,12 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
         ${Boost_INCLUDE_DIRS}
         ${NAOqi_INCLUDE_DIRS})
 
-    add_executable(cameras src/nao_camera.cpp src/nao_camera_node.cpp src/nao_node.cpp)
+    set(NAOCAMERA_SOURCES
+        src/nao_camera.cpp
+        src/nao_camera_node.cpp
+        src/nao_node.cpp)
+
+    add_executable(cameras ${NAOCAMERA_SOURCES})
     target_link_libraries(cameras
         ${catkin_LIBRARIES}
         ${Boost_LIBRARIES}
@@ -57,9 +62,26 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
     install(TARGETS cameras
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
 
-	## install pluginlib definition for the nodelet
-	#install(FILES camera1394_nodelet.xml
-	#	    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+    #### NODELET
+
+    # build and install the nodelet
+    add_library(naocamera_nodelet src/nodelet.cpp ${NAOCAMERA_SOURCES})
+    add_dependencies(naocamera_nodelet ${catkin_EXPORTED_TARGETS})
+    target_link_libraries(naocamera_nodelet
+                          ${catkin_LIBRARIES}
+                          ${NAOqi_LIBRARIES})
+    install(TARGETS naocamera_nodelet
+            RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+            ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+            LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+
+    # install pluginlib definition for the nodelet
+    install(FILES naocamera_nodelet.xml
+            DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+    install(FILES launch/nodelet_manager.launch launch/nodelet_standalone.launch launch/nodelet_pipeline.launch
+            DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+    ####
 else()
     message(FATAL_ERROR "Cannot find NAOqi C++ SDK! Set NAOqi_DIR to the SDK prefix.")
 endif()
