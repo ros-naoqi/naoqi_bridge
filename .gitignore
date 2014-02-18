@@ -6,3 +6,4 @@ cfg/cpp
 docs
 lib
 src/camera1394
+*.pyc

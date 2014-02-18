@@ -23,6 +23,8 @@ find_package(NAOqi QUIET COMPONENTS
     alerror
     alvalue)
 
+# deal with the Python code
+catkin_python_setup()
 
 # This driver uses Boost threads
 find_package(Boost REQUIRED COMPONENTS thread program_options)
@@ -83,7 +85,7 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
 
     ####
 else()
-    message(FATAL_ERROR "Cannot find NAOqi C++ SDK! Set NAOqi_DIR to the SDK prefix.")
+    # not set as warning to not update the buildfarms
+    message(STATUS "-- Cannot find NAOqi C++ SDK! Set NAOqi_DIR to the SDK prefix to build the C++ nodes.")
+    message(STATUS "-- The Python nodes will still be installed and can be run provided NAOqi is in your PYTHONPATH.")
 endif()
-
-
