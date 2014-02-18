@@ -59,6 +59,7 @@ from nao_camera.vision_definitions import kCameraSelectID, kCameraAutoExposition
 # those should appear in vision_definitions.py at some point
 kTopCamera = 0
 kBottomCamera = 1
+kDepthCamera = 2
 
 class NaoCam (NaoNode):
     def __init__(self):
@@ -99,6 +100,8 @@ class NaoCam (NaoNode):
                 self.frame_id = "/CameraTop_frame"
             elif new_config['source'] == kBottomCamera:
                 self.frame_id = "/CameraBottom_frame"
+            elif new_config['source'] == kDepthCamera:
+                self.frame_id = new_config['camera3d_frame']
             else:
                 rospy.logerr('Invalid source. Must be 0, 1 or 2')
                 exit(1)
@@ -176,18 +179,49 @@ class NaoCam (NaoNode):
                 encoding = "bgr8"
             elif image[3] == kYUV422ColorSpace:
                 encoding = "yuv422" # this works only in ROS groovy and later
+            elif image[3] == kDepthColorSpace:
+                encoding = "mono16"
             else:
                 rospy.logerr("Received unknown encoding: {0}".format(image[3]))
 
             img.encoding = encoding
             img.step = img.width * nbLayers
             img.data = image[6]
-            if self.config['camera_info_url'] in self.camera_infos:
+
+            self.pub_img_.publish(img)
+
+            # deal with the camera info
+            if self.config['source'] == kDepthCamera and image[3] == kDepthColorSpace:
+                infomsg = CameraInfo()
+                # yes, this is only for an XTion / Kinect but that's the only thing supported by NAO
+                ratio_x = float(640)/float(img.width)
+                ratio_y = float(480)/float(img.height)
+                infomsg.width = img.width
+                infomsg.height = img.height
+                # [ 525., 0., 3.1950000000000000e+02, 0., 525., 2.3950000000000000e+02, 0., 0., 1. ]
+                infomsg.K = [ 525, 0, 3.1950000000000000e+02,
+                              0, 525, 2.3950000000000000e+02,
+                              0, 0, 1 ]
+                infomsg.P = [ 525, 0, 3.1950000000000000e+02, 0,
+                              0, 525, 2.3950000000000000e+02, 0,
+                              0, 0, 1, 0 ]
+                for i in range(3):
+                    infomsg.K[i] = infomsg.K[i] / ratio_x
+                    infomsg.K[3+i] = infomsg.K[3+i] / ratio_y
+                    infomsg.P[i] = infomsg.P[i] / ratio_x
+                    infomsg.P[4+i] = infomsg.P[4+i] / ratio_y
+
+                infomsg.D = []
+                infomsg.binning_x = 0
+                infomsg.binning_y = 0
+                infomsg.distortion_model = ""
+                self.pub_info_.publish(infomsg)
+
+            elif self.config['camera_info_url'] in self.camera_infos:
                 infomsg = self.camera_infos[self.config['camera_info_url']]
                 infomsg.header = img.header
                 self.pub_info_.publish(infomsg)
 
-            self.pub_img_.publish(img)
             r.sleep()
 
 
