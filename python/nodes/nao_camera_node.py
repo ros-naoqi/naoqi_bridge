@@ -5,6 +5,7 @@
 # be the most efficient way...)
 #
 # Copyright 2012 Daniel Maier, University of Freiburg
+# Copyright 2014 Aldebaran Robotics
 # http://www.ros.org/wiki/nao
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,15 +33,32 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from collections import defaultdict
 import rospy
 from sensor_msgs.msg import Image, CameraInfo
-from nao_driver import NaoNode
+from nao_driver.nao_driver_naoqi import NaoNode
 import camera_info_manager
+from sensor_msgs.msg._CameraInfo import CameraInfo
 
+from dynamic_reconfigure.server import Server
+from nao_camera.cfg import NaoCameraConfig
 
 from naoqi import ALProxy
-from vision_definitions import *
 
+
+# import resolutions
+from nao_camera.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
+# import color spaces
+from nao_camera.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, \
+                    kRGBColorSpace, kBGRColorSpace, kDepthColorSpace
+# import extra parameters
+from nao_camera.vision_definitions import kCameraSelectID, kCameraAutoExpositionID, kCameraAecAlgorithmID, \
+                  kCameraContrastID, kCameraSaturationID, kCameraHueID, kCameraSharpnessID, kCameraAutoWhiteBalanceID, \
+                  kCameraExposureID, kCameraGainID, kCameraBrightnessID, kCameraWhiteBalanceID
+
+# those should appear in vision_definitions.py at some point
+kTopCamera = 0
+kBottomCamera = 1
 
 class NaoCam (NaoNode):
     def __init__(self):
@@ -50,80 +68,102 @@ class NaoCam (NaoNode):
         self.camProxy = self.getProxy("ALVideoDevice")
         if self.camProxy is None:
             exit(1)
-
-        # check if camera_switch is admissible
-        self.camera_switch = rospy.get_param('~camera_switch', 0)
-        if self.camera_switch == 0:
-            self.frame_id = "/CameraTop_frame"
-        elif self.camera_switch == 1:
-            self.frame_id = "/CameraBottom_frame"
-        else:
-            rospy.logerr('Invalid camera_switch. Must be 0 or 1')
-            exit(1)
-        rospy.loginfo('using camera: %d', self.camera_switch)
-
-        # Parameters for ALVideoDevice
-        self.resolution = rospy.get_param('~resolution', kVGA)
-        self.colorSpace = rospy.get_param('~color_space', kBGRColorSpace)
-        self.fps  = rospy.get_param('~fps', 30)
+        self.nameId = ''
+        self.camera_infos = {}
+        def returnNone():
+            return None
+        self.config = defaultdict(returnNone)
 
         # ROS publishers
         self.pub_img_ = rospy.Publisher('~image_raw', Image)
         self.pub_info_ = rospy.Publisher('~camera_info', CameraInfo)
 
-        # initialize camera info manager
-        self.cname = "nao_camera" # maybe it's a good idea to add _top and _bottom here ...
-        self.cim = camera_info_manager.CameraInfoManager(cname=self.cname)
-        self.calibration_file_bottom = rospy.get_param('~calibration_file_bottom', None)
-        self.calibration_file_top = rospy.get_param('~calibration_file_top', None)
-        if self.camera_switch == 0:
-            calibration_file = self.calibration_file_top
-        else:
-            calibration_file = self.calibration_file_bottom
+        # initialize the parameter server
+        self.srv = Server(NaoCameraConfig, self.reconfigure)
 
-        if not self.cim.setURL( calibration_file ):
-            rospy.logerr('malformed URL for calibration file')
-            sys.exit(1)
-        else:
-            try:
-                self.cim.loadCameraInfo()
-            except IOExcept:
-                rospy.logerr('Could not read from existing calibration file')
+    def reconfigure( self, new_config, level ):
+        """ Reconfigure the camera
+        """
+        # check if we are even subscribed to a camera
+        if new_config['source'] and not self.config['source']:
+            # unsubscribe for all zombie subscribers
+            self.camProxy.unsubscribeAllInstances("rospy_gvm")
+            # subscribe
+            self.nameId = self.camProxy.subscribe("rospy_gvm", new_config['resolution'], new_config['color_space'],
+                                                  new_config['frame_rate'])
+            rospy.loginfo('subscriber name is ' + self.nameId)
+
+        if self.config['source'] != new_config['source']:
+            rospy.loginfo('using camera: %d', new_config['source'])
+            if new_config['source'] == kTopCamera:
+                self.frame_id = "/CameraTop_frame"
+            elif new_config['source'] == kBottomCamera:
+                self.frame_id = "/CameraBottom_frame"
+            else:
+                rospy.logerr('Invalid source. Must be 0, 1 or 2')
                 exit(1)
 
-        if self.cim.isCalibrated():
-            rospy.loginfo('Successfully loaded camera info')
-        else:
-            rospy.logerr('There was a problem loading the calibration file. Check the URL!')
-            exit(1)
+        # check if the camera changed
+        if self.config['camera_info_url'] != new_config['camera_info_url'] and \
+                        new_config['camera_info_url'] and new_config['camera_info_url'] not in self.camera_infos:
+            if 'cim' not in self.__dict__:
+                self.cim = camera_info_manager.CameraInfoManager(cname='nao_camera')
 
+            if not self.cim.setURL( new_config['camera_info_url'] ):
+                rospy.logerr('malformed URL for calibration file')
+            else:
+                try:
+                    self.cim.loadCameraInfo()
+                except IOExcept:
+                    rospy.logerr('Could not read from existing calibration file')
 
-        # subscription to camProxy
-        self.nameId = ''
-        self.subscribe()
-
-    def subscribe(self):
-        # unsubscribe for all zombie subscribers
-        self.camProxy.unsubscribeAllInstances("rospy_gvm")
-
-        # subscribe
-        self.nameId = self.camProxy.subscribe("rospy_gvm", self.resolution, self.colorSpace, self.fps)
-        #print "subscriber name is ", self.nameId
+            if self.cim.isCalibrated():
+                rospy.loginfo('Successfully loaded camera info')
+                self.camera_infos[new_config['camera_info_url']] = self.cim.getCameraInfo()
+            else:
+                rospy.logerr('There was a problem loading the calibration file. Check the URL!')
 
         # set params
-        rospy.sleep(1)
-        self.camProxy.setParam(kCameraSelectID, self.camera_switch)
-        self.camProxy.setResolution(self.nameId, self.resolution)
+        for key, naoqi_key in [('source', kCameraSelectID), ('auto_exposition', kCameraAutoExpositionID),
+                               ('auto_exposure_algo', kCameraAecAlgorithmID),
+                               ('contrast', kCameraContrastID), ('saturation', kCameraSaturationID),
+                               ('hue', kCameraHueID), ('sharpness', kCameraSharpnessID),
+                               ('auto_white_balance', kCameraAutoWhiteBalanceID)
+                               ]:
+            if self.config[key] != new_config[key]:
+                self.camProxy.setParam(naoqi_key, new_config[key])
 
+        for key, naoqi_key, auto_exp_val in [('exposure', kCameraExposureID, 0),
+                                             ('gain', kCameraGainID, 0), ('brightness', kCameraBrightnessID, 1)]:
+            if self.config[key] != new_config[key]:
+                self.camProxy.setParam(kCameraAutoExpositionID, auto_exp_val)
+                self.camProxy.setParam(naoqi_key, new_config[key])
+
+        if self.config['white_balance'] != new_config['white_balance']:
+            self.camProxy.setParam(kCameraAutoWhiteBalanceID, 0)
+            self.camProxy.setParam(kCameraWhiteBalanceID, new_config['white_balance'])
+
+        for key, method in [('resolution', 'setResolution'), ('color_space', 'setColorSpace'),
+                            ('frame_rate', 'setFrameRate')]:
+            if self.config[key] != new_config[key]:
+                self.camProxy.__getattribute__(method)(self.nameId, new_config[key])
+
+        self.config.update(new_config)
+
+        return self.config
 
     def main_loop(self):
         img = Image()
-        r = rospy.Rate(self.fps)
+        r = rospy.Rate(self.config['frame_rate'])
         while not rospy.is_shutdown():
             image = self.camProxy.getImageRemote(self.nameId)
-            stampAL = image[4] + image[5]*1e-6
-            #print image[5],  stampAL, "%lf"%(stampAL)
-            img.header.stamp = rospy.Time(stampAL)
+            if image is None:
+                continue
+            # Deal with the image
+            if self.config['use_ros_time']:
+                img.header.stamp = rospy.Time.now()
+            else:
+                img.header.stamp = rospy.Time(image[4] + image[5]*1e-6)
             img.header.frame_id = self.frame_id
             img.height = image[1]
             img.width = image[0]
@@ -137,14 +177,16 @@ class NaoCam (NaoNode):
             elif image[3] == kYUV422ColorSpace:
                 encoding = "yuv422" # this works only in ROS groovy and later
             else:
-                rospy.logerror("Received unknown encoding: {0}".format(image[3]))
+                rospy.logerr("Received unknown encoding: {0}".format(image[3]))
 
             img.encoding = encoding
             img.step = img.width * nbLayers
             img.data = image[6]
-            infomsg = self.cim.getCameraInfo()
-            infomsg.header = img.header
-            self.pub_info_.publish(infomsg)
+            if self.config['camera_info_url'] in self.camera_infos:
+                infomsg = self.camera_infos[self.config['camera_info_url']]
+                infomsg.header = img.header
+                self.pub_info_.publish(infomsg)
+
             self.pub_img_.publish(img)
             r.sleep()
 
@@ -155,6 +197,6 @@ if __name__ == "__main__":
     try:
         naocam = NaoCam()
         naocam.main_loop()
-    except RuntimeError, e:
-        rospy.logerr('Something went wrong: %s' % (e.strerrror) )
+    except RuntimeError as e:
+        rospy.logerr('Something went wrong: %s' % str(e) )
     rospy.loginfo('Camera stopped')
