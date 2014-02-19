@@ -45,7 +45,6 @@ from nao_camera.cfg import NaoCameraConfig
 
 from naoqi import ALProxy
 
-
 # import resolutions
 from nao_camera.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
 # import color spaces
@@ -69,7 +68,7 @@ class NaoCam (NaoNode):
         self.camProxy = self.getProxy("ALVideoDevice")
         if self.camProxy is None:
             exit(1)
-        self.nameId = ''
+        self.nameId = None
         self.camera_infos = {}
         def returnNone():
             return None
@@ -85,17 +84,22 @@ class NaoCam (NaoNode):
     def reconfigure( self, new_config, level ):
         """ Reconfigure the camera
         """
+        if self.pub_img_.get_num_connections() == 0:
+            rospy.loginfo('Changes recorded but not applied as nobody is subscribed to the ROS topics.')
+            self.config.update(new_config)
+            return self.config
+
         # check if we are even subscribed to a camera
-        if new_config['source'] and not self.config['source']:
+        is_camera_new = self.nameId is None
+
+        if self.config['source'] != new_config['source'] or is_camera_new:
             # unsubscribe for all zombie subscribers
             self.camProxy.unsubscribeAllInstances("rospy_gvm")
             # subscribe
             self.nameId = self.camProxy.subscribe("rospy_gvm", new_config['resolution'], new_config['color_space'],
                                                   new_config['frame_rate'])
-            rospy.loginfo('subscriber name is ' + self.nameId)
+            rospy.loginfo('Using camera: %d . Subscriber name is %s .' % (new_config['source'], self.nameId))
 
-        if self.config['source'] != new_config['source']:
-            rospy.loginfo('using camera: %d', new_config['source'])
             if new_config['source'] == kTopCamera:
                 self.frame_id = "/CameraTop_frame"
             elif new_config['source'] == kBottomCamera:
@@ -133,22 +137,22 @@ class NaoCam (NaoNode):
                                ('hue', kCameraHueID), ('sharpness', kCameraSharpnessID),
                                ('auto_white_balance', kCameraAutoWhiteBalanceID)
                                ]:
-            if self.config[key] != new_config[key]:
+            if self.config[key] != new_config[key] or is_camera_new:
                 self.camProxy.setParam(naoqi_key, new_config[key])
 
         for key, naoqi_key, auto_exp_val in [('exposure', kCameraExposureID, 0),
                                              ('gain', kCameraGainID, 0), ('brightness', kCameraBrightnessID, 1)]:
-            if self.config[key] != new_config[key]:
+            if self.config[key] != new_config[key] or is_camera_new:
                 self.camProxy.setParam(kCameraAutoExpositionID, auto_exp_val)
                 self.camProxy.setParam(naoqi_key, new_config[key])
 
-        if self.config['white_balance'] != new_config['white_balance']:
+        if self.config['white_balance'] != new_config['white_balance'] or is_camera_new:
             self.camProxy.setParam(kCameraAutoWhiteBalanceID, 0)
             self.camProxy.setParam(kCameraWhiteBalanceID, new_config['white_balance'])
 
         for key, method in [('resolution', 'setResolution'), ('color_space', 'setColorSpace'),
                             ('frame_rate', 'setFrameRate')]:
-            if self.config[key] != new_config[key]:
+            if self.config[key] != new_config[key] or is_camera_new:
                 self.camProxy.__getattribute__(method)(self.nameId, new_config[key])
 
         self.config.update(new_config)
@@ -159,6 +163,17 @@ class NaoCam (NaoNode):
         img = Image()
         r = rospy.Rate(self.config['frame_rate'])
         while not rospy.is_shutdown():
+            if self.pub_img_.get_num_connections() == 0:
+                if self.nameId:
+                    rospy.loginfo('Unsubscribing from camera as nobody listens to the topics.')
+                    self.camProxy.unsubscribe(self.nameId)
+                    self.nameId = None
+                r.sleep()
+                continue
+            if self.nameId is None:
+                self.reconfigure(self.config, 0)
+                r.sleep()
+                continue
             image = self.camProxy.getImageRemote(self.nameId)
             if image is None:
                 continue
@@ -183,7 +198,6 @@ class NaoCam (NaoNode):
                 encoding = "mono16"
             else:
                 rospy.logerr("Received unknown encoding: {0}".format(image[3]))
-
             img.encoding = encoding
             img.step = img.width * nbLayers
             img.data = image[6]
