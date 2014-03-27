@@ -15,6 +15,7 @@
   <author>Andrew Howard</author>
   <author>Damien Douxchamps</author>
   <author>Dan Dennedy</author>
+  <author>Daniel Maier</author>
 
   <maintainer email="severin.lemaignan@epfl.ch">Séverin Lemaignan</maintainer>
   <license>LGPL</license>
@@ -40,10 +41,12 @@
   <run_depend>boost</run_depend>
   <run_depend>nodelet</run_depend>
   <run_depend>camera_info_manager</run_depend>
+  <run_depend>camera_info_manager_py</run_depend>
   <run_depend>diagnostic_updater</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>image_transport</run_depend>
   <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>tf</run_depend>
 
