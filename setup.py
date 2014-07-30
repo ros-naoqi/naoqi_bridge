@@ -5,7 +5,7 @@ from catkin_pkg.python_setup import generate_distutils_setup
 d = generate_distutils_setup(
     packages=['nao_camera'],
     package_dir={'': 'src'},
-    scripts=['nodes/camera.py']
+    scripts=['nodes/camera.py', 'nodes/octomap.py']
 )
 
 setup(**d)

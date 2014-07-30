@@ -89,3 +89,5 @@ else()
     message(STATUS "-- Cannot find NAOqi C++ SDK! Set NAOqi_DIR to the SDK prefix to build the C++ nodes.")
     message(STATUS "-- The Python nodes will still be installed and can be run provided NAOqi is in your PYTHONPATH.")
 endif()
+
+add_subdirectory(./src)
