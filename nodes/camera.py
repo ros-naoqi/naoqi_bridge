@@ -41,17 +41,17 @@ import camera_info_manager
 from sensor_msgs.msg._CameraInfo import CameraInfo
 
 from dynamic_reconfigure.server import Server
-from nao_camera.cfg import NaoCameraConfig
+from nao_sensors.cfg import NaoCameraConfig
 
 from naoqi import ALProxy
 
 # import resolutions
-from nao_camera.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
+from nao_sensors.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
 # import color spaces
-from nao_camera.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, \
+from nao_sensors.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, \
                     kRGBColorSpace, kBGRColorSpace, kDepthColorSpace
 # import extra parameters
-from nao_camera.vision_definitions import kCameraSelectID, kCameraAutoExpositionID, kCameraAecAlgorithmID, \
+from nao_sensors.vision_definitions import kCameraSelectID, kCameraAutoExpositionID, kCameraAecAlgorithmID, \
                   kCameraContrastID, kCameraSaturationID, kCameraHueID, kCameraSharpnessID, kCameraAutoWhiteBalanceID, \
                   kCameraExposureID, kCameraGainID, kCameraBrightnessID, kCameraWhiteBalanceID
 

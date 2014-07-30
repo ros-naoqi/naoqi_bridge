@@ -55,7 +55,7 @@
 
 
 
-#include "nao_camera/NaoCameraConfig.h"
+#include "nao_sensors/NaoCameraConfig.h"
 
 #include "nao_camera.h"
 /** @file
