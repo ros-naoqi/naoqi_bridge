@@ -31,7 +31,11 @@ class NaoOctomap(NaoNode):
             rospy.loginfo('NAOqi version < 2.0, Octomap is not used')
             exit(0)
 
-        self.connectNaoQi()
+        proxy = self.getProxy("ALNavigation")
+        if proxy is None:
+            rospy.loginfo('Could not get access to the ALNavigation proxy')
+            exit(1)
+        proxy._setObstacleModeForSafety(1)
 
         # Create ROS publisher
         self.pub = rospy.Publisher("octomap", Octomap, latch = True, queue_size=1)
@@ -40,22 +44,12 @@ class NaoOctomap(NaoNode):
 
         rospy.loginfo("nao_octomap initialized")
 
-    def connectNaoQi(self):
-        '''(re-) connect to NaoQI'''
-        rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
-
-        proxy = self.getProxy("ALNavigation")
-        if proxy is None:
-            rospy.loginfo('Could not get access to the ALNavigation proxy')
-            exit(1)
-        proxy._setObstacleModeForSafety(1)
-
-    def main_loop(self):
+    def run(self):
         r = rospy.Rate(self.fps)
         octomap = Octomap()
         octomap.header.frame_id = '/odom'
 
-        while not rospy.is_shutdown():
+        while self.isLooping():
             octomap_bin = self.getProxy("ALNavigation")._get3DMap()
             octomap.binary, octomap.id, octomap.resolution, octomap.data = octomap_str_to_tuple(octomap_bin)
 
@@ -67,4 +61,5 @@ class NaoOctomap(NaoNode):
 
 if __name__ == '__main__':
     nao_octomap = NaoOctomap()
-    nao_octomap.main_loop()
+    nao_octomap.start()
+    rospy.spin()

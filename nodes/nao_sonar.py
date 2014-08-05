@@ -35,10 +35,4 @@ if __name__ == '__main__':
     publisher.start()
 
     rospy.spin()
-
-    rospy.loginfo('Stopping nao_sonars ...')
-    publisher.stopThread = True
-    publisher.join()
-
-    rospy.loginfo('nao_sonars stopped ...')
     exit(0)

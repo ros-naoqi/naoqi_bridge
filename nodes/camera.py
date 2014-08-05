@@ -34,16 +34,14 @@
 #
 
 from collections import defaultdict
+from distutils.version import LooseVersion
 import rospy
 from sensor_msgs.msg import Image, CameraInfo
 from nao_driver.nao_driver_naoqi import NaoNode
 import camera_info_manager
-from sensor_msgs.msg._CameraInfo import CameraInfo
 
 from dynamic_reconfigure.server import Server
 from nao_sensors.cfg import NaoCameraConfig
-
-from naoqi import ALProxy
 
 # import resolutions
 from nao_sensors.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
@@ -62,8 +60,7 @@ kDepthCamera = 2
 
 class NaoCam (NaoNode):
     def __init__(self):
-        NaoNode.__init__(self)
-        rospy.init_node('nao_camera')
+        NaoNode.__init__(self, 'nao_camera')
 
         self.camProxy = self.getProxy("ALVideoDevice")
         if self.camProxy is None:
@@ -159,7 +156,7 @@ class NaoCam (NaoNode):
 
         return self.config
 
-    def main_loop(self):
+    def run(self):
         img = Image()
         r = rospy.Rate(self.config['frame_rate'])
         while not rospy.is_shutdown():
@@ -242,9 +239,6 @@ class NaoCam (NaoNode):
         self.camProxy.unsubscribe(self.nameId)
 
 if __name__ == "__main__":
-    try:
-        naocam = NaoCam()
-        naocam.main_loop()
-    except RuntimeError as e:
-        rospy.logerr('Something went wrong: %s' % str(e) )
-    rospy.loginfo('Camera stopped')
+    naocam = NaoCam()
+    naocam.start()
+    rospy.spin()

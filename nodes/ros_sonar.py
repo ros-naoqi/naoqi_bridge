@@ -22,11 +22,6 @@ from sensor_msgs.msg import Range
 #import NAO dependencies
 from nao_driver import NaoNode
 
-#general
-import threading
-from threading import Thread
-import copy
-
 class SonarSensor(object):
 
     # default values
@@ -49,18 +44,14 @@ class SonarSensor(object):
         self.msg.radiation_type = Range.ULTRASOUND
 
 
-class SonarPublisher(NaoNode, Thread):
+class SonarPublisher(NaoNode):
 
     NAOQI_SONAR_SUB_NAME = 'ros_sonar_subsription'
 
     def __init__(self, sonarSensorList, param_sonar_rate="~sonar_rate", sonar_rate=40):
-        NaoNode.__init__(self)
-        Thread.__init__(self)
-
-        rospy.init_node("sonar_publisher")
+        NaoNode.__init__(self, "sonar_publisher")
         self.sonarRate = rospy.Rate(rospy.get_param(param_sonar_rate, sonar_rate))
         self.connectNaoQi()
-        self.stopThread = False
 
         self.sonarSensorList = sonarSensorList
         self.publisherList = []
@@ -82,7 +73,7 @@ class SonarPublisher(NaoNode, Thread):
         # start subscriber to sonar sensor
         self.sonarProxy.subscribe(self.NAOQI_SONAR_SUB_NAME)
 
-        while(not self.stopThread):
+        while self.isLooping():
             for i in range(len(self.sonarSensorList)):
                 sonar = self.sonarSensorList[i]
                 sonar.msg.header.stamp = rospy.Time.now()
@@ -91,7 +82,6 @@ class SonarPublisher(NaoNode, Thread):
                     sonar.msg.range = self.memProxy.getData(sonar.memoryKey)
                 except RuntimeError as e:
                     print 'key not found, correct robot ?', e
-                    self.stopThread = True
                     break
 
                 # publish messages
