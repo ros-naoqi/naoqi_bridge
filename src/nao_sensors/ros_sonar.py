@@ -27,7 +27,7 @@ class SonarSensor(object):
     # default values
     # NAO sonar specs
     # see https://community.aldebaran.com/doc/1-14/family/robots/sonar_robot.html
-    SONAR_FREQ = 40
+    SONAR_FREQ = 10
     SONAR_MIN_RANGE = 0.25
     SONAR_MAX_RANGE = 2.55
     SONAR_FOV = 0.523598776
