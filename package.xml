@@ -1,13 +1,16 @@
 <package>
   <name>nao_sensors</name>
-  <version>1.0.0</version>
+  <version>0.0.0</version>
 
   <description>
-    ROS driver for cameras accessible from the NAOqi middleware (in particular, Nao's cameras).
-    This driver is adapted from the camera1394 driver.
+    ROS driver for miscellaneous sensors on NAO.
+    Python bindings for camera, sonar and octomap
+    C++: bindings for camera only (requires NAOqi to build)
   </description>
 
   <author>Séverin Lemaignan</author>
+  <author>Vincent Rabaud</author>
+  <author>Karsten Knese</author>
   <author>Jack O'Quin</author>
   <author>Ken Tossell</author>
   <author>Patrick Beeson</author>
@@ -18,11 +21,12 @@
   <author>Daniel Maier</author>
 
   <maintainer email="severin.lemaignan@epfl.ch">Séverin Lemaignan</maintainer>
-  <license>LGPL</license>
+  <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
+  <license>LGPL and Apache2</license>
 
-  <url type="website">http://ros.org/wiki/nao_camera</url>
-  <url type="bugtracker">https://github.com/severin-lemaignan/nao_camera/issues</url>
-  <url type="repository">https://github.com/severin-lemaignan/nao_camera.git</url>
+  <url type="website">http://ros.org/nao</url>
+  <url type="bugtracker">https://github.com/ros-nao/nao_sensors/issues</url>
+  <url type="repository">https://github.com/ros-nao/nao_sensors.git</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
