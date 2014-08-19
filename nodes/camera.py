@@ -62,7 +62,7 @@ class NaoCam (NaoNode):
     def __init__(self):
         NaoNode.__init__(self, 'nao_camera')
 
-        self.camProxy = self.getProxy("ALVideoDevice")
+        self.camProxy = self.get_proxy("ALVideoDevice")
         if self.camProxy is None:
             exit(1)
         self.nameId = None
@@ -96,7 +96,7 @@ class NaoCam (NaoNode):
 
         if is_camera_new:
             rospy.loginfo('subscribed to camera proxy, since this is the first camera')
-            if self.getVersion() < LooseVersion('2.0'):
+            if self.get_version() < LooseVersion('2.0'):
                 self.nameId = self.camProxy.subscribe("rospy_gvm", new_config['source'],
                                                       new_config['resolution'], new_config['color_space'],
                                                       new_config['frame_rate'])
@@ -144,12 +144,12 @@ class NaoCam (NaoNode):
                           ('contrast', kCameraContrastID), ('saturation', kCameraSaturationID),
                           ('hue', kCameraHueID), ('sharpness', kCameraSharpnessID),
                           ('auto_white_balance', kCameraAutoWhiteBalanceID)]
-        if self.getVersion() < LooseVersion('2.0'):
+        if self.get_version() < LooseVersion('2.0'):
             key_method.append(('source', 'setActiveCamera'))
 
         for key, naoqi_key in key_naoqi_keys:
             if self.config[key] != new_config[key] or is_camera_new:
-                if self.getVersion() < LooseVersion('2.0'):
+                if self.get_version() < LooseVersion('2.0'):
                     self.camProxy.setParam(naoqi_key, new_config[key])
                 else:
                     self.camProxy.setCamerasParameter(self.nameId, naoqi_key, new_config[key])
@@ -157,7 +157,7 @@ class NaoCam (NaoNode):
         for key, naoqi_key, auto_exp_val in [('exposure', kCameraExposureID, 0),
                                              ('gain', kCameraGainID, 0), ('brightness', kCameraBrightnessID, 1)]:
             if self.config[key] != new_config[key] or is_camera_new:
-                if self.getVersion() < LooseVersion('2.0'):
+                if self.get_version() < LooseVersion('2.0'):
                     self.camProxy.setParam(kCameraAutoExpositionID, auto_exp_val)
                     self.camProxy.setParam(naoqi_key, new_config[key])
                 else:
@@ -165,7 +165,7 @@ class NaoCam (NaoNode):
                     self.camProxy.setCamerasParameter(self.nameId, naoqi_key, new_config[key])
 
         if self.config['white_balance'] != new_config['white_balance'] or is_camera_new:
-            if self.getVersion() < LooseVersion('2.0'):
+            if self.get_version() < LooseVersion('2.0'):
                 self.camProxy.setParam(kCameraAutoWhiteBalanceID, 0)
                 self.camProxy.setParam(kCameraWhiteBalanceID, new_config['white_balance'])
             else:
@@ -173,7 +173,7 @@ class NaoCam (NaoNode):
                 self.camProxy.setCamerasParameter(self.nameId, kCameraWhiteBalanceID, new_config['white_balance'])
 
         key_methods =  [ ('resolution', 'setResolution'), ('color_space', 'setColorSpace'), ('frame_rate', 'setFrameRate')]
-        if self.getVersion() >= LooseVersion('2.0'):
+        if self.get_version() >= LooseVersion('2.0'):
             key_methods.append(('source', 'setActiveCamera'))
         for key, method in key_methods:
             if self.config[key] != new_config[key] or is_camera_new:
@@ -186,7 +186,7 @@ class NaoCam (NaoNode):
     def run(self):
         img = Image()
         r = rospy.Rate(self.config['frame_rate'])
-        while self.isLooping():
+        while self.is_looping():
             if self.pub_img_.get_num_connections() == 0:
                 if self.nameId:
                     rospy.loginfo('Unsubscribing from camera as nobody listens to the topics.')

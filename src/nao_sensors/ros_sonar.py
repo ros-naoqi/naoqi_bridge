@@ -62,8 +62,8 @@ class SonarPublisher(NaoNode):
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
-        self.sonarProxy = self.getProxy("ALSonar")
-        self.memProxy = self.getProxy("ALMemory")
+        self.sonarProxy = self.get_proxy("ALSonar")
+        self.memProxy = self.get_proxy("ALMemory")
         if self.sonarProxy is None or self.memProxy is None:
             #self.sonarProxy.unsubscribe(NAO_SONAR_SUB_NAME)
             exit(1)
@@ -73,7 +73,7 @@ class SonarPublisher(NaoNode):
         # start subscriber to sonar sensor
         self.sonarProxy.subscribe(self.NAOQI_SONAR_SUB_NAME)
 
-        while self.isLooping():
+        while self.is_looping():
             for i in range(len(self.sonarSensorList)):
                 sonar = self.sonarSensorList[i]
                 sonar.msg.header.stamp = rospy.Time.now()

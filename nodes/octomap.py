@@ -27,11 +27,11 @@ class NaoOctomap(NaoNode):
     def __init__(self):
         NaoNode.__init__(self, 'nao_octomap')
 
-        if self.getVersion() < LooseVersion('2.0'):
+        if self.get_version() < LooseVersion('2.0'):
             rospy.loginfo('NAOqi version < 2.0, Octomap is not used')
             exit(0)
 
-        proxy = self.getProxy("ALNavigation")
+        proxy = self.get_proxy("ALNavigation")
         if proxy is None:
             rospy.loginfo('Could not get access to the ALNavigation proxy')
             exit(1)
@@ -49,8 +49,8 @@ class NaoOctomap(NaoNode):
         octomap = Octomap()
         octomap.header.frame_id = '/odom'
 
-        while self.isLooping():
-            octomap_bin = self.getProxy("ALNavigation")._get3DMap()
+        while self.is_looping():
+            octomap_bin = self.get_proxy("ALNavigation")._get3DMap()
             octomap.binary, octomap.id, octomap.resolution, octomap.data = octomap_str_to_tuple(octomap_bin)
 
             octomap.header.stamp = rospy.Time.now()
