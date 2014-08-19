@@ -2,8 +2,8 @@
 Changelog for package nao_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.0 (2014-08-19)
+------------------
 * comply to the new NaoNode API
 * lowered getData frequency
 * correct path for ros_sonar.py
