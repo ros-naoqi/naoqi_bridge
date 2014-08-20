@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   image_transport
   nodelet
+  octomap_msgs
   roscpp
   sensor_msgs
   tf)

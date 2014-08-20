@@ -38,6 +38,7 @@
   <build_depend>image_transport</build_depend>
   <build_depend>nodelet</build_depend>
   <build_depend>octomap</build_depend>
+  <build_depend>octomap_msgs</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>tf</build_depend>
