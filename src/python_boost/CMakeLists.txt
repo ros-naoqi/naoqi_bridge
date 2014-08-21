@@ -1,10 +1,11 @@
-find_package(Octomap)
+find_package(octomap)
 find_package(Boost COMPONENTS python)
 set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs REQUIRED)
 
 include_directories(${catkin_INCLUDE_DIRS})
 include_directories(${PYTHON_INCLUDE_PATH} ${Boost_INCLUDE_DIRS})
+link_directories(${OCTOMAP_LIBRARY_DIRS})
 include_directories(${OCTOMAP_INCLUDE_DIRS})
 
 # add the boost Python module
