@@ -2,8 +2,8 @@
 Changelog for package nao_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.2 (2014-08-21)
+------------------
 * fix a compile bug on Groovy
   absolute path is not specified in the Findoctomap.cmake
 * Contributors: Vincent Rabaud
