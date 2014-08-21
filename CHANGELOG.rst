@@ -2,6 +2,12 @@
 Changelog for package nao_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix a compile bug on Groovy
+  absolute path is not specified in the Findoctomap.cmake
+* Contributors: Vincent Rabaud
+
 0.1.0 (2014-08-19)
 ------------------
 * comply to the new NaoNode API
