@@ -2,8 +2,8 @@
 Changelog for package nao_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2014-08-21)
+------------------
 * install the sensor scripts in the local bin
 * Contributors: Vincent Rabaud
 
