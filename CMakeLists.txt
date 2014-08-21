@@ -92,3 +92,10 @@ else()
 endif()
 
 add_subdirectory(./src)
+
+# install sensor scripts
+install(PROGRAMS nodes/camera.py
+                 nodes/octomap.py
+                 nodes/sonar.py
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
