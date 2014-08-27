@@ -51,7 +51,7 @@
 
 #include "nao_node.h"
 
-#include "nao_camera/NaoCameraConfig.h"
+#include "nao_sensors/NaoCameraConfig.h"
 typedef naocamera::NaoCameraConfig Config;
 
 /** @file
