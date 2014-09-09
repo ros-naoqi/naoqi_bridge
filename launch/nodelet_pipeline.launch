@@ -10,7 +10,7 @@
 <launch>
 
   <!-- start the driver in a camera_nodelet_manager process -->
-  <include file="$(find nao_camera)/nodelet_manager.launch" >
+  <include file="$(find nao_sensors)/nodelet_manager.launch" >
   </include>
 
   <!-- Bayer color decoding -->
