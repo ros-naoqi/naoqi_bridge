@@ -73,7 +73,9 @@ set(NAOqi_COMPONENTS
     alremotecall
     althread
     alvision
-    alproxies)
+    alproxies
+    qi
+    qitype)
 
 
 #Set INCLUDE hints
@@ -132,7 +134,8 @@ find_package_handle_standard_args(
     # Variables required to evaluate as TRUE
     NAOqi_LIBRARY
     NAOqi_INCLUDE_DIR
-    NAOqi_FOUND_COMPONENTS)
+    NAOqi_FOUND_COMPONENTS
+)
 
 # Copy the values of the advanced variables to the user-facing ones
 set(NAOqi_LIBRARIES ${NAOqi_LIBRARY} )
