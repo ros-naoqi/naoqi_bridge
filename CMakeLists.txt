@@ -33,7 +33,8 @@ find_package(Boost REQUIRED COMPONENTS thread program_options)
 # auto-generate dynamic reconfiguration GUI before catkin_package()
 generate_dynamic_reconfigure_options(cfg/NaoCamera.cfg)
 
-catkin_package(CATKIN_DEPENDS
+if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
+    catkin_package(CATKIN_DEPENDS
                  camera_info_manager
                  diagnostic_updater
                  dynamic_reconfigure
@@ -42,9 +43,8 @@ catkin_package(CATKIN_DEPENDS
                  roscpp
                  tf
                DEPENDS Boost
-               LIBRARIES src/naocamera_nodelet)
+               LIBRARIES naocamera_nodelet)
 
-if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
     include_directories(
         ${catkin_INCLUDE_DIRS}
         ${Boost_INCLUDE_DIRS}
@@ -86,6 +86,8 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
 
     ####
 else()
+    catkin_package()
+
     # not set as warning to not update the buildfarms
     message(STATUS "-- Cannot find NAOqi C++ SDK! Set NAOqi_DIR to the SDK prefix to build the C++ nodes.")
     message(STATUS "-- The Python nodes will still be installed and can be run provided NAOqi is in your PYTHONPATH.")
