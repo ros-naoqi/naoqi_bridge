@@ -2,6 +2,16 @@
 Changelog for package nao_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* add the queue_size parameter to the Publisher
+  Hence drop Groovy support
+* fix the catkin_package call
+* Merge pull request `#3 <https://github.com/ros-nao/nao_sensors/issues/3>`_ from dhood/master
+  Rename nao_camera to nao_sensors in header also
+* Rename nao_camera to nao_sensors
+* Contributors: CHILI Demo Corner, Séverin Lemaignan, Vincent Rabaud
+
 0.1.3 (2014-08-21)
 ------------------
 * install the sensor scripts in the local bin
