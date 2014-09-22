@@ -2,8 +2,8 @@
 Changelog for package nao_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2014-09-22)
+------------------
 * add the queue_size parameter to the Publisher
   Hence drop Groovy support
 * fix the catkin_package call
