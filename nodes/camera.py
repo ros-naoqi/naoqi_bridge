@@ -72,8 +72,8 @@ class NaoCam (NaoNode):
         self.config = defaultdict(returnNone)
 
         # ROS publishers
-        self.pub_img_ = rospy.Publisher('~image_raw', Image)
-        self.pub_info_ = rospy.Publisher('~camera_info', CameraInfo)
+        self.pub_img_ = rospy.Publisher('~image_raw', Image, queue_size=5)
+        self.pub_info_ = rospy.Publisher('~camera_info', CameraInfo, queue_size=5)
 
         # initialize the parameter server
         self.srv = Server(NaoCameraConfig, self.reconfigure)

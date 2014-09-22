@@ -57,7 +57,7 @@ class SonarPublisher(NaoNode):
         self.publisherList = []
         for sonarSensor in sonarSensorList:
             self.publisherList.append(
-                        rospy.Publisher(sonarSensor.rosTopic, Range))
+                        rospy.Publisher(sonarSensor.rosTopic, Range, queue_size=5))
 
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
