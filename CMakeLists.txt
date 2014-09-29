@@ -15,7 +15,9 @@ find_package(catkin REQUIRED COMPONENTS
   octomap_msgs
   roscpp
   sensor_msgs
+  nao_msgs
   tf
+  nao_driver
 )
 
 # Optional naoqi packages
@@ -40,7 +42,8 @@ catkin_python_setup()
 find_package(Boost REQUIRED COMPONENTS thread program_options)
 
 # auto-generate dynamic reconfiguration GUI before catkin_package()
-generate_dynamic_reconfigure_options(cfg/NaoCamera.cfg)
+generate_dynamic_reconfigure_options(cfg/NaoCamera.cfg
+                                     cfg/NaoMicrophone.cfg)
 
 if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
     message(STATUS "NAOqi C++ SDK found; C++ nodes will be built")
@@ -107,6 +110,7 @@ add_subdirectory(./src)
 
 # install sensor scripts
 install(PROGRAMS nodes/camera.py
+                 nodes/microphone.py
                  nodes/octomap.py
                  nodes/sonar.py
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
