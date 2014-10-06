@@ -36,6 +36,7 @@
   <build_depend>driver_base</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>image_transport</build_depend>
+  <build_depend>nao_driver</build_depend>
   <build_depend>nodelet</build_depend>
   <build_depend>octomap</build_depend>
   <build_depend>octomap_msgs</build_depend>

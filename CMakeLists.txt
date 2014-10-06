@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(nao_sensors)
 
-# Tell CMake where to find "FindNAOqi.cmake"
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
 # Find catkin macros and libraries, also other catkin packages.
 find_package(catkin REQUIRED COMPONENTS
   camera_info_manager
@@ -20,13 +17,6 @@ find_package(catkin REQUIRED COMPONENTS
   nao_driver
 )
 
-# Optional naoqi packages
-find_package(NAOqi QUIET COMPONENTS
-    qitype
-    qi
-)
-
-# Necessary naoqi packages for c++ compilation
 find_package(NAOqi QUIET COMPONENTS
     alcommon
     alvision
