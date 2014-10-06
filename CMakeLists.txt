@@ -78,9 +78,7 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
             ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
             LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-    # install pluginlib definition for the nodelet
-    install(FILES naocamera_nodelet.xml
-            DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+    # nodelet launch files
     install(FILES launch/nodelet_manager.launch launch/nodelet_standalone.launch launch/nodelet_pipeline.launch
             DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
@@ -101,3 +99,9 @@ install(PROGRAMS nodes/camera.py
                  nodes/sonar.py
         DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+# install pluginlib definition for the nodelet. In the case the plugin is not compiled
+# this is still useful to not display an error from the package.xml parsing
+# (the plugin is exported there no matter what)
+install(FILES naocamera_nodelet.xml
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
