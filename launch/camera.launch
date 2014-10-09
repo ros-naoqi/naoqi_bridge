@@ -1,6 +1,6 @@
 
 <launch>
-  <env name="PYTHONPATH" value="$(env PYTHONPATH)" /> 
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
 
   <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
   <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
