@@ -254,11 +254,13 @@ class NaoCam (NaoNode):
                 infomsg.binning_y = 0
                 infomsg.distortion_model = ""
 
+                infomsg.header = img.header
+                self.pub_info_.publish(infomsg)
             elif self.config['camera_info_url'] in self.camera_infos:
                 infomsg = self.camera_infos[self.config['camera_info_url']]
 
-            infomsg.header = img.header
-            self.pub_info_.publish(infomsg)
+                infomsg.header = img.header
+                self.pub_info_.publish(infomsg)
 
             r.sleep()
 
