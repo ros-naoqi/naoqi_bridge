@@ -24,11 +24,11 @@ from nao_sensors.ros_sonar import SonarSensor, SonarPublisher
 if __name__ == '__main__':
     # create two sonars
     leftSonar = SonarSensor('Device/SubDeviceList/US/Left/Sensor/Value',     # AL memory key
-                            'LSonar',                                        # ROS frame id
+                            'LSonar_frame',                                        # ROS frame id
                             '~/nao/sonar_left')                              # ROS topic to publish
 
     rightSonar = SonarSensor('Device/SubDeviceList/US/Right/Sensor/Value',   # AL memory key
-                             'RSonar',                                       # ROS frame id
+                             'RSonar_frame',                                       # ROS frame id
                              '~/nao/sonar_right')                            # ROS topic to publish
 
     publisher = SonarPublisher( (leftSonar,rightSonar))                      # list of sonars
