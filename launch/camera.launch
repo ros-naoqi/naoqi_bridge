@@ -4,7 +4,8 @@
 
   <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
   <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
-  <arg name="resolution" default="2" />
+  <arg name="source" default="2" />
+  <arg name="resolution" default="1" />
   <arg name="color_space" default="13" />
   <arg name="frame_rate" default="15" />
   <node pkg="nao_sensors" type="camera.py" name="nao_camera" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen">
