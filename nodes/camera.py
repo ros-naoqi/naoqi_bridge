@@ -78,8 +78,41 @@ class NaoCam (NaoNode):
         # initialize the parameter server
         self.srv = Server(NaoCameraConfig, self.reconfigure)
 
+        # initial load from param server
+        self.init_config()
+
         # initially load configurations
         self.reconfigure(self.config, 0)
+
+    def init_config( self ):
+        # mandatory configurations to be set
+        self.config['frame_rate'] = rospy.get_param('~frame_rate')
+        self.config['source'] = rospy.get_param('~source')
+        self.config['resolution'] = rospy.get_param('~resolution')
+        self.config['color_space'] = rospy.get_param('~color_space')
+
+        # optional for camera frames
+        # top camera with default
+        if rospy.has_param('~camera_top_frame'):
+            self.config['camera_top_frame'] = rospy.get_param('~camera_top_frame')
+        else:
+            self.config['camera_top_frame'] = "/CameraTop_frame"
+        # bottom camera with default
+        if rospy.has_param('~camera_bottom_frame'):
+            self.config['camera_bottom_frame'] = rospy.get_param('~camera_bottom_frame')
+        else:
+            self.config['camera_bottom_frame'] = "/CameraBottom_frame"
+        # depth camera with default
+        if rospy.has_param('~camera_depth_frame'):
+            self.config['camera_depth_frame'] = rospy.get_param('~camera_depth_frame')
+        else:
+            self.config['camera_depth_frame'] = "/DepthCamera_frame"
+
+        #load calibration files
+        if rospy.has_param('~calibration_file_top'):
+            self.config['calibration_file_top'] = rospy.get_param('~calibration_file_top')
+        if rospy.has_param('~calibration_file_bottom'):
+            self.config['calibration_file_bottom'] = rospy.get_param('~calibration_file_bottom')
 
     def reconfigure( self, new_config, level ):
         """
@@ -109,11 +142,11 @@ class NaoCam (NaoNode):
             rospy.loginfo('updating camera source information')
 
             if new_config['source'] == kTopCamera:
-                self.frame_id = "/CameraTop_frame"
+                self.frame_id = self.config['camera_top_frame']
             elif new_config['source'] == kBottomCamera:
-                self.frame_id = "/CameraBottom_frame"
+                self.frame_id = self.config['camera_bottom_frame']
             elif new_config['source'] == kDepthCamera:
-                self.frame_id = new_config['camera3d_frame']
+                self.frame_id = new_config['camera_depth_frame']
             else:
                 rospy.logerr('Invalid source. Must be 0, 1 or 2')
                 exit(1)
