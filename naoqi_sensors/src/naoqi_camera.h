@@ -92,6 +92,7 @@ public:
 private:
 
   // private methods
+  void getNaoqiParams(ros::NodeHandle priv_nh);
   void closeCamera();
   bool openCamera(Config &newconfig);
   void publish(const sensor_msgs::ImagePtr &image);

@@ -112,6 +112,7 @@ namespace naoqicamera_driver
                      &topic_diagnostics_max_freq_, 0.1, 10),
                 diagnostic_updater::TimeStampStatusParam())
   {
+    getNaoqiParams(priv_nh);
     if ( !connectNaoQi() )
     {
       ROS_ERROR("Could not connect to NAOqi! Make sure NAOqi is running and you passed the right host/port.");
@@ -122,6 +123,28 @@ namespace naoqicamera_driver
 
   NaoqiCameraDriver::~NaoqiCameraDriver()
   {}
+
+
+  /** Get broker ip and port from ROS parameters.
+   * @param nh Nodehandle used to get parameters
+   *
+   */
+  void NaoCameraDriver::getNaoqiParams(ros::NodeHandle nh)
+  {
+    if( !nh.getParam("pip", m_pip) )
+      ROS_WARN("No pip parameter specified.");
+    if( !nh.getParam("pport", m_pport) )
+      ROS_WARN("No pport parameter specified.");
+    if( !nh.getParam("ip", m_ip) )
+      ROS_DEBUG("No ip parameter specified.");
+    if( !nh.getParam("port", m_port) )
+      ROS_DEBUG("No port parameter specified.");
+
+    ROS_INFO_STREAM("pip: " << m_pip);
+    ROS_INFO_STREAM("pip: " << m_pport);
+    ROS_INFO_STREAM("ip:" << m_ip);
+    ROS_INFO_STREAM("port: " << m_port);
+  }
 
   /** Close camera device
    *
