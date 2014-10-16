@@ -1,5 +1,6 @@
 #include <boost/program_options.hpp>
 #include <alerror/alerror.h>
+#include <alcommon/albrokermanager.h>
 
 #include <ros/ros.h> // for logging macros
 
@@ -58,7 +59,30 @@ void NaoqiNode::parse_command_line(int argc, char ** argv)
    }
 }
 
+bool NaoqiNode::connectLocalNaoQi() {
+   try
+   {
+      // The manager might not exist in this process wich causes this to crash.
+      boost::shared_ptr<AL::ALBrokerManager> manager =
+        AL::ALBrokerManager::getInstance();
+      // This will crash if there is no broker registered.
+      m_broker = manager->getRandomBroker();
+   }
+   catch(...)
+   {
+      // There is no broker manager running in this process.
+      return false;
+   }
 
+   // Fill in members
+   m_ip = m_broker->getIP();
+   m_port = m_broker->getPort();
+   m_pip = m_broker->getParentIP();
+   m_pport = m_broker->getParentPort();
+   m_brokerName = m_broker->getName();
+
+  return true;
+}
 
 bool NaoqiNode::connectNaoQi()
 {

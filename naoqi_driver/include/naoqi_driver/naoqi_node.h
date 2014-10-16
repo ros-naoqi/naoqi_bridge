@@ -10,6 +10,7 @@ class NaoqiNode
       NaoqiNode(int argc, char ** argv);
       ~NaoqiNode();
       bool connectNaoQi();
+      bool connectLocalNaoQi();
       void parse_command_line(int argc, char ** argv);
    protected:
       std::string m_pip;
