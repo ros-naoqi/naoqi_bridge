@@ -114,6 +114,12 @@ class NaoCam (NaoNode):
         if rospy.has_param('~calibration_file_bottom'):
             self.config['calibration_file_bottom'] = rospy.get_param('~calibration_file_bottom')
 
+        if rospy.has_param('~use_ros_time'):
+            self.config['use_ros_time'] = rospy.get_param('~use_ros_time')
+        else:
+            self.config['use_ros_time'] = False
+
+
     def reconfigure( self, new_config, level ):
         """
         Reconfigure the camera
