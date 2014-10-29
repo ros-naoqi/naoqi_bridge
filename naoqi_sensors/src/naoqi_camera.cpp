@@ -91,7 +91,6 @@ namespace naoqicamera_driver
                                    ros::NodeHandle camera_nh):
     NaoqiNode(argc, argv),
     state_(Driver::CLOSED),
-    reconfiguring_(false),
     priv_nh_(priv_nh),
     camera_nh_(camera_nh),
     camera_name_("camera"),
@@ -237,8 +236,9 @@ namespace naoqicamera_driver
             closeCamera();
         }
     }
-    else if (!reconfiguring_)
+    else
     {
+        boost::mutex::scoped_lock scopedLock(reconfiguration_mutex_);
         if (state_ == Driver::CLOSED)
         {
             openCamera(config_);        // open with current configuration
@@ -380,9 +380,8 @@ namespace naoqicamera_driver
    **/
   void NaoqiCameraDriver::reconfig(Config &newconfig, uint32_t level)
   {
-    // Do not run concurrently with poll().  Tell it to stop running,
-    // and wait on the lock until it does.
-    reconfiguring_ = true;
+    // Do not run concurrently with poll().
+    boost::mutex::scoped_lock scopedLock(reconfiguration_mutex_);
     ROS_DEBUG("dynamic reconfigure level 0x%x", level);
 
     // resolve frame ID using tf_prefix parameter
@@ -451,7 +450,7 @@ namespace naoqicamera_driver
 
         if (config_.saturation != newconfig.saturation)
             camera_proxy_->setParam(kCameraSaturationID, newconfig.saturation);
- 
+
         if (config_.hue != newconfig.hue)
             camera_proxy_->setParam(kCameraHueID, newconfig.hue);
 
@@ -470,8 +469,6 @@ namespace naoqicamera_driver
 
     config_ = newconfig;                // save new parameters
     real_frame_rate_ = ros::Rate(newconfig.frame_rate);
-
-    reconfiguring_ = false;             // let poll() run again
 
     ROS_DEBUG_STREAM("[" << camera_name_
                      << "] reconfigured: frame_id " << frame_id_
