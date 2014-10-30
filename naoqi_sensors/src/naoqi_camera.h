@@ -100,8 +100,7 @@ private:
 
   /** driver state variables */
   volatile driver_base::Driver::state_t state_; // current driver state
-  //volatile bool reconfiguring_;         // true when reconfig() running
-  boost::mutex reconfiguration_mutex_;
+  boost::mutex reconfiguration_mutex_;  // critical section of poll() and reconfigure()
 
   ros::NodeHandle priv_nh_;             // private node handle
   ros::NodeHandle camera_nh_;           // camera name space handle
