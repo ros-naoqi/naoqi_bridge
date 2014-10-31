@@ -1,0 +1,11 @@
+
+<launch>
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
+
+  <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
+  <node pkg="nao_sensors" type="microphone.py" name="nao_microphone" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen">
+    <param name="frequency" type="int" value="16000" />
+    <param name="use_ros_time" type="bool" value="True" />
+  </node>
+</launch>

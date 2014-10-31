@@ -34,6 +34,7 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+<<<<<<< HEAD
 
 #Specific ignores for nao_robot
 nao_msgs/src
@@ -45,3 +46,5 @@ nao_msgs/msg/*Feedback.msg
 nao_msgs/msg/*Goal.msg
 nao_msgs/msg/*Result.msg
 
+=======
+>>>>>>> c9abd0fc94490da43bcf8eaa3896870bad3e9484
