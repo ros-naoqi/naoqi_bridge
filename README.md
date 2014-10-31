@@ -1,3 +1,5 @@
+THIS PACKAGE IS BASED ON FORMER NAO_ROBOT PACKAGE
+
 nao_robot
 =========
 
