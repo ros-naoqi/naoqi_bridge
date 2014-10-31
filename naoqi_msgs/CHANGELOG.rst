@@ -2,15 +2,6 @@
 Changelog for package nao_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.1 (2014-10-27)
-------------------
-* Addition of an audio message
-* get the accent right in Séverin's name
-* Contributors: Vincent Rabaud, sambrose
-
-0.4.0 (2014-09-18)
-------------------
-
 0.3.0 (2014-08-19)
 ------------------
 * update maintainers

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(nao_msgs)
+project(naoqi_msgs)
 
 #List to make rest of code more readable
 set( MESSAGE_DEPENDENCIES
@@ -11,7 +11,7 @@ set( MESSAGE_DEPENDENCIES
     trajectory_msgs)
 
 #Declare build dependencies
-find_package(catkin REQUIRED 
+find_package(catkin REQUIRED
     COMPONENTS
     message_generation
     ${MESSAGE_DEPENDENCIES} )
@@ -19,7 +19,6 @@ find_package(catkin REQUIRED
 #Add message files
 add_message_files(DIRECTORY msg
     FILES
-    AudioBuffer.msg
     Bumper.msg
     FadeRGB.msg
     JointAnglesWithSpeed.msg
@@ -48,7 +47,7 @@ add_action_files(DIRECTORY action
     FollowPath.action
     JointAnglesWithSpeed.action
     JointTrajectory.action
-    RunBehavior.action 
+    RunBehavior.action
     SetSpeechVocabulary.action
     SpeechWithFeedback.action
 )
