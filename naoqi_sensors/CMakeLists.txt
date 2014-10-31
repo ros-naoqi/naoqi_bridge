@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(nao_sensors)
+project(naoqi_sensors)
 
 # Find catkin macros and libraries, also other catkin packages.
 find_package(catkin REQUIRED COMPONENTS
@@ -12,9 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   octomap_msgs
   roscpp
   sensor_msgs
-  nao_msgs
   tf
-  nao_driver
+  naoqi_driver
 )
 
 find_package(NAOqi QUIET COMPONENTS
@@ -32,8 +31,8 @@ catkin_python_setup()
 find_package(Boost REQUIRED COMPONENTS thread program_options)
 
 # auto-generate dynamic reconfiguration GUI before catkin_package()
-generate_dynamic_reconfigure_options(cfg/NaoCamera.cfg
-                                     cfg/NaoMicrophone.cfg)
+generate_dynamic_reconfigure_options(cfg/NaoqiCamera.cfg
+                                     cfg/NaoqiMicrophone.cfg)
 
 if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
     message(STATUS "NAOqi C++ SDK found; C++ nodes will be built")

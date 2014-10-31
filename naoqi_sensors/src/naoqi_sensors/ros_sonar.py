@@ -20,7 +20,7 @@ import rospy
 from sensor_msgs.msg import Range
 
 #import NAO dependencies
-from nao_driver import NaoNode
+from naoqi_driver.naoqi_node import NaoqiNode
 
 class SonarSensor(object):
 
@@ -44,12 +44,12 @@ class SonarSensor(object):
         self.msg.radiation_type = Range.ULTRASOUND
 
 
-class SonarPublisher(NaoNode):
+class SonarPublisher(NaoqiNode):
 
     NAOQI_SONAR_SUB_NAME = 'ros_sonar_subsription'
 
     def __init__(self, sonarSensorList, param_sonar_rate="~sonar_rate", sonar_rate=40):
-        NaoNode.__init__(self, "sonar_publisher")
+        NaoqiNode.__init__(self, "sonar_publisher")
         self.sonarRate = rospy.Rate(rospy.get_param(param_sonar_rate, sonar_rate))
         self.connectNaoQi()
 

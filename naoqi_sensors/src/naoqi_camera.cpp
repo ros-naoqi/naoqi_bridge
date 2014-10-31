@@ -55,9 +55,9 @@
 
 
 
-#include "nao_sensors/NaoCameraConfig.h"
+#include "naoqi_sensors/NaoqiCameraConfig.h"
 
-#include "nao_camera.h"
+#include "naoqi_camera.h"
 /** @file
 
 @brief ROS driver for IIDC-compatible IEEE 1394 digital cameras.
@@ -79,17 +79,17 @@ pipeline similar to the other ROS camera drivers.
 using namespace std;
 using namespace AL;
 
-namespace naocamera_driver
+namespace naoqicamera_driver
 {
   // some convenience typedefs
-  typedef naocamera::NaoCameraConfig Config;
+  typedef naoqicamera::NaoqiCameraConfig Config;
   typedef driver_base::Driver Driver;
   typedef driver_base::SensorLevels Levels;
 
-  NaoCameraDriver::NaoCameraDriver(int argc, char ** argv,
+  NaoqiCameraDriver::NaoqiCameraDriver(int argc, char ** argv,
                                    ros::NodeHandle priv_nh,
                                    ros::NodeHandle camera_nh):
-    NaoNode(argc, argv),
+    NaoqiNode(argc, argv),
     state_(Driver::CLOSED),
     reconfiguring_(false),
     priv_nh_(priv_nh),
@@ -115,19 +115,19 @@ namespace naocamera_driver
     if ( !connectNaoQi() )
     {
       ROS_ERROR("Could not connect to NAOqi! Make sure NAOqi is running and you passed the right host/port.");
-      throw naocamera_driver::Exception("Connection to NAOqi failed");
+      throw naoqicamera_driver::Exception("Connection to NAOqi failed");
     }
 
   }
 
-  NaoCameraDriver::~NaoCameraDriver()
+  NaoqiCameraDriver::~NaoqiCameraDriver()
   {}
 
   /** Close camera device
    *
    *  postcondition: state_ is Driver::CLOSED
    */
-  void NaoCameraDriver::closeCamera()
+  void NaoqiCameraDriver::closeCamera()
   {
     if (state_ != Driver::CLOSED)
       {
@@ -149,7 +149,7 @@ namespace naocamera_driver
    *   camera_name_ set to GUID string
    *   GUID configuration parameter updated
    */
-  bool NaoCameraDriver::openCamera(Config &newconfig)
+  bool NaoqiCameraDriver::openCamera(Config &newconfig)
   {
     bool success = false;
 
@@ -216,7 +216,7 @@ namespace naocamera_driver
 
 
   /** device poll */
-  void NaoCameraDriver::poll(void)
+  void NaoqiCameraDriver::poll(void)
   {
     // Do not run concurrently with reconfig().
     //
@@ -271,7 +271,7 @@ namespace naocamera_driver
    *
    *  @param image points to latest camera frame
    */
-  void NaoCameraDriver::publish(const sensor_msgs::ImagePtr &image)
+  void NaoqiCameraDriver::publish(const sensor_msgs::ImagePtr &image)
   {
     image->header.frame_id = frame_id_;
 
@@ -323,7 +323,7 @@ namespace naocamera_driver
    * @param image points to camera Image message
    * @return true if successful, with image filled in
    */
-  bool NaoCameraDriver::read(sensor_msgs::ImagePtr &image)
+  bool NaoqiCameraDriver::read(sensor_msgs::ImagePtr &image)
   {
     bool success = true;
     try
@@ -378,7 +378,7 @@ namespace naocamera_driver
    *  @param level bit-wise OR of reconfiguration levels for all
    *               changed parameters (0xffffffff on initial call)
    **/
-  void NaoCameraDriver::reconfig(Config &newconfig, uint32_t level)
+  void NaoqiCameraDriver::reconfig(Config &newconfig, uint32_t level)
   {
     // Do not run concurrently with poll().  Tell it to stop running,
     // and wait on the lock until it does.
@@ -485,15 +485,15 @@ namespace naocamera_driver
    *  immediately with level 0xffffffff.  The reconfig() method will
    *  set initial parameter values, then open the device if it can.
    */
-  void NaoCameraDriver::setup(void)
+  void NaoqiCameraDriver::setup(void)
   {
-    srv_.setCallback(boost::bind(&NaoCameraDriver::reconfig, this, _1, _2));
+    srv_.setCallback(boost::bind(&NaoqiCameraDriver::reconfig, this, _1, _2));
     ROS_INFO("Ready to publish Nao cameras. Waiting for someone to subscribe...");
   }
 
 
   /** driver termination */
-  void NaoCameraDriver::shutdown(void)
+  void NaoqiCameraDriver::shutdown(void)
   {
     closeCamera();
   }

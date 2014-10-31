@@ -49,10 +49,10 @@
 // Aldebaran includes
 #include <alproxies/alvideodeviceproxy.h>
 
-#include "nao_node.h"
+#include <nao_driver/nao_node.h>
 
-#include "nao_sensors/NaoCameraConfig.h"
-typedef naocamera::NaoCameraConfig Config;
+#include "nao_sensors/NaoqiCameraConfig.h"
+typedef naoqicamera::NaoqiCameraConfig Config;
 
 /** @file
 
@@ -60,7 +60,7 @@ typedef naocamera::NaoCameraConfig Config;
 
 */
 
-namespace naocamera_driver
+namespace naoqicamera_driver
 {
 
   //! Macro for defining an exception with a given parent
@@ -76,15 +76,15 @@ namespace naocamera_driver
   DEF_EXCEPTION(Exception, std::runtime_error);
 
 
-class NaoCameraDriver : public NaoNode
+class NaoqiCameraDriver : public NaoqiNode
 {
 public:
 
   // public methods
-  NaoCameraDriver(int argc, char ** argv,
+  NaoqiCameraDriver(int argc, char ** argv,
                   ros::NodeHandle priv_nh,
                   ros::NodeHandle camera_nh);
-  ~NaoCameraDriver();
+  ~NaoqiCameraDriver();
   void poll(void);
   void setup(void);
   void shutdown(void);
@@ -114,8 +114,8 @@ private:
   boost::shared_ptr<AL::ALVideoDeviceProxy> camera_proxy_;
 
   /** dynamic parameter configuration */
-  naocamera::NaoCameraConfig config_;
-  dynamic_reconfigure::Server<naocamera::NaoCameraConfig> srv_;
+  naoqiCamera::NaoqiCameraConfig config_;
+  dynamic_reconfigure::Server<naoqicamera::NaoqiCameraConfig> srv_;
 
   /** camera calibration information */
   boost::shared_ptr<camera_info_manager::CameraInfoManager> cinfo_;

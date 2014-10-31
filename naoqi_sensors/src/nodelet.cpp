@@ -42,7 +42,7 @@
 #include <pluginlib/class_list_macros.h>
 #include <nodelet/nodelet.h>
 
-#include "nao_camera.h"
+#include "naoqi_camera.h"
 
 /** @file
 
@@ -51,14 +51,14 @@
 */
 
 /** Nao camera driver nodelet implementation. */
-class NaoCameraNodelet: public nodelet::Nodelet
+class NaoqiCameraNodelet: public nodelet::Nodelet
 {
 public:
-  NaoCameraNodelet():
+  NaoqiCameraNodelet():
     running_(false)
   {}
 
-  ~NaoCameraNodelet()
+  ~NaoqiCameraNodelet()
   {
     if (running_)
       {
@@ -75,7 +75,7 @@ private:
   virtual void devicePoll();
 
   volatile bool running_;               ///< device is running
-  boost::shared_ptr<naocamera_driver::NaoCameraDriver> dvr_;
+  boost::shared_ptr<naoqicamera_driver::NaoqiCameraDriver> dvr_;
   boost::shared_ptr<boost::thread> deviceThread_;
 };
 
@@ -83,7 +83,7 @@ private:
  *
  *  @note MUST return immediately.
  */
-void NaoCameraNodelet::onInit()
+void NaoqiCameraNodelet::onInit()
 {
   ros::NodeHandle priv_nh(getPrivateNodeHandle());
   ros::NodeHandle node(getNodeHandle());
@@ -91,17 +91,17 @@ void NaoCameraNodelet::onInit()
   //TODO: allow for passing host/port of broker!
   int argc = 0;
   char* argv = "";
-  dvr_.reset(new naocamera_driver::NaoCameraDriver(argc, &argv, priv_nh, camera_nh));
+  dvr_.reset(new naoqicamera_driver::NaoqiCameraDriver(argc, &argv, priv_nh, camera_nh));
   dvr_->setup();
 
   // spawn device thread
   running_ = true;
   deviceThread_ = boost::shared_ptr< boost::thread >
-    (new boost::thread(boost::bind(&NaoCameraNodelet::devicePoll, this)));
+    (new boost::thread(boost::bind(&NaoqiCameraNodelet::devicePoll, this)));
 }
 
 /** Nodelet device poll thread main function. */
-void NaoCameraNodelet::devicePoll()
+void NaoqiCameraNodelet::devicePoll()
 {
   while (running_)
     {
@@ -112,5 +112,5 @@ void NaoCameraNodelet::devicePoll()
 // Register this plugin with pluginlib.  Names must match nodelet_velodyne.xml.
 //
 // parameters are: package, class name, class type, base class type
-PLUGINLIB_DECLARE_CLASS(naocamera, driver,
-                        NaoCameraNodelet, nodelet::Nodelet);
+PLUGINLIB_DECLARE_CLASS(naoqicamera, driver,
+                        NaoqiCameraNodelet, nodelet::Nodelet);

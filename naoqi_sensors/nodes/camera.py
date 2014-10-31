@@ -37,19 +37,19 @@ from collections import defaultdict
 from distutils.version import LooseVersion
 import rospy
 from sensor_msgs.msg import Image, CameraInfo
-from nao_driver.nao_driver_naoqi import NaoNode
+from naoqi_driver.naoqi_node import NaoqiNode
 import camera_info_manager
 
 from dynamic_reconfigure.server import Server
-from nao_sensors.cfg import NaoCameraConfig
+from naoqi_sensors.cfg import NaoqiCameraConfig
 
 # import resolutions
-from nao_sensors.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
+from naoqi_sensors.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
 # import color spaces
-from nao_sensors.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, \
+from naoqi_sensors.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, \
                     kRGBColorSpace, kBGRColorSpace, kDepthColorSpace
 # import extra parameters
-from nao_sensors.vision_definitions import kCameraSelectID, kCameraAutoExpositionID, kCameraAecAlgorithmID, \
+from naoqi_sensors.vision_definitions import kCameraSelectID, kCameraAutoExpositionID, kCameraAecAlgorithmID, \
                   kCameraContrastID, kCameraSaturationID, kCameraHueID, kCameraSharpnessID, kCameraAutoWhiteBalanceID, \
                   kCameraExposureID, kCameraGainID, kCameraBrightnessID, kCameraWhiteBalanceID
 
@@ -58,9 +58,9 @@ kTopCamera = 0
 kBottomCamera = 1
 kDepthCamera = 2
 
-class NaoCam (NaoNode):
+class NaoqiCam (NaoqiNode):
     def __init__(self):
-        NaoNode.__init__(self, 'nao_camera')
+        NaoqiNode.__init__(self, 'naoqi_camera')
 
         self.camProxy = self.get_proxy("ALVideoDevice")
         if self.camProxy is None:
@@ -76,7 +76,7 @@ class NaoCam (NaoNode):
         self.pub_info_ = rospy.Publisher('~camera_info', CameraInfo, queue_size=5)
 
         # initialize the parameter server
-        self.srv = Server(NaoCameraConfig, self.reconfigure)
+        self.srv = Server(NaoqiCameraConfig, self.reconfigure)
 
         # initial load from param server
         self.init_config()
@@ -90,6 +90,9 @@ class NaoCam (NaoNode):
         self.config['source'] = rospy.get_param('~source')
         self.config['resolution'] = rospy.get_param('~resolution')
         self.config['color_space'] = rospy.get_param('~color_space')
+
+        print 'camera source ', self.config['source']
+        print 'camera resolution ' , self.config['resolution']
 
         # optional for camera frames
         # top camera with default
@@ -118,7 +121,6 @@ class NaoCam (NaoNode):
             self.config['use_ros_time'] = rospy.get_param('~use_ros_time')
         else:
             self.config['use_ros_time'] = False
-
 
     def reconfigure( self, new_config, level ):
         """
@@ -152,7 +154,7 @@ class NaoCam (NaoNode):
             elif new_config['source'] == kBottomCamera:
                 self.frame_id = self.config['camera_bottom_frame']
             elif new_config['source'] == kDepthCamera:
-                self.frame_id = new_config['camera_depth_frame']
+                self.frame_id = self.config['camera_depth_frame']
             else:
                 rospy.logerr('Invalid source. Must be 0, 1 or 2')
                 exit(1)
@@ -191,7 +193,7 @@ class NaoCam (NaoNode):
                 if self.get_version() < LooseVersion('2.0'):
                     self.camProxy.setParam(naoqi_key, new_config[key])
                 else:
-                    self.camProxy.setCameraParameter(self.nameId, naoqi_key, new_config[key])
+                    self.camProxy.setCamerasParameter(self.nameId, naoqi_key, new_config[key])
 
         for key, naoqi_key, auto_exp_val in [('exposure', kCameraExposureID, 0),
                                              ('gain', kCameraGainID, 0), ('brightness', kCameraBrightnessID, 1)]:
@@ -200,16 +202,16 @@ class NaoCam (NaoNode):
                     self.camProxy.setParam(kCameraAutoExpositionID, auto_exp_val)
                     self.camProxy.setParam(naoqi_key, new_config[key])
                 else:
-                    self.camProxy.setCameraParameter(self.nameId, kCameraAutoExpositionID, auto_exp_val)
-                    self.camProxy.setCameraParameter(self.nameId, naoqi_key, new_config[key])
+                    self.camProxy.setCamerasParameter(self.nameId, kCameraAutoExpositionID, auto_exp_val)
+                    self.camProxy.setCamerasParameter(self.nameId, naoqi_key, new_config[key])
 
         if self.config['white_balance'] != new_config['white_balance'] or is_camera_new:
             if self.get_version() < LooseVersion('2.0'):
                 self.camProxy.setParam(kCameraAutoWhiteBalanceID, 0)
                 self.camProxy.setParam(kCameraWhiteBalanceID, new_config['white_balance'])
             else:
-                self.camProxy.setCameraParameter(self.nameId, kCameraAutoWhiteBalanceID, 0)
-                self.camProxy.setCameraParameter(self.nameId, kCameraWhiteBalanceID, new_config['white_balance'])
+                self.camProxy.setCamerasParameter(self.nameId, kCameraAutoWhiteBalanceID, 0)
+                self.camProxy.setCamerasParameter(self.nameId, kCameraWhiteBalanceID, new_config['white_balance'])
 
         key_methods =  [ ('resolution', 'setResolution'), ('color_space', 'setColorSpace'), ('frame_rate', 'setFrameRate')]
         if self.get_version() >= LooseVersion('2.0'):
@@ -308,6 +310,6 @@ class NaoCam (NaoNode):
             self.camProxy.unsubscribe(self.nameId)
 
 if __name__ == "__main__":
-    naocam = NaoCam()
+    naocam = NaoqiCam()
     naocam.start()
     rospy.spin()
