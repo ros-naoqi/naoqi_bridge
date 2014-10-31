@@ -36,7 +36,7 @@ try:
 except ImportError:
     raise RuntimeError("Error importing NaoQI. Please make sure that Aldebaran's NaoQI API is in your PYTHONPATH.")
 
-class NaoNode(Thread):
+class NaoqiNode(Thread):
     """
     A ROS Node wrapper that can help you connect to NAOqi and deal with ROS shutdown
     To start your node, just call:
@@ -57,7 +57,7 @@ class NaoNode(Thread):
         """
         :param name: the name of the ROS node
         """
-        super(NaoNode, self).__init__()
+        super(NaoqiNode, self).__init__()
 
         # A distutils.version.LooseVersion that contains the current verssion of NAOqi we're connected to
         self.__naoqi_version = None

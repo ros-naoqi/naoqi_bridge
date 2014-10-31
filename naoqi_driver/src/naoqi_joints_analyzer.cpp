@@ -32,13 +32,13 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#include "NaoJointsAnalyzer.h"
+#include "naoqi_joints_analyzer.h"
 
 #include <sstream>
 #include <fstream>
 
-PLUGINLIB_DECLARE_CLASS(nao_dashboard, NaoJointsAnalyzer,
-		diagnostic_aggregator::NaoJointsAnalyzer,
+PLUGINLIB_DECLARE_CLASS(nao_dashboard, NaoqiJointsAnalyzer,
+		diagnostic_aggregator::NaoqiJointsAnalyzer,
 		diagnostic_aggregator::Analyzer)
 
 namespace diagnostic_aggregator {
@@ -46,17 +46,17 @@ namespace diagnostic_aggregator {
 /**
  * @brief Constructor.
  */
-NaoJointsAnalyzer::NaoJointsAnalyzer() :
+NaoqiJointsAnalyzer::NaoqiJointsAnalyzer() :
 	m_path(""), m_niceName("Joints"), m_lastSeen(0) {
 }
 
 /**
  * @brief Destructor.
  */
-NaoJointsAnalyzer::~NaoJointsAnalyzer() {
+NaoqiJointsAnalyzer::~NaoqiJointsAnalyzer() {
 }
 
-bool NaoJointsAnalyzer::init(const std::string base_name, const ros::NodeHandle &n) {
+bool NaoqiJointsAnalyzer::init(const std::string base_name, const ros::NodeHandle &n) {
 	if (!n.getParam("path", m_niceName))
 	{
 		ROS_ERROR("NaoJointsAnalyzer was not given parameter \"path\". Namespace: %s",
@@ -72,11 +72,11 @@ bool NaoJointsAnalyzer::init(const std::string base_name, const ros::NodeHandle 
 	return true;
 }
 
-bool NaoJointsAnalyzer::match(const std::string name) {
+bool NaoqiJointsAnalyzer::match(const std::string name) {
 	return name.find("nao_joint") == 0;
 }
 
-bool NaoJointsAnalyzer::analyze(const boost::shared_ptr<StatusItem> item) {
+bool NaoqiJointsAnalyzer::analyze(const boost::shared_ptr<StatusItem> item) {
 	if(item->getName().find("nao_joint") != 0)
 		return false;
 
@@ -100,7 +100,7 @@ bool NaoJointsAnalyzer::analyze(const boost::shared_ptr<StatusItem> item) {
 	return true;
 }
 
-bool NaoJointsAnalyzer::compareByTemperature(const NaoJointsAnalyzer::JointData& a, const NaoJointsAnalyzer::JointData& b) {
+bool NaoqiJointsAnalyzer::compareByTemperature(const NaoqiJointsAnalyzer::JointData& a, const NaoqiJointsAnalyzer::JointData& b) {
     return (a.temperature > b.temperature);
 }
 
@@ -112,7 +112,7 @@ bool NaoJointsAnalyzer::compareByTemperature(const NaoJointsAnalyzer::JointData&
  * @param value Value.
  */
 template<typename T>
-void NaoJointsAnalyzer::addValue(boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> joint_stat, const std::string& key, const T& value) const {
+void NaoqiJointsAnalyzer::addValue(boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> joint_stat, const std::string& key, const T& value) const {
 	std::stringstream ss;
 	ss << value;
 	diagnostic_msgs::KeyValue kv;
@@ -121,7 +121,7 @@ void NaoJointsAnalyzer::addValue(boost::shared_ptr<diagnostic_msgs::DiagnosticSt
 	joint_stat->values.push_back(kv);
 }
 
-std::vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> > NaoJointsAnalyzer::report() {
+std::vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> > NaoqiJointsAnalyzer::report() {
     bool stale = (ros::Time::now()-m_lastSeen).toSec() > 5.0;
 	boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> joint_stat =
 			m_jointsMasterItem->toStatusMsg(m_path, stale);
@@ -160,7 +160,7 @@ std::vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> > NaoJointsAnal
 	addValue(joint_stat, "Lowest Stiffness", minStiffness);
 	addValue(joint_stat, "Lowest Stiffness without Hands", minStiffnessWoHands);
 
-    std::sort(hotJoints.begin(), hotJoints.end(), NaoJointsAnalyzer::compareByTemperature);
+    std::sort(hotJoints.begin(), hotJoints.end(), NaoqiJointsAnalyzer::compareByTemperature);
     std::stringstream hotJointsSS;
     for(size_t i = 0; i < hotJoints.size(); i++) {
         hotJointsSS << std::endl << removeLeadingNameChaff(hotJoints[i].status->getName(), "nao_joint") << ": " << hotJoints[i].temperature << "°C";

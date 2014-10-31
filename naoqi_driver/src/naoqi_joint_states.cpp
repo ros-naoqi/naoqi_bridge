@@ -38,7 +38,7 @@
 #include <iostream>
 
 #include <std_srvs/Empty.h>
-#include <nao_msgs/SetTransform.h>
+#include <naoqi_msgs/SetTransform.h>
 
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
@@ -61,116 +61,27 @@
 #include <alcommon/albroker.h>
 #include <alcommon/albrokermanager.h>
 
-
+#include <naoqi_driver/naoqi_node.h>
 
 // Other includes
 #include <boost/program_options.hpp>
 
 using namespace std;
 
-class NaoNode
-{
-   public:
-      NaoNode();
-      ~NaoNode();
-      bool connectNaoQi();
-      void parse_command_line(int argc, char ** argv);
-   protected:
-      std::string m_pip;
-      std::string m_ip;
-      int m_port;
-      int m_pport;
-      std::string m_brokerName;
-      boost::shared_ptr<AL::ALBroker> m_broker;
-
-
-};
-
-
-NaoNode::NaoNode() : m_pip("127.0.0.01"),m_ip("0.0.0.0"),m_port(0),m_pport(9559),m_brokerName("NaoROSBroker")
-{
-
-
-}
-
-NaoNode::~NaoNode()
-{
-}
-
-void NaoNode::parse_command_line(int argc, char ** argv)
-{
-   std::string pip;
-   std::string ip;
-   int pport;
-   int port;
-   boost::program_options::options_description desc("Configuration");
-   desc.add_options()
-      ("help", "show this help message")
-      ("ip", boost::program_options::value<std::string>(&ip)->default_value(m_ip),
-       "IP/hostname of the broker")
-      ("port", boost::program_options::value<int>(&port)->default_value(m_port),
-       "Port of the broker")
-      ("pip", boost::program_options::value<std::string>(&pip)->default_value(m_pip),
-       "IP/hostname of parent broker")
-      ("pport", boost::program_options::value<int>(&pport)->default_value(m_pport),
-       "port of parent broker")
-      ;
-   boost::program_options::variables_map vm;
-   boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
-   boost::program_options::notify(vm);
-   m_port = vm["port"].as<int>();
-   m_pport = vm["pport"].as<int>();
-   m_pip = vm["pip"].as<std::string>();
-   m_ip = vm["ip"].as<std::string>();
-   cout << "pip is " << m_pip << endl;
-   cout << "ip is " << m_ip << endl;
-   cout << "port is " << m_port << endl;
-   cout << "pport is " << m_pport << endl;
-
-   if (vm.count("help")) {
-      std::cout << desc << "\n";
-      return ;
-   }
-}
-
-
-
-bool NaoNode::connectNaoQi()
-{
-   // Need this to for SOAP serialization of floats to work
-   setlocale(LC_NUMERIC, "C");
-   // A broker needs a name, an IP and a port:
-   // FIXME: would be a good idea to look for a free port first
-   // listen port of the broker (here an anything)
-   try
-   {
-      m_broker = AL::ALBroker::createBroker(m_brokerName, m_ip, m_port, m_pip, m_pport, false);
-   }
-   catch(const AL::ALError& e)
-   {
-      ROS_ERROR( "Failed to connect broker to: %s:%d",m_pip.c_str(),m_port);
-      //AL::ALBrokerManager::getInstance()->killAllBroker();
-      //AL::ALBrokerManager::kill();
-      return false;
-   }
-   cout << "broker ready." << endl;
-   return true;
-}
-
-class NaoSensors : public NaoNode
+class NaoqiJointStates : public NaoqiNode
 {
 public:
 
-    NaoSensors(int argc, char ** argv);
-    ~NaoSensors();
+    NaoqiJointStates(int argc, char ** argv);
+    ~NaoqiJointStates();
 
     bool connectProxy();
     void run();
 
     bool pauseOdomCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
     bool resumeOdomCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
-    bool odomOffsetCallback(nao_msgs::SetTransform::Request& req, nao_msgs::SetTransform::Response& res);
-    bool setOdomPoseCallback(nao_msgs::SetTransform::Request& req, nao_msgs::SetTransform::Response& res);
+    bool odomOffsetCallback(naoqi_msgs::SetTransform::Request& req, naoqi_msgs::SetTransform::Response& res);
+    bool setOdomPoseCallback(naoqi_msgs::SetTransform::Request& req, naoqi_msgs::SetTransform::Response& res);
 
 
 protected:
@@ -221,7 +132,7 @@ protected:
     bool m_isInitialized;
 };
 
-bool NaoSensors::connectProxy()
+bool NaoqiJointStates::connectProxy()
 {
    if (!m_broker)
    {
@@ -252,8 +163,9 @@ bool NaoSensors::connectProxy()
    return true;
 }
 
-NaoSensors::NaoSensors(int argc, char ** argv)
- : m_rate(25.0), m_privateNh("~"),
+NaoqiJointStates::NaoqiJointStates(int argc, char ** argv)
+ : NaoqiNode(argc, argv),
+   m_rate(25.0), m_privateNh("~"),
    m_odomFrameId("odom"),
    m_baseFrameId("base_link"),
    m_useIMUAngles(false),
@@ -285,10 +197,10 @@ NaoSensors::NaoSensors(int argc, char ** argv)
     m_privateNh.param("odom_frame_id", m_odomFrameId, m_odomFrameId);
     m_privateNh.param("use_imu_angles", m_useIMUAngles, m_useIMUAngles);
 
-    m_pauseOdomSrv = m_nh.advertiseService("pause_odometry", &NaoSensors::pauseOdomCallback, this);
-    m_resumeOdomSrv = m_nh.advertiseService("resume_odometry", &NaoSensors::resumeOdomCallback, this);
-    m_odomOffsetSrv = m_nh.advertiseService("odometry_offset", &NaoSensors::odomOffsetCallback, this);
-    m_setOdomPoseSrv = m_nh.advertiseService("set_odometry_pose", &NaoSensors::setOdomPoseCallback, this);
+    m_pauseOdomSrv = m_nh.advertiseService("pause_odometry", &NaoqiJointStates::pauseOdomCallback, this);
+    m_resumeOdomSrv = m_nh.advertiseService("resume_odometry", &NaoqiJointStates::resumeOdomCallback, this);
+    m_odomOffsetSrv = m_nh.advertiseService("odometry_offset", &NaoqiJointStates::odomOffsetCallback, this);
+    m_setOdomPoseSrv = m_nh.advertiseService("set_odometry_pose", &NaoqiJointStates::setOdomPoseCallback, this);
 
 
     m_odom.header.frame_id = m_odomFrameId;
@@ -328,10 +240,12 @@ NaoSensors::NaoSensors(int argc, char ** argv)
     ROS_INFO("nao_sensors initialized");
 
 }
-NaoSensors::~NaoSensors()
+
+NaoqiJointStates::~NaoqiJointStates()
 {
 }
-void NaoSensors::run()
+
+void NaoqiJointStates::run()
 {
    ros::Rate r(m_rate);
    ros::Time stamp1;
@@ -340,9 +254,9 @@ void NaoSensors::run()
 
    std::vector<float> odomData;
    float odomX, odomY, odomZ, odomWX, odomWY, odomWZ;
-   
+
    std::vector<float> memData;
-   
+
    std::vector<float> positionData;
 
    ROS_INFO("Staring main loop. ros::ok() is %d nh.ok() is %d",ros::ok(),m_nh.ok());
@@ -512,7 +426,7 @@ void NaoSensors::run()
         m_odom.twist.twist.linear.x = (odomX - m_odom.pose.pose.position.x) / dt;
         m_odom.twist.twist.linear.y = (odomY - m_odom.pose.pose.position.y) / dt;
         m_odom.twist.twist.linear.z = (odomZ - m_odom.pose.pose.position.z) / dt;
-        
+
         // TODO: calc angular velocity!
         //	m_odom.twist.twist.angular.z = vth; ??
 
@@ -530,11 +444,11 @@ void NaoSensors::run()
 
         }
     }
-    ROS_INFO("nao_sensors stopped.");
+    ROS_INFO("naoqi_sensors stopped.");
 
 }
 
-bool NaoSensors::pauseOdomCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res){
+bool NaoqiJointStates::pauseOdomCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res){
     if (m_paused){
         ROS_WARN("Odometry pause requested, but is already paused");
         return false;
@@ -547,7 +461,7 @@ bool NaoSensors::pauseOdomCallback(std_srvs::Empty::Request& req, std_srvs::Empt
     }
 }
 
-bool NaoSensors::resumeOdomCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res){
+bool NaoqiJointStates::resumeOdomCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res){
     if (m_paused){
         ROS_INFO("Odometry resumed");
         m_paused = false;
@@ -558,7 +472,8 @@ bool NaoSensors::resumeOdomCallback(std_srvs::Empty::Request& req, std_srvs::Emp
     }
 }
 
-bool NaoSensors::odomOffsetCallback(nao_msgs::SetTransform::Request& req, nao_msgs::SetTransform::Response& res){
+bool NaoqiJointStates::odomOffsetCallback(naoqi_msgs::SetTransform::Request& req,
+                                          naoqi_msgs::SetTransform::Response& res){
     ROS_INFO("New odometry offset received");
     tf::Transform newOffset;
     tf::transformMsgToTF(req.offset, newOffset);
@@ -574,7 +489,8 @@ bool NaoSensors::odomOffsetCallback(nao_msgs::SetTransform::Request& req, nao_ms
     return true;
 }
 
-bool NaoSensors::setOdomPoseCallback(nao_msgs::SetTransform::Request& req, nao_msgs::SetTransform::Response& res){
+bool NaoqiJointStates::setOdomPoseCallback(naoqi_msgs::SetTransform::Request& req,
+                                           naoqi_msgs::SetTransform::Response& res){
     ROS_INFO("New target for current odometry pose received");
     tf::Transform targetPose;
     tf::transformMsgToTF(req.offset, targetPose);
@@ -586,24 +502,24 @@ bool NaoSensors::setOdomPoseCallback(nao_msgs::SetTransform::Request& req, nao_m
 
 int main(int argc, char ** argv)
 {
-   ros::init(argc, argv, "nao_sensors_cpp");
+   ros::init(argc, argv, "naoqi_sensors_cpp");
    cout << "I am here" << endl;
-   NaoSensors * sensors;
+   NaoqiJointStates * sensors;
    try{
-      sensors = new NaoSensors(argc,argv);
-      //NaoSensors sensors(argc,argv);
+      sensors = new NaoqiJointStates(argc,argv);
+      //NaoqiJointStates sensors(argc,argv);
    }
    catch (const std::exception & e)
       //catch (...)
    {
       // TODO: why does this not work?
-      //ROS_ERROR("Creating NaoSensors object failed with error %s",e.what());
-      ROS_ERROR("Creating NaoSensors object failed with error ");
+      //ROS_ERROR("Creating NaoqiJointStates object failed with error %s",e.what());
+      ROS_ERROR("Creating NaoqiJointStates object failed with error ");
       return -1;
    }
-   
+
    sensors->run();
-   
+
    delete sensors;
 
    ROS_INFO("nao_sensors stopped");

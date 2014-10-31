@@ -19,7 +19,7 @@ import logging
 from rosgraph_msgs.msg import Log
 import rospy
 
-from nao_driver.nao_driver_naoqi import NaoNode
+from naoqi_driver.naoqi_node import NaoqiNode
 
 import qi
 
@@ -44,13 +44,13 @@ def onMessageCallback(msg):
     l.header.stamp = rospy.Time(msg['timestamp']['tv_sec'], msg['timestamp']['tv_usec'])
     ROSOUT_PUB.publish(l)
 
-class NaoLogger(NaoNode):
+class NaoqiLogger(NaoqiNode):
     #This should be treated as a constant
     NODE_NAME = 'nao_logger'
 
     def __init__( self ):
         #Initialization
-        NaoNode.__init__( self, self.NODE_NAME )
+        NaoqiNode.__init__( self, self.NODE_NAME )
 
         from distutils.version import LooseVersion
         if self.get_version() < LooseVersion('2.0.0'):
@@ -70,7 +70,7 @@ class NaoLogger(NaoNode):
 
 if __name__ == '__main__':
     try:
-        nao_logger = NaoLogger()
+        nao_logger = NaoqiLogger()
     except RuntimeError as e:
         rospy.logerr('Something went wrong: %s' % str(e) )
 

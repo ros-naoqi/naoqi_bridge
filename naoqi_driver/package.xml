@@ -1,6 +1,6 @@
 <package>
-  <name>nao_driver</name>
-  <version>0.4.1</version>
+  <name>naoqi_driver</name>
+  <version>0.3.0</version>
   <description>
     <p>
       Driver package for the Nao robot, providing access to walking commands,
@@ -14,7 +14,7 @@
     </p>
   </description>
   <author>Armin Hornung</author>
-  <maintainer email="severin.lemaignan@epfl.ch">Séverin Lemaignan</maintainer>
+  <maintainer email="severin.lemaignan@epfl.ch">Severin Lemaignan</maintainer>
   <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
   <license>BSD</license>
 
@@ -26,7 +26,7 @@
   <author>Stefan Osswald</author>
   <author>Daniel Maier</author>
   <author>Miguel Sarabia</author>
-  <author>Séverin Lemaignan</author>
+  <author>Severin Lemaignan</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
@@ -35,7 +35,7 @@
   <build_depend>diagnostic_msgs</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>geometry_msgs</build_depend>
-  <build_depend>nao_msgs</build_depend>
+  <build_depend>naoqi_msgs</build_depend>
   <build_depend>pluginlib</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>sensor_msgs</build_depend>
@@ -53,14 +53,14 @@
   <run_depend>geometry_msgs</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>diagnostic_msgs</run_depend>
-  <run_depend>nao_msgs</run_depend>
+  <run_depend>naoqi_msgs</run_depend>
   <run_depend>pluginlib</run_depend>
   <run_depend>humanoid_nav_msgs</run_depend>
   <run_depend>nav_msgs</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
 
   <export>
-    <diagnostic_aggregator plugin="${prefix}/nao_analyzer_plugins.xml" />
+    <diagnostic_aggregator plugin="${prefix}/naoqi_analyzer_plugins.xml" />
   </export>
 
 </package>

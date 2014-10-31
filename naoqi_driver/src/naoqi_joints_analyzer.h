@@ -48,10 +48,10 @@ namespace diagnostic_aggregator {
 /**
  * @brief Analyzes diagnostic messages about Nao's joints from nao_diagnostic/nao_diagnostic_updater.
  */
-class NaoJointsAnalyzer: public Analyzer {
+class NaoqiJointsAnalyzer: public Analyzer {
 public:
-	NaoJointsAnalyzer();
-	~NaoJointsAnalyzer();
+	NaoqiJointsAnalyzer();
+	~NaoqiJointsAnalyzer();
 	bool init(const std::string base_name, const ros::NodeHandle &n);
 	bool match(const std::string name);
 	bool analyze(const boost::shared_ptr<StatusItem> item);
@@ -78,7 +78,7 @@ private:
 	JointsMapType m_joints;
 
 	template<typename T> void addValue(boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> joint_stat, const std::string& key, const T& value) const;
-	static bool compareByTemperature(const NaoJointsAnalyzer::JointData& a, const NaoJointsAnalyzer::JointData& b);
+	static bool compareByTemperature(const NaoqiJointsAnalyzer::JointData& a, const NaoqiJointsAnalyzer::JointData& b);
 };
 
 }

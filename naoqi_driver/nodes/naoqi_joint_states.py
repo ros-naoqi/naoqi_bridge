@@ -39,7 +39,7 @@ from sensor_msgs.msg import JointState
 from sensor_msgs.msg import Imu
 from nav_msgs.msg import Odometry
 
-from nao_driver import NaoNode
+from naoqi_driver.naoqi_node import NaoqiNode
 
 from tf import transformations
 import tf
@@ -47,9 +47,9 @@ import tf
 # NAOqi specific
 import motion
 
-class NaoSensors(NaoNode):
+class NaoqiJointStates(NaoqiNode):
     def __init__(self):
-        NaoNode.__init__(self, 'nao_sensors')
+        NaoqiNode.__init__(self, 'naoqi_joint_states')
 
         self.connectNaoQi()
 
@@ -70,9 +70,6 @@ class NaoSensors(NaoNode):
             self.tf_prefix = rospy.get_param(tf_prefix_param_name)
         else:
             self.tf_prefix = ""
-        
-        # To stop odometry tf being broadcast
-        self.broadcast_odometry = rospy.get_param('~broadcast_odometry', True)
 
         self.base_frameID = rospy.get_param('~base_frame_id', "base_link")
         if not(self.base_frameID[0] == '/'):
@@ -101,13 +98,13 @@ class NaoSensors(NaoNode):
         msg = "Nao joints found: "+ str(self.jointState.name)
         rospy.logdebug(msg)
 
-        self.torsoOdomPub = rospy.Publisher("odom", Odometry, queue_size=10)
-        self.torsoIMUPub = rospy.Publisher("imu", Imu, queue_size=10)
-        self.jointStatePub = rospy.Publisher("joint_states", JointState, queue_size=10)
+        self.torsoOdomPub = rospy.Publisher("odom", Odometry)
+        self.torsoIMUPub = rospy.Publisher("imu", Imu)
+        self.jointStatePub = rospy.Publisher("joint_states", JointState)
 
         self.tf_br = tf.TransformBroadcaster()
 
-        rospy.loginfo("nao_sensors initialized")
+        rospy.loginfo("nao_joint_states initialized")
 
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
@@ -140,7 +137,7 @@ class NaoSensors(NaoNode):
             elif len(odomData)!=6:
                 print "Error getting odom data"
                 continue
-            
+
             self.torsoOdom.pose.pose.position.x = odomData[0]
             self.torsoOdom.pose.pose.position.y = odomData[1]
             self.torsoOdom.pose.pose.position.z = odomData[2]
@@ -152,10 +149,8 @@ class NaoSensors(NaoNode):
 
             t = self.torsoOdom.pose.pose.position
             q = self.torsoOdom.pose.pose.orientation
-            
-            if self.broadcast_odometry:
-                self.tf_br.sendTransform((t.x, t.y, t.z), (q.x, q.y, q.z, q.w),
-                                         timestamp, self.base_frameID, self.torsoOdom.header.frame_id)
+            self.tf_br.sendTransform((t.x, t.y, t.z), (q.x, q.y, q.z, q.w),
+                                     timestamp, self.base_frameID, self.torsoOdom.header.frame_id)
 
             self.torsoOdomPub.publish(self.torsoOdom)
 
@@ -214,8 +209,8 @@ class NaoSensors(NaoNode):
 
 if __name__ == '__main__':
 
-    sensors = NaoSensors()
-    sensors.start()
+    joint_states = NaoqiJointStates()
+    joint_states.start()
 
     rospy.spin()
     exit(0)

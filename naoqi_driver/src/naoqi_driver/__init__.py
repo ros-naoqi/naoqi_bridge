@@ -26,5 +26,5 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from nao_driver_naoqi import *
+from .naoqi_node import *
 
