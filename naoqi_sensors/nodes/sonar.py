@@ -19,7 +19,7 @@
 import rospy
 
 #import NAO dependencies
-from nao_sensors.ros_sonar import SonarSensor, SonarPublisher
+from naoqi_sensors.ros_sonar import SonarSensor, SonarPublisher
 
 if __name__ == '__main__':
     # create two sonars
