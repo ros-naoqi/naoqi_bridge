@@ -34,7 +34,7 @@
 
 #include <ros/ros.h>
 
-#include "nao_camera.h"
+#include "naoqi_camera.h"
 
 /** @file
 
@@ -45,11 +45,11 @@
 /** Main node entry point. */
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "naocamera_node");
+  ros::init(argc, argv, "naoqicamera_node");
   ros::NodeHandle node;
   ros::NodeHandle priv_nh("~");
   ros::NodeHandle camera_nh("camera");
-  naocamera_driver::NaoCameraDriver dvr(argc, argv, priv_nh, camera_nh);
+  naoqicamera_driver::NaoqiCameraDriver dvr(argc, argv, priv_nh, camera_nh);
 
   dvr.setup();
   while (node.ok())

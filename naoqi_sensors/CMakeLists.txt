@@ -45,7 +45,7 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
                  roscpp
                  tf
                DEPENDS Boost
-               LIBRARIES naocamera_nodelet)
+               LIBRARIES naoqicamera_nodelet)
 
     include_directories(
         ${catkin_INCLUDE_DIRS}
@@ -53,9 +53,9 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
         ${NAOqi_INCLUDE_DIRS})
 
     set(NAOCAMERA_SOURCES
-        src/nao_camera.cpp
-        src/nao_camera_node.cpp
-        src/nao_node.cpp)
+        src/naoqi_camera.cpp
+        src/naoqi_camera_node.cpp
+       )
 
     add_executable(cameras ${NAOCAMERA_SOURCES})
     target_link_libraries(cameras
@@ -70,12 +70,12 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
     #### NODELET
 
     # build and install the nodelet
-    add_library(naocamera_nodelet src/nodelet.cpp ${NAOCAMERA_SOURCES})
-    add_dependencies(naocamera_nodelet ${catkin_EXPORTED_TARGETS})
-    target_link_libraries(naocamera_nodelet
+    add_library(naoqicamera_nodelet src/nodelet.cpp ${NAOCAMERA_SOURCES})
+    add_dependencies(naoqicamera_nodelet ${catkin_EXPORTED_TARGETS})
+    target_link_libraries(naoqicamera_nodelet
                           ${catkin_LIBRARIES}
                           ${NAOqi_LIBRARIES})
-    install(TARGETS naocamera_nodelet
+    install(TARGETS naoqicamera_nodelet
             RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
             ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
             LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
@@ -106,5 +106,5 @@ install(PROGRAMS nodes/camera.py
 # install pluginlib definition for the nodelet. In the case the plugin is not compiled
 # this is still useful to not display an error from the package.xml parsing
 # (the plugin is exported there no matter what)
-install(FILES naocamera_nodelet.xml
+install(FILES naoqicamera_nodelet.xml
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

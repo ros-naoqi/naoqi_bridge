@@ -360,7 +360,7 @@ namespace naoqicamera_driver
         success = true;
         ROS_DEBUG_STREAM("[" << camera_name_ << "] read returned");
       }
-    catch (naocamera_driver::Exception& e)
+    catch (naoqicamera_driver::Exception& e)
       {
         ROS_WARN_STREAM("[" << camera_name_
                         << "] Exception reading data: " << e.what());
