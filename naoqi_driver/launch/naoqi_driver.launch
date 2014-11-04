@@ -1,5 +1,5 @@
 <launch>
-  <!-- 
+  <!--
     start Nao control and sensor nodes so that they connect to a local NaoQI
     (e.g. a local simulated one or when running directly on the robot).
 
@@ -7,11 +7,11 @@
     environment variables.
   -->
 
-  <!-- 
+  <!--
   	This pushes the local PYTHONPATH into the launch file, so that the NaoQI API is found.
     You need to add the Nao's API dir to your PYTHONPATH so that the modules are found.
   -->
-  <env name="PYTHONPATH" value="$(env PYTHONPATH)" /> 
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
 
   <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
   <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
