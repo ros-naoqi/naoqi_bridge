@@ -78,6 +78,14 @@ set(NAOqi_COMPONENTS
     qitype
 )
 
+# These are NAOqi low-level library. They must sometimes be included even though they are not directly
+# used by the module, but they are not always present, depending on the SDK version.
+# Therefore, if they are present, we try to include them to avoid any compilation issue,
+# but if they cannot be found then no error is raised.
+set(NAOqi_OPTIONALS
+    qi
+    qitype
+)
 
 #Set INCLUDE hints
 set(NAOqi_INCLUDE_HINTS

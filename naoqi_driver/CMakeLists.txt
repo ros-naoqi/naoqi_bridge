@@ -38,6 +38,7 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
   catkin_package(
     INCLUDE_DIRS include
     LIBRARIES naoqi_node
+    cmake_modules-extras.cmake
   )
 
   include_directories(
