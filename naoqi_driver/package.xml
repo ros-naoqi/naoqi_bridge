@@ -21,7 +21,7 @@
   <url>http://ros.org/wiki/nao_driver</url>
   <url type="bugtracker">https://github.com/ros-nao/nao_robot/issues</url>
   <url type="repository">https://github.com/ros-nao/nao_robot</url>
-  
+
   <author>Armin Hornung</author>
   <author>Stefan Osswald</author>
   <author>Daniel Maier</author>
@@ -58,6 +58,8 @@
   <run_depend>humanoid_nav_msgs</run_depend>
   <run_depend>nav_msgs</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
+
+  <replace>nao_driver</replace>
 
   <export>
     <diagnostic_aggregator plugin="${prefix}/naoqi_analyzer_plugins.xml" />
