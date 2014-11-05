@@ -91,7 +91,7 @@ install(DIRECTORY nodes/
 install(DIRECTORY launch/
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch )
 
-# Install config file
-install(DIRECTORY config/
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
-    PATTERN "*.cfg" EXCLUDE)
+## Install config file
+#install(DIRECTORY config/
+#    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
+#    PATTERN "*.cfg" EXCLUDE)
