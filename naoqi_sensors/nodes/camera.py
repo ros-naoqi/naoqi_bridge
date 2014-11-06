@@ -51,7 +51,7 @@ from naoqi_sensors.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, 
 # import extra parameters
 from naoqi_sensors.vision_definitions import kCameraSelectID, kCameraAutoExpositionID, kCameraAecAlgorithmID, \
                   kCameraContrastID, kCameraSaturationID, kCameraHueID, kCameraSharpnessID, kCameraAutoWhiteBalanceID, \
-                  kCameraExposureID, kCameraGainID, kCameraBrightnessID, kCameraWhiteBalanceID
+                  kCameraExposureID, kCameraAutoGainID, kCameraGainID, kCameraBrightnessID, kCameraWhiteBalanceID
 
 # those should appear in vision_definitions.py at some point
 kTopCamera = 0
@@ -91,9 +91,6 @@ class NaoqiCam (NaoqiNode):
         self.config['resolution'] = rospy.get_param('~resolution')
         self.config['color_space'] = rospy.get_param('~color_space')
 
-        print 'camera source ', self.config['source']
-        print 'camera resolution ' , self.config['resolution']
-
         # optional for camera frames
         # top camera with default
         if rospy.has_param('~camera_top_frame'):
@@ -121,6 +118,7 @@ class NaoqiCam (NaoqiNode):
             self.config['use_ros_time'] = rospy.get_param('~use_ros_time')
         else:
             self.config['use_ros_time'] = False
+
 
     def reconfigure( self, new_config, level ):
         """
@@ -180,38 +178,8 @@ class NaoqiCam (NaoqiNode):
                 rospy.logerr('There was a problem loading the calibration file. Check the URL!')
 
         # set params
-        key_naoqi_keys = [('auto_exposition', kCameraAutoExpositionID),
-                          ('auto_exposure_algo', kCameraAecAlgorithmID),
-                          ('contrast', kCameraContrastID), ('saturation', kCameraSaturationID),
-                          ('hue', kCameraHueID), ('sharpness', kCameraSharpnessID),
-                          ('auto_white_balance', kCameraAutoWhiteBalanceID)]
-        if self.get_version() < LooseVersion('2.0'):
-            key_method.append(('source', 'setActiveCamera'))
-
-        for key, naoqi_key in key_naoqi_keys:
-            if self.config[key] != new_config[key] or is_camera_new:
-                if self.get_version() < LooseVersion('2.0'):
-                    self.camProxy.setParam(naoqi_key, new_config[key])
-                else:
-                    self.camProxy.setCamerasParameter(self.nameId, naoqi_key, new_config[key])
-
-        for key, naoqi_key, auto_exp_val in [('exposure', kCameraExposureID, 0),
-                                             ('gain', kCameraGainID, 0), ('brightness', kCameraBrightnessID, 1)]:
-            if self.config[key] != new_config[key] or is_camera_new:
-                if self.get_version() < LooseVersion('2.0'):
-                    self.camProxy.setParam(kCameraAutoExpositionID, auto_exp_val)
-                    self.camProxy.setParam(naoqi_key, new_config[key])
-                else:
-                    self.camProxy.setCamerasParameter(self.nameId, kCameraAutoExpositionID, auto_exp_val)
-                    self.camProxy.setCamerasParameter(self.nameId, naoqi_key, new_config[key])
-
-        if self.config['white_balance'] != new_config['white_balance'] or is_camera_new:
-            if self.get_version() < LooseVersion('2.0'):
-                self.camProxy.setParam(kCameraAutoWhiteBalanceID, 0)
-                self.camProxy.setParam(kCameraWhiteBalanceID, new_config['white_balance'])
-            else:
-                self.camProxy.setCamerasParameter(self.nameId, kCameraAutoWhiteBalanceID, 0)
-                self.camProxy.setCamerasParameter(self.nameId, kCameraWhiteBalanceID, new_config['white_balance'])
+        camParams = self.extractParams(new_config)
+        self.setParams(camParams)
 
         key_methods =  [ ('resolution', 'setResolution'), ('color_space', 'setColorSpace'), ('frame_rate', 'setFrameRate')]
         if self.get_version() >= LooseVersion('2.0'):
@@ -223,6 +191,35 @@ class NaoqiCam (NaoqiNode):
         self.config.update(new_config)
 
         return self.config
+
+    def extractParams(self, new_config):
+        camParams = []
+
+        camParams.append( (kCameraAecAlgorithmID, new_config['auto_exposure_algo']) )
+        camParams.append( (kCameraContrastID, new_config['contrast']) )
+        camParams.append( (kCameraSaturationID, new_config['saturation']) )
+        camParams.append( (kCameraHueID, new_config['hue']) ) # Migth be deprecated
+        camParams.append( (kCameraSharpnessID, new_config['sharpness']) )
+
+        camParams.append( (kCameraAutoWhiteBalanceID, new_config['auto_white_balance']) )
+        if ( new_config['auto_white_balance']==0):
+            camParams.append( (kCameraWhiteBalanceID, new_config['white_balance']) )
+
+        camParams.append( (kCameraAutoExpositionID, new_config['auto_exposition']) )
+        if ( new_config['auto_exposition']==0):
+            camParams.append( (kCameraGainID, new_config['gain']) )
+            camParams.append( (kCameraExposureID, new_config['exposure']) )
+        else:
+            camParams.append( (kCameraBrightnessID, new_config['brightness']) )
+
+        return camParams
+
+    def setParams(self, key_list):
+        for key, value in key_list:
+            if self.get_version() < LooseVersion('2.0'):
+                self.camProxy.setParam(key, value)
+            else:
+                self.camProxy.setCameraParameter(self.nameId, key, value)
 
     def run(self):
         img = Image()
