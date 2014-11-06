@@ -12,7 +12,7 @@ using namespace std;
 NaoqiNode::NaoqiNode(int argc, char ** argv) :
     m_pip("nao.local"),
     m_ip("0.0.0.0"),
-    m_port(16712),
+    m_port(0),
     m_pport(9559),
     m_brokerName("NaoROSBroker")
 {
@@ -64,9 +64,6 @@ bool NaoqiNode::connectNaoQi()
 {
    // Need this to for SOAP serialization of floats to work
    setlocale(LC_NUMERIC, "C");
-   // A broker needs a name, an IP and a port:
-   // FIXME: would be a good idea to look for a free port first
-   // listen port of the broker (here an anything)
    try
    {
       m_broker = AL::ALBroker::createBroker(m_brokerName, m_ip, m_port, m_pip, m_pport, false);
