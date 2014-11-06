@@ -18,17 +18,17 @@
 from collections import defaultdict
 import rospy
 
-from nao_driver.nao_driver_naoqi import NaoNode
+from naoqi_driver.naoqi_node import NaoqiNode
 
 from dynamic_reconfigure.server import Server
-from nao_sensors.cfg import NaoMicrophoneConfig
-from nao_msgs.msg import AudioBuffer
+from naoqi_sensors.cfg import NaoqiMicrophoneConfig
+from naoqi_msgs.msg import AudioBuffer
 
 from naoqi import ALModule, ALBroker, ALProxy
 
-class NaoMic (ALModule, NaoNode):
+class NaoqiMic (ALModule, NaoqiNode):
     def __init__(self, name):
-        NaoNode.__init__(self, name)
+        NaoqiNode.__init__(self, name)
         self.myBroker = ALBroker("pythonBroker", "0.0.0.0", 0, self.pip, self.pport)
         ALModule.__init__(self, name)
 
@@ -59,7 +59,7 @@ class NaoMic (ALModule, NaoNode):
         self.pub_audio_ = rospy.Publisher('~audio_raw', AudioBuffer)
 
         # initialize the parameter server
-        self.srv = Server(NaoMicrophoneConfig, self.reconfigure)
+        self.srv = Server(NaoqiMicrophoneConfig, self.reconfigure)
 
     def reconfigure( self, new_config, level ):
         """
@@ -136,6 +136,6 @@ class NaoMic (ALModule, NaoNode):
 
 
 if __name__ == "__main__":
-    ALToRosMics = NaoMic('ALToRosMics')
+    ALToRosMics = NaoqiMic('ALToRosMics')
     ALToRosMics.start()
     rospy.spin()
