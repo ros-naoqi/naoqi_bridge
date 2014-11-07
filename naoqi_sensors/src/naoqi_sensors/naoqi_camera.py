@@ -59,8 +59,8 @@ kBottomCamera = 1
 kDepthCamera = 2
 
 class NaoqiCam (NaoqiNode):
-    def __init__(self):
-        NaoqiNode.__init__(self, 'naoqi_camera')
+    def __init__(self, node_name='naoqi_camera'):
+        NaoqiNode.__init__(self, node_name)
 
         self.camProxy = self.get_proxy("ALVideoDevice")
         if self.camProxy is None:
