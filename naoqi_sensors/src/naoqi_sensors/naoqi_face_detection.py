@@ -10,8 +10,8 @@ from naoqi_driver.naoqi_node import NaoqiNode
 
 class NaoqiFaceDetection(NaoqiNode):
     NAOQI_FACE_DETECTION_SUB_NAME = 'ros_face_detection_subscription'
-    def __init__(self, param_face_rate="~face_detection_rate", face_rate=10):
-        NaoqiNode.__init__(self, "face_detection_publisher")
+    def __init__(self, node_name='naoqi_face_detection', param_face_rate="~face_detection_rate", face_rate=10):
+        NaoqiNode.__init__(self, node_name)
         self.faceRate = rospy.Rate(rospy.get_param(param_face_rate, face_rate))
         if rospy.has_param('~use_ros_time'):
             self.use_ros_time_ = rospy.get_param('~use_ros_time')
