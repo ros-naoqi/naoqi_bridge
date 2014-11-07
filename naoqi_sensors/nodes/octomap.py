@@ -35,7 +35,6 @@ class NaoqiOctomap(NaoqiNode):
         if proxy is None:
             rospy.loginfo('Could not get access to the ALNavigation proxy')
             exit(1)
-        proxy._setObstacleModeForSafety(1)
 
         # Create ROS publisher
         self.pub = rospy.Publisher("octomap", Octomap, latch = True, queue_size=1)
@@ -52,10 +51,9 @@ class NaoqiOctomap(NaoqiNode):
         while self.is_looping():
             octomap_bin = self.get_proxy("ALNavigation")._get3DMap()
             octomap.binary, octomap.id, octomap.resolution, octomap.data = octomap_str_to_tuple(octomap_bin)
-
-            octomap.header.stamp = rospy.Time.now()
-
-            self.pub.publish(octomap)
+            if len(octomap.data) > 0:
+                octomap.header.stamp = rospy.Time.now()
+                self.pub.publish(octomap)
 
             r.sleep()
 
