@@ -21,6 +21,8 @@ add_message_files(DIRECTORY msg
     FILES
     AudioBuffer.msg
     Bumper.msg
+    FaceDetection.msg
+    FaceInfo.msg
     FadeRGB.msg
     JointAnglesWithSpeed.msg
     JointAngleTrajectory.msg
