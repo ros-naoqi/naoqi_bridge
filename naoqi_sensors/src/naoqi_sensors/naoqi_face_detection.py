@@ -31,37 +31,34 @@ class NaoqiFaceDetection(NaoqiNode):
 
     # do it!
     def run(self):
-        # start subscriber to sonar sensor
         self.faceProxy.subscribe(self.NAOQI_FACE_DETECTION_SUB_NAME)
 
         while self.is_looping():
             val = self.memProxy.getData("FaceDetected", 0)
 
-            # Check whether we got a valid output: a list with two fields.
+            # Check whether we got a valid output
             if(val and isinstance(val, list) and len(val) == 5):
-                # We detected faces !
-                # For each face, we can read its shape info and ID.
-                # First Field = TimeStamp.
-                timeStamp = val[0]
-                # Second Field = array of face_Info's.
-                faceInfoArray = val[1]
-
                 face_detection_msg = FaceDetection()
-                # camera_id
-                face_detection_msg.camera_id = val[4]
                 # timestamp
+                timeStamp = val[0]
                 if self.use_ros_time_:
                     face_detection_msg.header.stamp = rospy.Time.now()
                 else:
                     face_detection_msg.header.stamp = rospy.Time(timeStamp[0], timeStamp[1])
+
+                # camera id
+                face_detection_msg.camera_id = val[4]
+
+                # face info
+                faceInfoArray = val[1]
                 try:
                     # Browse the faceInfoArray to get info on each detected face.
                     for faceInfo in faceInfoArray:
                         if len(faceInfo) == 2:
+                            face_info_msg = FaceInfo()
+
                             faceShapeInfo = faceInfo[0]
                             faceExtraInfo = faceInfo[1]
-
-                            face_info_msg = FaceInfo()
                             # shape info
                             face_info_msg.alpha = faceShapeInfo[1]
                             face_info_msg.beta = faceShapeInfo[2]
@@ -73,18 +70,17 @@ class NaoqiFaceDetection(NaoqiNode):
                             face_info_msg.name = faceExtraInfo[2]
                             face_detection_msg.face_infos.append(face_info_msg)
 
-                            print "  alpha %.3f - beta %.3f" % (faceShapeInfo[1], faceShapeInfo[2])
-                            print "  width %.3f - height %.3f" % (faceShapeInfo[3], faceShapeInfo[4])
+                            rospy.loginfo("alpha %.3f - beta %.3f", faceShapeInfo[1], faceShapeInfo[2])
+                            rospy.loginfo("width %.3f - height %.3f", faceShapeInfo[3], faceShapeInfo[4])
                 except Exception, e:
-                    print "faces detected, but it seems getData is invalid. ALValue ="
-                    print val
-                    print "Error msg %s" % (str(e))
+                    rospy.logerr("faces detected, but it seems getData is invalid. ALValue =")
+                    rospy.logerr("%s", val)
+                    rospy.logerr("Error msg %s", (str(e)))
                 self.pub_face_.publish(face_detection_msg)
             else:
-                print "Error with getData. ALValue = %s" % (str(val))
+                rospy.loginfo("Error with getData. ALValue = %s", (str(val)))
 
             self.faceRate.sleep()
 
         #exit face detection subscription
         self.faceProxy.unsubscribe(self.NAOQI_FACE_DETECTION_SUB_NAME)
-
