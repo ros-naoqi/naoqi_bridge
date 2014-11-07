@@ -21,8 +21,6 @@ import rospy
 
 from naoqi_driver.naoqi_node import NaoqiNode
 
-import qi
-
 # level 0 is actually 'silent' in NAOqi and 5 is 'verbose' but we adapt to the ROS ones
 LEVELS = [Log.DEBUG, Log.FATAL, Log.ERROR, Log.WARN, Log.INFO, Log.DEBUG, Log.DEBUG]
 try:
@@ -60,6 +58,7 @@ class NaoqiLogger(NaoqiNode):
         rospy.init_node( self.NODE_NAME )
 
         # the log manager is only avaiable through a session (NAOqi 2.0)
+        import qi
         self.session = qi.Session()
         self.session.connect("tcp://%s:%s" % (self.pip, self.pport))
         self.logManager = self.session.service("LogManager")
