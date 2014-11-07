@@ -20,12 +20,12 @@ import rospy
 
 from octomap_msgs.msg import Octomap
 
-from nao_driver import NaoNode
-from nao_driver.boost.octomap_python import octomap_str_to_tuple
+from naoqi_driver.naoqi_node import NaoqiNode
+from naoqi_sensors.boost.octomap_python import octomap_str_to_tuple
 
-class NaoOctomap(NaoNode):
+class NaoqiOctomap(NaoqiNode):
     def __init__(self):
-        NaoNode.__init__(self, 'nao_octomap')
+        NaoqiNode.__init__(self, 'nao_octomap')
 
         if self.get_version() < LooseVersion('2.0'):
             rospy.loginfo('NAOqi version < 2.0, Octomap is not used')
@@ -60,6 +60,6 @@ class NaoOctomap(NaoNode):
             r.sleep()
 
 if __name__ == '__main__':
-    nao_octomap = NaoOctomap()
+    nao_octomap = NaoqiOctomap()
     nao_octomap.start()
     rospy.spin()

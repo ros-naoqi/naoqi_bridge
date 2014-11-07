@@ -237,7 +237,7 @@ NaoqiJointStates::NaoqiJointStates(int argc, char ** argv)
     m_torsoIMUPub = m_nh.advertise<sensor_msgs::Imu>("imu",5);
     m_jointStatePub = m_nh.advertise<sensor_msgs::JointState>("joint_states",5);
 
-    ROS_INFO("nao_sensors initialized");
+    ROS_INFO("naoqi_joint_states initialized");
 
 }
 
@@ -502,8 +502,7 @@ bool NaoqiJointStates::setOdomPoseCallback(naoqi_msgs::SetTransform::Request& re
 
 int main(int argc, char ** argv)
 {
-   ros::init(argc, argv, "naoqi_sensors_cpp");
-   cout << "I am here" << endl;
+   ros::init(argc, argv, "naoqi_joint_states");
    NaoqiJointStates * sensors;
    try{
       sensors = new NaoqiJointStates(argc,argv);
@@ -522,6 +521,6 @@ int main(int argc, char ** argv)
 
    delete sensors;
 
-   ROS_INFO("nao_sensors stopped");
+   ROS_INFO("naoqi_joint_states stopped");
    return 0;
 }

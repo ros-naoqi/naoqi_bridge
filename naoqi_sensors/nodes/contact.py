@@ -35,9 +35,9 @@
 import rospy
 
 import naoqi
-from nao_msgs.msg import TactileTouch, Bumper
+from naoqi_msgs.msg import TactileTouch, Bumper
 from std_msgs.msg import Bool
-from nao_driver import NaoNode
+from naoqi_driver.naoqi_node import NaoqiNode
 from naoqi import ( ALModule, ALBroker, ALProxy )
 
 #
@@ -54,7 +54,7 @@ from naoqi import ( ALModule, ALBroker, ALProxy )
 #   when the script ends (1.10.52).
 #
 
-class NaoTactile(ALModule):
+class NaoqiTactile(ALModule):
     "Sends callbacks for tactile touch, bumper press and foot contact to ROS"
     def __init__(self, moduleName):
         # get connection from command line:
@@ -80,7 +80,7 @@ class NaoTactile(ALModule):
         self.init_almodule()
         
         # ROS initialization:
-        rospy.init_node('nao_tactile')
+        rospy.init_node('naoqi_tactile')
              
         # init. messages:
         self.tactile = TactileTouch()              
@@ -189,7 +189,7 @@ class NaoTactile(ALModule):
         self.footContactPub.publish(value > 0.0)
 
 if __name__ == '__main__':
-    ROSNaoTactileModule = NaoTactile("ROSNaoTactileModule")
+    ROSNaoTactileModule = NaoqiTactile("ROSNaoTactileModule")
 
     rospy.spin()
     
