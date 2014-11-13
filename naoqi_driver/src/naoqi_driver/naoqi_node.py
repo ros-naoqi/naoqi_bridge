@@ -67,6 +67,9 @@ class NaoqiNode(Thread):
         # dict from a modulename to a proxy
         self.__proxies = {}
 
+        # Initialize ros, before getting parameters.
+        rospy.init_node(self.__name)
+
         # If user has set parameters for ip and port use them as default
         default_ip = rospy.get_param("~pip", "127.0.0.1")
         default_port = rospy.get_param("~pport", 9559)
@@ -86,7 +89,6 @@ class NaoqiNode(Thread):
 
         ## ROS stuff
         self.__stop_thread = False
-        rospy.init_node(self.__name)
         # make sure that we unregister from everything when the module dies
         rospy.on_shutdown(self.__on_ros_shutdown)
 
