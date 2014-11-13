@@ -128,7 +128,7 @@ namespace naoqicamera_driver
    * @param nh Nodehandle used to get parameters
    *
    */
-  void NaoCameraDriver::getNaoqiParams(ros::NodeHandle nh)
+  void NaoqiCameraDriver::getNaoqiParams(ros::NodeHandle nh)
   {
     if( !nh.getParam("pip", m_pip) )
       ROS_WARN("No pip parameter specified.");
