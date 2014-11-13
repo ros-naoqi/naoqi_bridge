@@ -1,81 +1,45 @@
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changelog for package nao_sensors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package naoqi_sensors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.2.0 (2014-09-22)
-------------------
-* add the queue_size parameter to the Publisher
-  Hence drop Groovy support
-* fix the catkin_package call
-* Merge pull request `#3 <https://github.com/ros-nao/nao_sensors/issues/3>`_ from dhood/master
-  Rename nao_camera to nao_sensors in header also
-* Rename nao_camera to nao_sensors
-* Contributors: CHILI Demo Corner, Séverin Lemaignan, Vincent Rabaud
+Forthcoming
+-----------
+* Merge pull request `#6 <https://github.com/ros-naoqi/naoqi_bridge/issues/6>`_ from jondy276/implement-critical-section-in-nodelet
+  Implement critical section in nodelet
+* OCTOMAP: Fix publisher for empty octree.
+* bugfix: naoqi migration
+* Fix sonar node
+* add args for camera parameters
+* expose configurable node_name in constructor
+* excluded most of the sensors as a python module
+  python files inside the node folder just contain a main function launching the module
+  Conflicts:
+  naoqi_sensors/nodes/microphone.py
+* exclude microphone
+* fixing imports on microphone sensor
+* fixing imports on microphone sensor
+* excluded sonar module
+* excluded camera as a python module
+* Added support for configuring ip and port of parent broker
+  This commit adds support to the nao camera nodelet to get the
+  ip and port settings from ros parameters. That way the nodelet
+  can be configured using launchfiles or using command line parameters via ros.
+* Remove old member and add comment
+* Replace volatile bool with boost::mutex
+  Volatile bool is not sufficient to prevent poll() and reconfigure() from
+  executing concurrently. This causes the nodelet to crash when poll()
+  releases the image on a closed camera.
+  Here a mutex is introduced to guard the relevant critical sections.
+* Contributors: Jon Dybeck, Karsten Knese, Vincent Rabaud, lsouchet, nao, sambrose
 
-0.1.3 (2014-08-21)
+0.4.0 (2014-11-06)
 ------------------
-* install the sensor scripts in the local bin
-* Contributors: Vincent Rabaud
-
-0.1.2 (2014-08-21)
-------------------
-* fix a compile bug on Groovy
-  absolute path is not specified in the Findoctomap.cmake
-* Contributors: Vincent Rabaud
-
-0.1.0 (2014-08-19)
-------------------
-* comply to the new NaoNode API
-* lowered getData frequency
-* correct path for ros_sonar.py
-* Export ros_sonar into python package
-  The upper class ros_sonar.py can now be imported via 'import nao_sensors.ros_sonar'
-* use the newer API when possible
-* use the new NaoNode API
-* comply to the newer NaoNode API
-* added sonar publisher
-  ros_sonar.py as common publisher for any sonar.
-  reusable for different robots
-  nao_sonar.py instantiats the correct sonar for nao
-* rename the package from nao_camera to nao_sensors
-* add octomap support
-* add a dependency on nao_driver for the Python code
-* Dependency on camera_info_manager_py for the python node
-* do not poll the image if nobody is subscribed
-* comply to REP008
-* add support for 3d camera in Python
-* make the camera dynamically reconfigurable in Python
-* move the nao_camera.py script from nao_driver
-* remove useless rosbuild artefact
-* Nodelet support for Nao cameras
-  Again, closely build upon camera1394 ROS driver
-* Make sure we never publish more than the actual camera framerate
-* Added sample calibration files for Nao cameras
-  OpenCV Calibration for top and bottom cameras, at 160x120, 320x240 and 640x480.
-  The actual calibration needs to be redone for each Nao, but this should be a fair
-  starting point.
-* Cosmetic refactoring
-* Remove useless mutex
-* Only publish frames when someone is listening on the topic
-  This saves a lot of CPU on Nao when images are not needed.
-* No easy way to go 'local'
-  From a performance point of view, it would be very beneficial to be a
-  NAOqi 'local module' to access the video buffer.
-  It remains to be seen if we can write a ROS nodes that also happen to be a
-  NAOqi local module (that would allow much better performances for the camera
-  node).
-* Support only RGB8 colorspace
-  If BGR is useful to someone, we can re-introduce it. For now, keep
-  things simple.
-* Use the Nao TF frames + generate unique calibration files
-  Make sure we generate calibration files different for each resolution/camera
-* Added support for dynamic reconfiguration of all Nao v4 camera params
-  Only reconfiguration of FPS, resolution, and source requires restart
-  of the driver.
-  Also, correctly unsubscribe/release from the video proxy.
-* Initial working version
-  This first version supports publishing images from the top
-  camera on Nao. No configurability yet.
-  The nodelet code has been kept, but it is not
-  used/enabled at compilation yet.
-* Contributors: Armin Hornung, Karsten Knese, Séverin Lemaignan, Vincent Rabaud
+* fix the version in order to bump everything
+* Add 2 methods for extract and set camera parameters
+* introduce replace tag in package.xml
+* resolved imports
+* renamed naoqi_sensors
+* naoqi_sensors transfer
+* removed or renamed wrongly placed files in naoqi_sensors
+* renamed subfolders for naoqi_*
+* Contributors: Karsten Knese, Vincent Rabaud, mchamoux
