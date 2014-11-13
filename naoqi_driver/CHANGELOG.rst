@@ -2,8 +2,8 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2014-11-13)
+------------------
 * added speech dynamic reconfigure
 * bugfix: naoqi migration
 * Init ros node before getting parameters

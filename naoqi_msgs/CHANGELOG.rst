@@ -2,8 +2,8 @@
 Changelog for package naoqi_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2014-11-13)
+------------------
 * fixing imports on microphone sensor
 * fixing imports on microphone sensor
 * Contributors: Karsten Knese

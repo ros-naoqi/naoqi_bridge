@@ -2,8 +2,8 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2014-11-13)
+------------------
 * Merge pull request `#6 <https://github.com/ros-naoqi/naoqi_bridge/issues/6>`_ from jondy276/implement-critical-section-in-nodelet
   Implement critical section in nodelet
 * OCTOMAP: Fix publisher for empty octree.
