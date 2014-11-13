@@ -30,6 +30,8 @@ find_package(Boost QUIET COMPONENTS program_options signals)
 # This will install python libraries
 catkin_python_setup()
 
+ # auto-generate dynamic reconfiguration GUI before catkin_package()
+generate_dynamic_reconfigure_options(cfg/NaoqiSpeech.cfg)
 
 if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
   message(STATUS "NAOqi C++ SDK found; C++ nodes will be built")
