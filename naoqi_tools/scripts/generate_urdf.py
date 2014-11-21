@@ -103,9 +103,7 @@ def REP120_compatibility():
         for link in robot.links.keys():
             try:
                 robot.rename_link(link,LINKS_DICO[link])
-            except KeyError:
-                pass
-            except ValueError:
+            except KeyError, ValueError:
                 pass
 
     if NAME=='romeo':
