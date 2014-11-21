@@ -28,8 +28,8 @@ Pepper_links = {
 'RElbowRoll_link':'RForeArm',
 'LWristYaw_link':'l_wrist',
 'RWristYaw_link':'r_wrist',
-'LHand_actuatorframe':'l_gripper',
-'RHand_actuatorframe':'r_gripper',
+'LHand_actuator_frame':'l_gripper',
+'RHand_actuator_frame':'r_gripper',
 
 # SENSORS
 'Accelerometer_sensor':'ImuTorsoAccelerometer_frame',

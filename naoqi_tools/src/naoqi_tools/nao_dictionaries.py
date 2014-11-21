@@ -39,8 +39,8 @@ Nao_links = {
     u'RAnkleRoll_link':'r_ankle',
     u'LWristYaw_link':'l_wrist',
     u'RWristYaw_link':'r_wrist',
-    u'LHand_actuatorframe':'l_gripper',
-    u'RHand_actuatorframe':'r_gripper',
+    u'LHand_actuator_frame':'l_gripper',
+    u'RHand_actuator_frame':'r_gripper',
     u'LLeg_effector':'l_sole',
     u'RLeg_effector':'r_sole',
 
