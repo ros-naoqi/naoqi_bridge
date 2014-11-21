@@ -112,18 +112,22 @@ namespace naoqicamera_driver
                 diagnostic_updater::TimeStampStatusParam())
   {
     getNaoqiParams(priv_nh);
-    if ( connectLocalNaoQi() )
+    
+    if ( connectNaoQi() )
     {
-      ROS_INFO("Connected to local broker. Ignoring command line and ros parameters");
+      ROS_DEBUG("Connected to remote NAOqi.");
       return;
     }
 
-    if ( !connectNaoQi() )
+    ROS_WARN("Could not connect to remote NAOqi! Trying to connect to local NAOqi.");
+
+    if ( connectLocalNaoQi() )
     {
-      ROS_ERROR("Could not connect to NAOqi! Make sure NAOqi is running and you passed the right host/port.");
-      throw naoqicamera_driver::Exception("Connection to NAOqi failed");
+      ROS_DEBUG("Connected to local NAOqi.");
+      return;
     }
 
+    throw naoqicamera_driver::Exception("Connection to NAOqi failed");
   }
 
   NaoqiCameraDriver::~NaoqiCameraDriver()
