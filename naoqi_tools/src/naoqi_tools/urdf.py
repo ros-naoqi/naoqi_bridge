@@ -2,7 +2,7 @@
 # Available at https://github.com/laas/robot_model_py
 
 import string
-from nao_description.gazeboUrdf import *
+from naoqi_tools.gazeboUrdf import *
 from xml.dom.minidom import Document
 from xml.dom import minidom
 import sys

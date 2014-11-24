@@ -6,10 +6,13 @@ Description
 This script allows to convert an official Aldebaran URDF file into a REP120 compliant set of xacro files.
 Official Aldebaran urdf files should be included in Aldebaran documentation very soon.
 It is an Aldebaran specific script which will certainly not work on other robots. I handles every aldebaran robot : hence <ROBOT> can be any of the following : romeo, nao and pepper
+
+Prerequisites
+-------------
 This script assumes that you have the <ROBOT>_description package installed, it will export all the files in <ROBOT>_description/urdf/<ROBOT><VERSION>_generated_urdf/
 
 URDF parsing
-============
+------------
 This code doesn't use urdfdom because it was lacking xacro, comments and gazebo tags support. Some bugs and features about handling materials were also problematic. The impossibility to create xml custom nodes by hand was a blocking issue so we decided to use a minidom base urdf parsing library.
 
 

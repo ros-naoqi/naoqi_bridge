@@ -1,5 +1,5 @@
 import math
-import nao_description.urdf as ur
+import naoqi_tools.urdf as ur
 pi_2 = math.pi/2.0
 
 Nao_offsets = {
