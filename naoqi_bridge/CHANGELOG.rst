@@ -4,6 +4,10 @@ Changelog for package naoqi_bridge
 
 Forthcoming
 -----------
+* add changelogs
+* add a meta-package for naoqi_bridge
+* Contributors: Vincent Rabaud
+
 * add a meta-package for naoqi_bridge
 * Contributors: Vincent Rabaud
 

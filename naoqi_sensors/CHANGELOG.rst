@@ -4,6 +4,22 @@ Changelog for package naoqi_sensors
 
 Forthcoming
 -----------
+* Install launchfiles even if naoqi not found
+* update changelogs
+* Merge pull request `#5 <https://github.com/ros-naoqi/naoqi_bridge/issues/5>`_ from jondy276/add-support-for-local-broker
+  Added support for connecting to local broker
+* Try remote naoqi before local naoqi.
+* Added support for connecting to local broker
+  By doing this the nodelet can connect to a local broker allowing
+  direct function calls and memory access.
+  Note that the nodelet will prefer the local broker over one
+  specified on the command line or using ros parameters.
+* Fix namespace problem in naoqi_camera
+  The new method getNaoqiParams did not take into account the namespace
+  change done using repo restructuring. Here the correct namespace is
+  used for the method.
+* Contributors: Arguedas Mikael, Jon Dybeck, Vincent Rabaud
+
 * Merge pull request `#5 <https://github.com/ros-naoqi/naoqi_bridge/issues/5>`_ from jondy276/add-support-for-local-broker
   Added support for connecting to local broker
 * Try remote naoqi before local naoqi.
