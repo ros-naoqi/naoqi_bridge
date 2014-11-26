@@ -1,0 +1,23 @@
+<package>
+  <name>naoqi_tools</name>
+  <version>0.0.0</version>
+
+  <description>
+    Set of tools provided by Aldebaran to convert Aldebaran files (URDF, blender...)
+  </description>
+
+  <author>Mikael Arguedas</author>
+  <maintainer email="mikael.arguedas@gmail.com">Mikael Arguedas</maintainer>
+  <license>BSD</license>
+
+  <url>http://www.ros.org/wiki/nao_description</url>
+  <url type="bugtracker">https://github.com/ros-nao/nao_robot/issues</url>
+  <url type="repository">https://github.com/ros-nao/nao_robot</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>nao_description</run_depend>
+  <run_depend>pepper_description</run_depend>
+  <run_depend>romeo_description</run_depend>
+
+</package>
