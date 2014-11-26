@@ -2,8 +2,8 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.2 (2014-11-26)
+------------------
 * Install launchfiles even if naoqi not found
 * update changelogs
 * Merge pull request `#5 <https://github.com/ros-naoqi/naoqi_bridge/issues/5>`_ from jondy276/add-support-for-local-broker

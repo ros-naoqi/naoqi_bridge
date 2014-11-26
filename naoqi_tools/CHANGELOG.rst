@@ -2,8 +2,8 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.2 (2014-11-26)
+------------------
 * remove useless dependency
 * Remove suffix _joint for all joints
 * get package version to agree

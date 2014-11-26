@@ -1,6 +1,6 @@
 <package>
   <name>naoqi_driver</name>
-  <version>0.4.1</version>
+  <version>0.4.2</version>
   <description>
     <p>
       Driver package for the Naoqi robot, providing access to walking commands,

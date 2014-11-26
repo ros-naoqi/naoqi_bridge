@@ -2,8 +2,8 @@
 Changelog for package naoqi_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.2 (2014-11-26)
+------------------
 * add changelogs
 * add a meta-package for naoqi_bridge
 * Contributors: Vincent Rabaud

@@ -2,8 +2,8 @@
 Changelog for package naoqi_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.2 (2014-11-26)
+------------------
 * update changelogs
 * Contributors: Vincent Rabaud
 

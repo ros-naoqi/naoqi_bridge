@@ -2,8 +2,8 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.2 (2014-11-26)
+------------------
 * update changelogs
 * Fix SDK dependencies (did not compile in C++ with every SDK versions)
 * Added support for connecting to local broker
