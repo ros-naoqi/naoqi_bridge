@@ -92,6 +92,8 @@ def REP120_compatibility():
 
     # Rename links
     for joint in robot.joints:
+        if robot.joints[joint].name.endswith('_joint'):
+            robot.joints[joint].name = robot.joints[joint].name[0:-6]
         try:
             robot.joints[joint].parent = LINKS_DICO[robot.joints[joint].parent]
         except KeyError:
