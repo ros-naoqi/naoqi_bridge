@@ -94,6 +94,13 @@ def REP120_compatibility():
     for joint in robot.joints:
         if robot.joints[joint].name.endswith('_joint'):
             robot.joints[joint].name = robot.joints[joint].name[0:-6]
+        if robot.joints[joint].name.endswith('_actuator'):
+            robot.joints[joint].name = robot.joints[joint].name[0:-9]
+        if robot.joints[joint].mimic is not None:
+            if robot.joints[joint].mimic.joint_name.endswith('_actuator'):
+               robot.joints[joint].mimic.joint_name = robot.joints[joint].mimic.joint_name[0:-9]
+            if robot.joints[joint].mimic.joint_name.endswith('_joint'):
+               robot.joints[joint].mimic.joint_name = robot.joints[joint].mimic.joint_name[0:-6]
         try:
             robot.joints[joint].parent = LINKS_DICO[robot.joints[joint].parent]
         except KeyError:
