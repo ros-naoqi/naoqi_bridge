@@ -59,7 +59,7 @@
   <run_depend>sensor_msgs</run_depend>
   <run_depend>tf</run_depend>
 
-  <replace>nao_sensors</replace>
+  <conflict>nao_sensors</conflict>
 
   <export>
       <nodelet plugin="${prefix}/naoqicamera_nodelet.xml"/>

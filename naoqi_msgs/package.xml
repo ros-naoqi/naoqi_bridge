@@ -35,6 +35,6 @@
   <run_depend>nav_msgs</run_depend>
   <run_depend>trajectory_msgs</run_depend>
 
-  <replace>nao_msgs</replace>
+  <conflict>nao_msgs</conflict>
 
 </package>
