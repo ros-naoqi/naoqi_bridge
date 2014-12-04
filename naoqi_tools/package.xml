@@ -16,7 +16,4 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>nao_description</run_depend>
-  <run_depend>romeo_description</run_depend>
-
 </package>
