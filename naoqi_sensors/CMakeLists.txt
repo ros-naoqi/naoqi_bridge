@@ -63,6 +63,7 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
         ${Boost_LIBRARIES}
         ${NAOqi_LIBRARIES})
     add_dependencies(cameras ${catkin_EXPORTED_TARGETS})
+    add_dependencies(cameras ${PROJECT_NAME}_gencfg)
 
     install(TARGETS cameras
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
