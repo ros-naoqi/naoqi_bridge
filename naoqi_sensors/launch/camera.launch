@@ -10,7 +10,7 @@
   <arg name="frame_rate" default="15" />
   <arg name="use_ros_time" default="True" />
   <arg name="auto_exposition" default="1" />
-  <arg name="auto_exposure_algo" default="3" />
+  <arg name="auto_exposure_algo" default="0" />
   <arg name="exposure" default="128" />
   <arg name="gain" default="128" />
   <arg name="brightness" default="128" />
