@@ -135,14 +135,9 @@ class NaoqiCam (NaoqiNode):
 
         if is_camera_new:
             rospy.loginfo('subscribed to camera proxy, since this is the first camera')
-            if self.get_version() < LooseVersion('2.0'):
-                self.nameId = self.camProxy.subscribe("rospy_gvm", new_config['source'],
-                                                      new_config['resolution'], new_config['color_space'],
-                                                      new_config['frame_rate'])
-            else:
-                self.nameId = self.camProxy.subscribeCamera("rospy_gvm", new_config['source'],
-                                                            new_config['resolution'], new_config['color_space'],
-                                                            new_config['frame_rate'])
+            self.nameId = self.camProxy.subscribeCamera("rospy_gvm", new_config['source'],
+                                                        new_config['resolution'], new_config['color_space'],
+                                                        new_config['frame_rate'])
 
         if self.config['source'] != new_config['source'] or is_camera_new:
             rospy.loginfo('updating camera source information')
