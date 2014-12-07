@@ -38,7 +38,7 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
   catkin_package(
     INCLUDE_DIRS include
     LIBRARIES naoqi_node
-    CFG_EXTRAS cmake_modules-extras.cmake
+    CFG_EXTRAS naoqi_driver-extras.cmake
   )
 
   include_directories(
@@ -71,7 +71,7 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
           RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
 else()
   message(STATUS "Cannot find NAOqi C++ sdk; C++ nodes will NOT be built")
-  catkin_package()
+  catkin_package(CFG_EXTRAS naoqi_driver-extras.cmake)
 endif()
 
 # add a diagnostic analyzer plugin
@@ -91,7 +91,7 @@ install(DIRECTORY nodes/
 install(DIRECTORY launch/
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch )
 
-## Install config file
-#install(DIRECTORY config/
-#    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
-#    PATTERN "*.cfg" EXCLUDE)
+# Install cmake file
+install(FILES cmake/FindNAOqi.cmake
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/cmake/
+)
