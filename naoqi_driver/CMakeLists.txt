@@ -64,6 +64,9 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
                        )
   add_dependencies(naoqi_joint_states_cpp ${catkin_EXPORTED_TARGETS})
 
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/
+          DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  )
   install(TARGETS naoqi_node
           LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
           )
