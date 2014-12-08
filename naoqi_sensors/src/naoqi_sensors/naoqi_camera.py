@@ -127,7 +127,6 @@ class NaoqiCam (NaoqiNode):
 
 
     def load_camera_info( self ):
-        print 'loading camera info'
         if self.config['source'] == 0:
             self.config['camera_info_url'] = self.config['calibration_file_top']
         elif self.config['source'] == 1:
@@ -169,8 +168,8 @@ class NaoqiCam (NaoqiNode):
 
         # check if the camera changed
         if self.config['camera_info_url'] == "" or \
-           self.config['camera_info_url'] != new_config['camera_info_url'] and \
-           new_config['camera_info_url'] not in self.camera_infos:
+           ( self.config['camera_info_url'] != new_config['camera_info_url'] and \
+           new_config['camera_info_url'] not in self.camera_infos ):
 
             self.load_camera_info()
 
