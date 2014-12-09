@@ -212,7 +212,7 @@ class NaoqiJointStates(NaoqiNode):
             # send jointStiffness
             self.jointStiffness.header.stamp = timestamp
             self.jointStiffness.header.frame_id = self.base_frameID
-            self.jointStiffness.position = stiffnessData
+            self.jointStiffness.effort = stiffnessData
 
             self.jointStiffnessPub.publish(self.jointStiffness)
 
