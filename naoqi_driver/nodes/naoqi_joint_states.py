@@ -87,6 +87,8 @@ class NaoqiJointStates(NaoqiNode):
         self.torsoIMU.header.frame_id = self.base_frameID
         self.jointState = JointState()
         self.jointState.name = self.motionProxy.getJointNames('Body')
+        self.jointStiffness = JointState()
+        self.jointStiffness.name = self.motionProxy.getJointNames('Body')
 
         # simluated model misses some joints, we need to fill:
         if (len(self.jointState.name) == 22):
@@ -101,6 +103,7 @@ class NaoqiJointStates(NaoqiNode):
         self.torsoOdomPub = rospy.Publisher("odom", Odometry)
         self.torsoIMUPub = rospy.Publisher("imu", Imu)
         self.jointStatePub = rospy.Publisher("joint_states", JointState)
+        self.jointStiffnessPub = rospy.Publisher("joint_stiffness", JointState)
 
         self.tf_br = tf.TransformBroadcaster()
 
@@ -126,6 +129,7 @@ class NaoqiJointStates(NaoqiNode):
                  # odometry data:
                 odomData = self.motionProxy.getPosition('Torso', motion.SPACE_WORLD, True)
                 positionData = self.motionProxy.getAngles('Body', self.useJointSensors)
+                stiffnessData = self.motionProxy.getStiffnesses('Body')
             except RuntimeError, e:
                 print "Error accessing ALMemory, exiting...\n"
                 print e
@@ -204,6 +208,13 @@ class NaoqiJointStates(NaoqiNode):
                 self.jointState.position.append(0.0)
 
             self.jointStatePub.publish(self.jointState)
+
+            # send jointStiffness
+            self.jointStiffness.header.stamp = timestamp
+            self.jointStiffness.header.frame_id = self.base_frameID
+            self.jointStiffness.position = stiffnessData
+
+            self.jointStiffnessPub.publish(self.jointStiffness)
 
             self.sensorRate.sleep()
 
