@@ -252,7 +252,7 @@ class NaoqiCam (NaoqiNode):
             elif image[3] == kYUV422ColorSpace:
                 encoding = "yuv422" # this works only in ROS groovy and later
             elif image[3] == kDepthColorSpace:
-                encoding = "mono16"
+                encoding = "16UC1"
             else:
                 rospy.logerr("Received unknown encoding: {0}".format(image[3]))
             img.encoding = encoding
