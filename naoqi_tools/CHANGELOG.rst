@@ -2,8 +2,8 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.3 (2014-12-14)
+------------------
 * naoqui_tools not depending on robot descriptions
   I was gonna test Nao in ROS and, hopefully, in Gazebo. I didn't find any updated guide on that so I'm just debugging as I work.
   I did a:

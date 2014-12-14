@@ -1,6 +1,6 @@
 <package>
   <name>naoqi_bridge</name>
-  <version>0.4.2</version>
+  <version>0.4.3</version>
   <description>Meta package to interface ROS with Aldebaran's NAOqi.</description>
   <author>Vincent Rabaud</author>
   <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>

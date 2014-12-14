@@ -1,6 +1,6 @@
 <package>
   <name>naoqi_tools</name>
-  <version>0.4.2</version>
+  <version>0.4.3</version>
 
   <description>
     Set of tools provided by Aldebaran to convert Aldebaran files (URDF, blender...)

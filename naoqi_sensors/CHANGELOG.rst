@@ -2,8 +2,8 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.3 (2014-12-14)
+------------------
 * Merge pull request `#22 <https://github.com/ros-naoqi/naoqi_bridge/issues/22>`_ from Karsten1987/hotfix_camera_info
   bugfix: correctly load camera calibration acc. to cam source
 * use 16UC1 as kinect do
