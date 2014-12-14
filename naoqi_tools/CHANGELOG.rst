@@ -2,6 +2,19 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* naoqui_tools not depending on robot descriptions
+  I was gonna test Nao in ROS and, hopefully, in Gazebo. I didn't find any updated guide on that so I'm just debugging as I work.
+  I did a:
+  rosdep install --from-paths src --ignore-src --rosdistro hydro -y
+  On a workspace with only ```nao_robot``` and ```naoqi_bridge``` and I got:
+  ERROR: the following packages/stacks could not have their rosdep keys resolved to system dependencies:
+  naoqi_tools: Cannot locate rosdep definition for [romeo_description]
+  As it's named "tools" I think that maybe it shouldn't depend on the robots descriptions (or you'll need all of them in the workspace!).
+* remove _actuator suffix to Hand joints
+* Contributors: Mikael ARGUEDAS, Sammy Pfeiffer
+
 0.4.2 (2014-11-26)
 ------------------
 * remove useless dependency

@@ -2,6 +2,13 @@
 Changelog for package naoqi_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* get the packages to actually conflict with the old versions (nao*)
+  The replace tag does not provide a way to uninstall the packages.
+  Its use case is different.
+* Contributors: Vincent Rabaud
+
 0.4.2 (2014-11-26)
 ------------------
 * update changelogs

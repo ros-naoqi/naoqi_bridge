@@ -2,6 +2,21 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge pull request `#22 <https://github.com/ros-naoqi/naoqi_bridge/issues/22>`_ from Karsten1987/hotfix_camera_info
+  bugfix: correctly load camera calibration acc. to cam source
+* use 16UC1 as kinect do
+* delete print, introduce parantheses if statement
+* bugfix: correctly load camera calibration acc. to cam source
+* Fix camera node for NAO version 3.2 with Naoqi 1.14. Changed the camProxy.subscribe() which was deprecated to the subscribeCamera, and as the call was the same for both versions removed the if for the version. Also changed the auto_Exposure_algo parameter to 0 as the parameters 2 and 3 were not valid for this NAO model (it gave an error), so parameter 0 and 1 should work for every NAO.
+* Added missing rule for NaoqiCameraConfig
+  Because it said the file naoqi_sensors/NaoqiCameraConfig.h was missing
+* get the packages to actually conflict with the old versions (nao*)
+  The replace tag does not provide a way to uninstall the packages.
+  Its use case is different.
+* Contributors: Gerard Canal, Karsten Knese, Kei Okada, Vincent Rabaud
+
 0.4.2 (2014-11-26)
 ------------------
 * Install launchfiles even if naoqi not found

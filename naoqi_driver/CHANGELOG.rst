@@ -2,6 +2,17 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* put data into effort
+* publish joint_stiffness
+* also install the include folder
+* install the FindNAOqi.cmake and use extra file in all cases
+* get the packages to actually conflict with the old versions (nao*)
+  The replace tag does not provide a way to uninstall the packages.
+  Its use case is different.
+* Contributors: Kei Okada, Vincent Rabaud
+
 0.4.2 (2014-11-26)
 ------------------
 * update changelogs
