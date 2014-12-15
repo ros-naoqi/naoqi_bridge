@@ -22,16 +22,22 @@ import rospy
 from naoqi_sensors.naoqi_sonar import SonarSensor, SonarPublisher
 
 if __name__ == '__main__':
-    # create two sonars
-    leftSonar = SonarSensor('Device/SubDeviceList/US/Left/Sensor/Value',     # AL memory key
-                            'LSonar_frame',                                        # ROS frame id
-                            '~/nao/sonar_left')                              # ROS topic to publish
+    sonar_params = rospy.get_param('sonar_devices', [{'al_memory_key': 'Device/SubDeviceList/US/Left/Sensor/Value',
+                                                      'frame_id': 'LSonar_frame',
+                                                      'topic_name': '~/nao/sonar_left'},
+                                                     {'al_memory_key': 'Device/SubDeviceList/US/Right/Sensor/Value',
+                                                      'frame_id': 'RSonar_frame',
+                                                      'topic_name': '~/nao/sonar_right'}])
+    sonars = []
+    for param in sonar_params:
+        print("{}: {} {}".format(param['al_memory_key'], param['frame_id'],param['topic_name']))
+        sonar = SonarSensor(param['al_memory_key'],     # AL memory key
+                            param['frame_id'],          # ROS frame_id
+                            param['topic_name'])        # ROS topic to publish
+        sonars.append(sonar)
+    sonars = tuple(sonars)
 
-    rightSonar = SonarSensor('Device/SubDeviceList/US/Right/Sensor/Value',   # AL memory key
-                             'RSonar_frame',                                       # ROS frame id
-                             '~/nao/sonar_right')                            # ROS topic to publish
-
-    publisher = SonarPublisher( (leftSonar,rightSonar))                      # list of sonars
+    publisher = SonarPublisher( sonars )                      # list of sonars
     publisher.start()
 
     rospy.spin()
