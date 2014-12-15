@@ -48,24 +48,23 @@ class SonarPublisher(NaoqiNode):
 
     NAOQI_SONAR_SUB_NAME = 'ros_sonar_subsription'
 
-    def __init__(self, sonarSensorList, param_sonar_rate="~sonar_rate", sonar_rate=40):
+    def __init__(self, param_sonar_rate="~sonar_rate", sonar_rate=10):
         NaoqiNode.__init__(self, "sonar_publisher")
         self.sonarRate = rospy.Rate(rospy.get_param(param_sonar_rate, sonar_rate))
         self.connectNaoQi()
 
-        self.sonarSensorList = sonarSensorList
-        self.publisherList = []
-        for sonarSensor in sonarSensorList:
-            self.publisherList.append(
-                        rospy.Publisher(sonarSensor.rosTopic, Range, queue_size=5))
+        memory_key = rospy.get_param("~memory_key")
+        frame_id = rospy.get_param("~frame_id")
+        self.sonarSensor = SonarSensor( memory_key, frame_id, "sonar" )
+        self.publisher = rospy.Publisher( self.sonarSensor.rosTopic, Range, queue_size=5)
 
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
-        self.sonarProxy = self.get_proxy("ALSonar")
         self.memProxy = self.get_proxy("ALMemory")
+        self.sonarProxy = self.get_proxy("ALSonar")
         if self.sonarProxy is None or self.memProxy is None:
-            #self.sonarProxy.unsubscribe(NAO_SONAR_SUB_NAME)
+            rospy.loginfo( 'sonar or memory proxy is invalid' )
             exit(1)
 
     # do it!
@@ -74,20 +73,19 @@ class SonarPublisher(NaoqiNode):
         self.sonarProxy.subscribe(self.NAOQI_SONAR_SUB_NAME)
 
         while self.is_looping():
-            for i in range(len(self.sonarSensorList)):
-                sonar = self.sonarSensorList[i]
-                sonar.msg.header.stamp = rospy.Time.now()
-                # fetch values
-                try:
-                    sonar.msg.range = self.memProxy.getData(sonar.memoryKey)
-                except RuntimeError as e:
-                    print 'key not found, correct robot ?', e
-                    break
+            sonar = self.sonarSensor
+            sonar.msg.header.stamp = rospy.Time.now()
+            # fetch values
+            try:
+                sonar.msg.range = self.memProxy.getData(sonar.memoryKey)
+            except RuntimeError as e:
+                rospy.loginfo( 'key not found, correct robot ?', e )
+                break
 
-                # publish messages
-                self.publisherList[i].publish(sonar.msg)
-                #sleep
-                self.sonarRate.sleep()
+            # publish messages
+            self.publisher.publish(sonar.msg)
+            #sleep
+            self.sonarRate.sleep()
 
         #exit sonar subscription
         self.sonarProxy.unsubscribe(self.NAOQI_SONAR_SUB_NAME)
