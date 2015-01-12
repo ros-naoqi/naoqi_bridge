@@ -106,7 +106,7 @@ class NaoqiCam (NaoqiNode):
         if rospy.has_param('~camera_depth_frame'):
             self.config['camera_depth_frame'] = rospy.get_param('~camera_depth_frame')
         else:
-            self.config['camera_depth_frame'] = "/DepthCamera_frame"
+            self.config['camera_depth_frame'] = "/CameraDepth_frame"
 
         #load calibration files
         if rospy.has_param('~calibration_file_top'):
