@@ -2,6 +2,15 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* cleanup some installs
+* change default 3d frame
+* configure sonars via external params
+  launch multiple sonars via diff namespaces
+  see launching cameras for this
+* Contributors: Karsten Knese, Vincent Rabaud
+
 0.4.3 (2014-12-14)
 ------------------
 * Merge pull request `#22 <https://github.com/ros-naoqi/naoqi_bridge/issues/22>`_ from Karsten1987/hotfix_camera_info

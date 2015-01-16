@@ -2,6 +2,9 @@
 Changelog for package naoqi_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.4.3 (2014-12-14)
 ------------------
 * get the packages to actually conflict with the old versions (nao*)
