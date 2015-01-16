@@ -199,7 +199,6 @@ class NaoqiCam (NaoqiNode):
             key_methods.append(('source', 'setActiveCamera'))
         for key, method in key_methods:
             if self.config[key] != new_config[key] or is_camera_new:
-                rospy.loginfo((self.nameId, new_config[key]))
                 self.camProxy.__getattribute__(method)(self.nameId, new_config[key])
 
         self.config.update(new_config)
