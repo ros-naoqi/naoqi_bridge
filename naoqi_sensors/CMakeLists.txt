@@ -97,12 +97,8 @@ endif()
 add_subdirectory(./src)
 
 # install sensor scripts
-install(PROGRAMS nodes/camera.py
-                 nodes/microphone.py
-                 nodes/octomap.py
-                 nodes/sonar.py
-        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+catkin_install_python(PROGRAMS nodes/camera.py nodes/microphone.py nodes/octomap.py nodes/sonar.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # install launch files
 install(FILES launch/camera.launch 
@@ -117,3 +113,7 @@ install(FILES launch/camera.launch
 # (the plugin is exported there no matter what)
 install(FILES naoqicamera_nodelet.xml
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+# install camera files
+install(DIRECTORY share
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
