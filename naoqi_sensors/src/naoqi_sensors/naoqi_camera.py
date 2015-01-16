@@ -47,7 +47,7 @@ from naoqi_sensors.cfg import NaoqiCameraConfig
 from naoqi_sensors.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA
 # import color spaces
 from naoqi_sensors.vision_definitions import kYUV422ColorSpace, kYUVColorSpace, \
-                    kRGBColorSpace, kBGRColorSpace, kDepthColorSpace
+                    kRGBColorSpace, kBGRColorSpace, kDepthColorSpace, kRawDepthColorSpace
 # import extra parameters
 from naoqi_sensors.vision_definitions import kCameraSelectID, kCameraAutoExpositionID, kCameraAecAlgorithmID, \
                   kCameraContrastID, kCameraSaturationID, kCameraHueID, kCameraSharpnessID, kCameraAutoWhiteBalanceID, \
@@ -199,6 +199,7 @@ class NaoqiCam (NaoqiNode):
             key_methods.append(('source', 'setActiveCamera'))
         for key, method in key_methods:
             if self.config[key] != new_config[key] or is_camera_new:
+                rospy.loginfo((self.nameId, new_config[key]))
                 self.camProxy.__getattribute__(method)(self.nameId, new_config[key])
 
         self.config.update(new_config)
@@ -269,7 +270,7 @@ class NaoqiCam (NaoqiNode):
                 encoding = "bgr8"
             elif image[3] == kYUV422ColorSpace:
                 encoding = "yuv422" # this works only in ROS groovy and later
-            elif image[3] == kDepthColorSpace:
+            elif image[3] == kDepthColorSpace or image[3] == kRawDepthColorSpace:
                 encoding = "16UC1"
             else:
                 rospy.logerr("Received unknown encoding: {0}".format(image[3]))
@@ -280,7 +281,7 @@ class NaoqiCam (NaoqiNode):
             self.pub_img_.publish(img)
 
             # deal with the camera info
-            if self.config['source'] == kDepthCamera and image[3] == kDepthColorSpace:
+            if self.config['source'] == kDepthCamera and (image[3] == kDepthColorSpace or image[3] == kRawDepthColorSpace):
                 infomsg = CameraInfo()
                 # yes, this is only for an XTion / Kinect but that's the only thing supported by NAO
                 ratio_x = float(640)/float(img.width)

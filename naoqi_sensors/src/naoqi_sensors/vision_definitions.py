@@ -61,6 +61,7 @@ kYYCbCrColorSpace = 14
 kH2RGBColorSpace = 15
 kHSMixedColorSpace = 16
 kDepthColorSpace = 17
+kRawDepthColorSpace = 23
 
 # Scale methods
 kSimpleScaleMethod = 0
