@@ -49,11 +49,13 @@ class NaoqiOctomap(NaoqiNode):
         octomap.header.frame_id = '/odom'
 
         while self.is_looping():
-            octomap_bin = self.get_proxy("ALNavigation")._get3DMap()
-            octomap.binary, octomap.id, octomap.resolution, octomap.data = octomap_str_to_tuple(octomap_bin)
-            if len(octomap.data) > 0:
-                octomap.header.stamp = rospy.Time.now()
-                self.pub.publish(octomap)
+            if self.pub.get_num_connections() > 0:
+                octomap_bin = self.get_proxy("ALNavigation")._get3DMap()
+                if len(octomap_bin) > 129:
+                    octomap.binary, octomap.id, octomap.resolution, octomap.data = octomap_str_to_tuple(octomap_bin)
+                    if len(octomap.data) > 0:
+                        octomap.header.stamp = rospy.Time.now()
+                    self.pub.publish(octomap)
 
             r.sleep()
 

@@ -73,19 +73,20 @@ class SonarPublisher(NaoqiNode):
         self.sonarProxy.subscribe(self.NAOQI_SONAR_SUB_NAME)
 
         while self.is_looping():
-            sonar = self.sonarSensor
-            sonar.msg.header.stamp = rospy.Time.now()
-            # fetch values
-            try:
-                sonar.msg.range = self.memProxy.getData(sonar.memoryKey)
-            except RuntimeError as e:
-                rospy.loginfo( 'key not found, correct robot ?', e )
-                break
-
-            # publish messages
-            self.publisher.publish(sonar.msg)
-            #sleep
-            self.sonarRate.sleep()
-
+            if (self.publisher.get_num_connections() > 0):
+                sonar = self.sonarSensor
+                sonar.msg.header.stamp = rospy.Time.now()
+                # fetch values
+                try:
+                    sonar.msg.range = self.memProxy.getData(sonar.memoryKey)
+                except RuntimeError as e:
+                    rospy.loginfo( 'key not found, correct robot ?', e )
+                    break
+    
+                # publish messages
+                self.publisher.publish(sonar.msg)
+                #sleep
+                self.sonarRate.sleep()
+            
         #exit sonar subscription
         self.sonarProxy.unsubscribe(self.NAOQI_SONAR_SUB_NAME)
