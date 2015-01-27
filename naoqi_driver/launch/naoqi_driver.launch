@@ -21,6 +21,7 @@
   <group if="$(arg force_python)">
     <node pkg="naoqi_driver" type="naoqi_joint_states.py" name="naoqi_joint_states" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
   </group>
+  <node pkg="naoqi_driver" type="naoqi_moveto.py" name="naoqi_moveto" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
 
   <!-- Start nodes in their C++ variant (default, when force_python:=false) -->
   <group unless="$(arg force_python)">
