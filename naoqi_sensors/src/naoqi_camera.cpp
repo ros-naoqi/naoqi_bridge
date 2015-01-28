@@ -528,4 +528,4 @@ namespace naoqicamera_driver
     closeCamera();
   }
 
-}; // end namespace naocamera_driver
+}; // end namespace naoqicamera_driver
