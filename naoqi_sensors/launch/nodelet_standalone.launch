@@ -8,8 +8,8 @@
 
 <launch>
 
-  <node pkg="nodelet" type="nodelet" name="naocamera_nodelet"
-        args="standalone naocamera/driver" >
+  <node pkg="nodelet" type="nodelet" name="naoqicamera_nodelet"
+        args="standalone naoqicamera/driver" >
   </node>
 
 </launch>

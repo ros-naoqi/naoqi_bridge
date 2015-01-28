@@ -13,8 +13,8 @@
         args="manager" />
 
   <!-- camera driver nodelet -->
-  <node pkg="nodelet" type="nodelet" name="naocamera_nodelet"
-        args="load naocamera/driver camera_nodelet_manager" >
+  <node pkg="nodelet" type="nodelet" name="naoqicamera_nodelet"
+        args="load naoqicamera/driver camera_nodelet_manager" >
   </node>
 
 </launch>
