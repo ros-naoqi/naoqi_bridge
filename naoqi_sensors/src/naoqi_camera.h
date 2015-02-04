@@ -133,6 +133,6 @@ private:
   double topic_diagnostics_max_freq_;
   diagnostic_updater::TopicDiagnostic topic_diagnostics_;
 
-}; // end class NaoCameraDriver
+}; // end class NaoqiCameraDriver
 
-}; // end namespace naocamera_driver
+}; // end namespace naoqicamera_driver

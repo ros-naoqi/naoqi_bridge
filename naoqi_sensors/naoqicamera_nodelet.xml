@@ -1,6 +1,6 @@
-<library path="lib/libnaocamera_nodelet">
-  <class name="naocamera/driver"
-         type="NaoCameraNodelet"
+<library path="lib/libnaoqicamera_nodelet">
+  <class name="naoqicamera/driver"
+         type="NaoqiCameraNodelet"
          base_class_type="nodelet::Nodelet">
     <description> 
       Driver nodelet for Aldebaran's NAO cameras.

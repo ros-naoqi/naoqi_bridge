@@ -190,9 +190,9 @@ namespace naoqicamera_driver
         camera_proxy_ = boost::shared_ptr<ALVideoDeviceProxy>(new ALVideoDeviceProxy(m_broker));
 
         if (camera_proxy_->getGenericProxy()->isLocal())
-            ROS_INFO("nao_camera runs directly on the robot.");
+            ROS_INFO("naoqi_camera runs directly on the robot.");
         else
-            ROS_WARN("nao_camera runs remotely.");
+            ROS_WARN("naoqi_camera runs remotely.");
         // build a unique name for the camera that will be used to
         // store calibration informations.
         stringstream canonical_name;
@@ -528,4 +528,4 @@ namespace naoqicamera_driver
     closeCamera();
   }
 
-}; // end namespace naocamera_driver
+}; // end namespace naoqicamera_driver
