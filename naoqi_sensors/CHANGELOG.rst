@@ -2,6 +2,22 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update nodelet names in log messages
+* Update names in nodelet launchfiles
+* Update camera nodelet names in comments
+* Update the xml for the camera nodelet
+  During the restructuring the nodelet was renamed, but the metadata in the
+  xml file was not updated. This breaks loading of the nodelet. Here the
+  metadata is updated. Packages that use the nodelet will need to update
+  their launchfiles.
+* SENSORS: Publish octomap and sonars only when subscribed.
+  Signed-off-by: lsouchet <lsouchet@aldebaran-robotics.com>
+* remove debug line
+* add raw depth support
+* Contributors: Jon Dybeck, Vincent Rabaud, lsouchet
+
 0.4.4 (2015-01-16)
 ------------------
 * cleanup some installs

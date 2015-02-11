@@ -2,6 +2,12 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* DRIVER: Add node to send motion moveTo via rviz.
+* propper install of the nodes
+* Contributors: Vincent Rabaud, lsouchet
+
 0.4.4 (2015-01-16)
 ------------------
 
