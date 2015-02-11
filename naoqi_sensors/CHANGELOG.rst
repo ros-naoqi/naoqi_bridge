@@ -2,8 +2,8 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.5 (2015-02-11)
+------------------
 * Update nodelet names in log messages
 * Update names in nodelet launchfiles
 * Update camera nodelet names in comments

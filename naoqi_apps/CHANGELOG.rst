@@ -2,8 +2,8 @@
 Changelog for package naoqi_apps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.5 (2015-02-11)
+------------------
 * add naoqi_apps
 * Contributors: Vincent Rabaud
 
