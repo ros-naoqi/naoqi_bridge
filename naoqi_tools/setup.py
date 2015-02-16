@@ -5,7 +5,6 @@ from catkin_pkg.python_setup import generate_distutils_setup
 d = generate_distutils_setup(
     packages=['naoqi_tools'],
     package_dir={'': 'src'},
-    scripts=['scripts/generate_urdf.py']
 )
 
 setup(**d)

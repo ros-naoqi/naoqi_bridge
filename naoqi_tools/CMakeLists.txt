@@ -16,3 +16,7 @@ catkin_python_setup()
 
 include_directories(${catkin_INCLUDE_DIRS})
 
+catkin_install_python(PROGRAMS
+  scripts/generate_urdf.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
