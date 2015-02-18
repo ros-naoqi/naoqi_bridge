@@ -96,17 +96,17 @@ class NaoqiCam (NaoqiNode):
         if rospy.has_param('~camera_top_frame'):
             self.config['camera_top_frame'] = rospy.get_param('~camera_top_frame')
         else:
-            self.config['camera_top_frame'] = "/CameraTop_frame"
+            self.config['camera_top_frame'] = "/CameraTop_optical_frame"
         # bottom camera with default
         if rospy.has_param('~camera_bottom_frame'):
             self.config['camera_bottom_frame'] = rospy.get_param('~camera_bottom_frame')
         else:
-            self.config['camera_bottom_frame'] = "/CameraBottom_frame"
+            self.config['camera_bottom_frame'] = "/CameraBottom_optical_frame"
         # depth camera with default
         if rospy.has_param('~camera_depth_frame'):
             self.config['camera_depth_frame'] = rospy.get_param('~camera_depth_frame')
         else:
-            self.config['camera_depth_frame'] = "/CameraDepth_frame"
+            self.config['camera_depth_frame'] = "/CameraDepth_optical_frame"
 
         #load calibration files
         if rospy.has_param('~calibration_file_top'):
