@@ -10,7 +10,7 @@
   <maintainer email="mikael.arguedas@gmail.com">Mikael Arguedas</maintainer>
   <license>BSD</license>
 
-  <url>http://www.ros.org/wiki/nao_description</url>
+  <url>http://www.ros.org/wiki/naoqi_tools</url>
   <url type="bugtracker">https://github.com/ros-naoqi/naoqi_bridge/issues</url>
   <url type="repository">https://github.com/ros-naoqi/naoqi_bridge</url>
 

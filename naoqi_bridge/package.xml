@@ -6,7 +6,7 @@
   <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
   <license>BSD</license>
 
-  <url type="website">http://www.ros.org/nao</url>
+  <url type="website">http://ros.org/wiki/nao</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 

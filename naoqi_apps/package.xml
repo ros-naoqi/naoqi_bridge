@@ -6,7 +6,7 @@
   <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
   <license>Apache 2.0</license>
 
-  <url type="website">http://www.ros.org/nao</url>
+  <url type="website">http://ros.org/wiki/nao</url>
   <url type="bugtracker">https://github.com/ros-naoqi/naoqi_bridge/issues</url>
   <url type="repository">https://github.com/ros-naoqi/naoqi_bridge.git</url>
 
