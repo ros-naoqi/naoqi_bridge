@@ -11,8 +11,8 @@
   <license>BSD</license>
 
   <url>http://www.ros.org/wiki/nao_description</url>
-  <url type="bugtracker">https://github.com/ros-nao/nao_robot/issues</url>
-  <url type="repository">https://github.com/ros-nao/nao_robot</url>
+  <url type="bugtracker">https://github.com/ros-naoqi/naoqi_bridge/issues</url>
+  <url type="repository">https://github.com/ros-naoqi/naoqi_bridge</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 

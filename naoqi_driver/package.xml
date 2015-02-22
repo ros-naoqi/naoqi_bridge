@@ -18,9 +18,9 @@
   <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
   <license>BSD</license>
 
-  <url>http://ros.org/wiki/nao_driver</url>
-  <url type="bugtracker">https://github.com/ros-nao/nao_robot/issues</url>
-  <url type="repository">https://github.com/ros-nao/nao_robot</url>
+  <url>http://ros.org/wiki/naoqi_driver</url>
+  <url type="bugtracker">https://github.com/ros-naoqi/naoqi_bridge/issues</url>
+  <url type="repository">https://github.com/ros-naoqi/naoqi_bridge.git</url>
 
   <author>Armin Hornung</author>
   <author>Stefan Osswald</author>

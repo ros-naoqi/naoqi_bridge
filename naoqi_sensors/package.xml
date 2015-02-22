@@ -24,9 +24,9 @@
   <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
   <license>LGPL and Apache2</license>
 
-  <url type="website">http://ros.org/nao</url>
-  <url type="bugtracker">https://github.com/ros-nao/naoqi_sensors/issues</url>
-  <url type="repository">https://github.com/ros-nao/naoqi_sensors.git</url>
+  <url type="website">http://ros.org/wiki/naoqi_sensors</url>
+  <url type="bugtracker">https://github.com/ros-naoqi/naoqi_bridge/issues</url>
+  <url type="repository">https://github.com/ros-naoqi/naoqi_bridge.git</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
