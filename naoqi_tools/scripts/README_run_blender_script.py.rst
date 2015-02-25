@@ -12,7 +12,7 @@ scripts accordingly.
 Dependencies
 -------------
  * Blender2.71 or higher
- * Blender add_on: "io_export_selected.py" (available in the blender folder of
+ * Blender add_ons: "io_export_selected.py" and "io_export_ogreDotScene.py" (available in the blender folder of
    this package)
 
 The export of the meshes to OGRE format (.mesh) requires OgreXMLConverter program to be installed
@@ -21,7 +21,6 @@ The export of the meshes to OGRE format (.mesh) requires OgreXMLConverter progra
 
     sudo apt-get install ogre-1.8-tools
 
-And the blender add_on "io_export_ogreDotScene.py"
 
 How to use it
 --------------
@@ -122,3 +121,6 @@ Parameters:
 
 
 
+TODO
+-------------
+Create script to convert any type of file to any other type supported by blender (not only COLLADA and OGRE)
