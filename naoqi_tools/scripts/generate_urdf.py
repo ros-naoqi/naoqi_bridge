@@ -145,6 +145,9 @@ def REP120_compatibility():
         robot.add_joint(ur.Joint('%s_joint' % camera_optical_frame, camera_frame, camera_optical_frame, 'fixed', None,
                                      ur.Pose((0,0,0),(-math.pi/2.0,0,-math.pi/2.0))))
 
+    # add dummy physics for gazebo simulation
+    add_dummy_inertia(['Finger','Thumb','gripper'])
+
 def add_transmission_tags():
     global robot
 #TODO create all transmission elements : Cannot get them from the lib for now
@@ -171,6 +174,13 @@ def add_gazebo_tags():
     """
     return
 
+def add_dummy_inertia(list):
+    global robot
+    for string in list:
+        for link in robot.links:
+            if robot.links[link].name.find(string) != -1:
+                robot.links[link].inertial=ur.Inertial(1.1e-9,0.0,0.0,1.1e-9,
+                                                       0.0,1.1e-9,2e-06)
 
 ##################
 ##### Meshes #####
