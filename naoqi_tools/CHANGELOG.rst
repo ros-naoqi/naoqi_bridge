@@ -2,6 +2,19 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update README_run_blender_script.py.rst
+* fix for issue 31: to be tested
+* update wiki ros links
+* update repo links in package.xml
+* upload blender scripts
+* add optical frames for each camera
+* fix typo for inversion of sonars
+* Use catkin_install_python macro
+* Move generate_urdf.py system bin dir to package bin dir
+* Contributors: Arguedas Mikael, Mikael Arguedas, Takashi Ogura, Vincent Rabaud
+
 0.4.5 (2015-02-11)
 ------------------
 

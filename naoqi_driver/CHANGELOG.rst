@@ -2,6 +2,14 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* update repo links in package.xml
+* fix the naoqi_logger name
+* fix bad nao_logger package
+* readd logger
+* Contributors: Mikael Arguedas, Vincent Rabaud
+
 0.4.5 (2015-02-11)
 ------------------
 * DRIVER: Add node to send motion moveTo via rviz.
