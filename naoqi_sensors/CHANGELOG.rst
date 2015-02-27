@@ -2,8 +2,8 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.6 (2015-02-27)
+------------------
 * update repo links in package.xml
 * use proper optical frames for the robot
 * Contributors: Mikael Arguedas, Vincent Rabaud

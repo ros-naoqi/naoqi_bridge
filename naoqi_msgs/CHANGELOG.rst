@@ -2,8 +2,8 @@
 Changelog for package naoqi_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.6 (2015-02-27)
+------------------
 * update repo links in package.xml
 * Contributors: Mikael Arguedas
 

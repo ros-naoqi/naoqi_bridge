@@ -2,8 +2,8 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.6 (2015-02-27)
+------------------
 * update repo links in package.xml
 * fix the naoqi_logger name
 * fix bad nao_logger package
