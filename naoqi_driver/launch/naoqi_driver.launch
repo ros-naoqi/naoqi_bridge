@@ -28,6 +28,6 @@
   </group>
 
   <!-- start robot agnostic nodes -->
-  <node pkg="naoqi_driver" type="naoqi_moveto.py" name="naoqi_moveto" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
+  <node pkg="naoqi_driver" type="naoqi_moveto.py" name="naoqi_moveto" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen"/>
   <node pkg="naoqi_driver" type="naoqi_logger.py" name="nao_logger" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
 </launch>

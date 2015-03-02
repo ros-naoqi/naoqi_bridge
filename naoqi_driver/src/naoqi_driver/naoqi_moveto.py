@@ -22,12 +22,15 @@ from naoqi_driver.naoqi_node import NaoqiNode
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import Pose
 import almath
+import tf
+from tf.transformations import euler_from_quaternion
 
 class MoveToListener(NaoqiNode):
 
     def __init__(self):
         NaoqiNode.__init__(self, 'naoqi_moveto_listener')
         self.connectNaoQi()
+        self.listener = tf.TransformListener()
 
         self.subscriber = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.callback)
 
@@ -40,12 +43,13 @@ class MoveToListener(NaoqiNode):
             exit(1)
 
     def callback(self, poseStamped):
-        pose = Pose(poseStamped.pose.position, poseStamped.pose.orientation)
-        quat = almath.Quaternion(pose.orientation.w, pose.orientation.x, pose.orientation.y, pose.orientation.z)
-        rotation = almath.rotation3DFromQuaternion(quat)
-        position3d = almath.Position3D(pose.position.x, pose.position.y, pose.position.z)
-        worldToTarget = almath.Pose2D(position3d.x, position3d.y, rotation.wz)
-        worldToRobot = almath.Pose2D(self.motionProxy.getRobotPosition(True))
-        robotToTarget = almath.pinv(worldToRobot) * worldToTarget
-        robotToTarget.theta = almath.modulo2PI(robotToTarget.theta)        
-        self.motionProxy.moveTo(robotToTarget.x, robotToTarget.y, robotToTarget.theta)
+        # reset timestamp because of bug: https://github.com/ros/geometry/issues/82
+        poseStamped.header.stamp = rospy.Time(0)
+        try:
+            robotToTarget1 = self.listener.transformPose("/base_footprint", poseStamped)
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as e:
+            rospy.logerr("Error while transforming pose: %s", str(e))
+            return
+        quat = robotToTarget1.pose.orientation
+        (roll,pitch,yaw) = euler_from_quaternion((quat.x, quat.y, quat.z, quat.w))
+        self.motionProxy.moveTo(robotToTarget1.pose.position.x, robotToTarget1.pose.position.y, yaw)
