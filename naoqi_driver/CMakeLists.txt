@@ -86,7 +86,7 @@ install(TARGETS naoqi_diagnostic_analyzers DESTINATION ${CATKIN_PACKAGE_LIB_DEST
 install(FILES naoqi_analyzer_plugins.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 #And this will install python nodes
-catkin_install_python(PROGRAMS nodes/naoqi_joint_states.py nodes/naoqi_logger.py
+catkin_install_python(PROGRAMS nodes/naoqi_joint_states.py nodes/naoqi_logger.py nodes/naoqi_moveto.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # Instructions to install launch files
