@@ -15,8 +15,17 @@
 
   <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
   <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
+  <arg name="force_python" default="false" />
 
-  <node pkg="naoqi_driver" type="naoqi_joint_states.py" name="naoqi_joint_states" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
+  <!-- Start nodes in their python variant (only when setting force_python:=true during launch) -->
+  <group if="$(arg force_python)">
+    <node pkg="naoqi_driver" type="naoqi_joint_states.py" name="naoqi_joint_states" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
+  </group>
+
+  <!-- Start nodes in their C++ variant (default, when force_python:=false) -->
+  <group unless="$(arg force_python)">
+    <node pkg="naoqi_driver" type="naoqi_joint_states_cpp" name="naoqi_joint_states" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
+  </group>
 
   <!-- start robot agnostic nodes -->
   <node pkg="naoqi_driver" type="naoqi_moveto.py" name="naoqi_moveto" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen"/>

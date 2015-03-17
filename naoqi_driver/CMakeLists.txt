@@ -72,9 +72,18 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
           )
   install(TARGETS naoqi_joint_states_cpp
           RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
+
+  # Instructions to install launch files
+  install(FILES launch/naoqi_driver_cpp.launch
+    RENAME naoqi_driver.launch
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch )
 else()
   message(STATUS "Cannot find NAOqi C++ sdk; C++ nodes will NOT be built")
   catkin_package(CFG_EXTRAS naoqi_driver-extras.cmake)
+
+  # Instructions to install launch files
+  install(FILES launch/naoqi_driver.launch
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch )
 endif()
 
 # add a diagnostic analyzer plugin
@@ -88,10 +97,6 @@ install(FILES naoqi_analyzer_plugins.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DEST
 #And this will install python nodes
 catkin_install_python(PROGRAMS nodes/naoqi_joint_states.py nodes/naoqi_logger.py nodes/naoqi_moveto.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
-# Instructions to install launch files
-install(DIRECTORY launch/
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch )
 
 # Install cmake file
 install(FILES cmake/FindNAOqi.cmake
