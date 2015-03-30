@@ -2,6 +2,11 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* install octomap_python
+* Contributors: Vincent Rabaud
+
 0.4.6 (2015-02-27)
 ------------------
 * update repo links in package.xml

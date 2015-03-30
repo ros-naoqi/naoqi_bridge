@@ -2,6 +2,9 @@
 Changelog for package naoqi_apps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.4.6 (2015-02-27)
 ------------------
 * update wiki ros links

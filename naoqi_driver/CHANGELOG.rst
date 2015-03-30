@@ -2,6 +2,11 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* MOVETO: transform moveTo commands in /base_footprint frame.
+* Contributors: lsouchet
+
 0.4.6 (2015-02-27)
 ------------------
 * update repo links in package.xml
