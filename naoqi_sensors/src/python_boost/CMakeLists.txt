@@ -17,6 +17,10 @@ set_target_properties(octomap_python PROPERTIES
                       PREFIX ""
 )
 
+install(TARGETS octomap_python
+        DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}/boost
+)
+
 # add an __init__.py file to be able to import the file
 configure_file(__init__.py.plain.in
                ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_PYTHON_DESTINATION}/boost/__init__.py
