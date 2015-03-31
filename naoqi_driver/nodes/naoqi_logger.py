@@ -23,11 +23,7 @@ from naoqi_driver.naoqi_node import NaoqiNode
 
 # level 0 is actually 'silent' in NAOqi and 5 is 'verbose' but we adapt to the ROS ones
 LEVELS = [Log.DEBUG, Log.FATAL, Log.ERROR, Log.WARN, Log.INFO, Log.DEBUG, Log.DEBUG]
-try:
-    ROSOUT_PUB = rospy.topics.Publisher('/rosout', Log, latch=True, queue_size=100)
-except:
-    # Groovy compatible code
-    ROSOUT_PUB = rospy.topics.Publisher('/rosout', Log, latch=True)
+ROSOUT_PUB = rospy.topics.Publisher('/rosout', Log, latch=True, queue_size=100)
 
 def onMessageCallback(msg):
     """

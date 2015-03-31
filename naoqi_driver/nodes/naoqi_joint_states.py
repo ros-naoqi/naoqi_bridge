@@ -100,10 +100,10 @@ class NaoqiJointStates(NaoqiNode):
         msg = "Nao joints found: "+ str(self.jointState.name)
         rospy.logdebug(msg)
 
-        self.torsoOdomPub = rospy.Publisher("odom", Odometry)
-        self.torsoIMUPub = rospy.Publisher("imu", Imu)
-        self.jointStatePub = rospy.Publisher("joint_states", JointState)
-        self.jointStiffnessPub = rospy.Publisher("joint_stiffness", JointState)
+        self.torsoOdomPub = rospy.Publisher("odom", Odometry, queue_size=1)
+        self.torsoIMUPub = rospy.Publisher("imu", Imu, queue_size=1)
+        self.jointStatePub = rospy.Publisher("joint_states", JointState, queue_size=1)
+        self.jointStiffnessPub = rospy.Publisher("joint_stiffness", JointState, queue_size=1)
 
         self.tf_br = tf.TransformBroadcaster()
 
