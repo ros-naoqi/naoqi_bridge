@@ -27,14 +27,11 @@ import subprocess
 
 parser = argparse.ArgumentParser(usage='Export meshes and convert them')
 parser.add_argument('-b','--blenderdir', default='/usr/bin', help='location of your blender directory')
-parser.add_argument('-f','--file', default='nao-v4.blend',help='blender file to process')
+parser.add_argument('-f','--file', default='nao-v4.blend',help='full path of the blender file to process')
 parser.add_argument('-o','--outputmeshdir',default=None, help='directory to export the meshes to')
 
 args = parser.parse_args()
 
-directory = args.file[0:args.file.find('/')]
-
-print("directory : " + directory)
 if os.path.basename(args.file).lower().startswith('nao'):
     robot='nao'
     version='V40'
@@ -54,7 +51,7 @@ else:
     print("robot name unknown")
     exit(1)
 package = robot + suffix
-print(package)
+
 if args.outputmeshdir == None :
     print("\nno valid output directory, looking for " + package + " ROS package\n")
     cmd= 'rospack find ' + package
@@ -62,16 +59,13 @@ if args.outputmeshdir == None :
     if not path_meshes:
       print('package "' + path_meshes + '" not found')
 else:
-  if not os.path.isdir(args.outputmeshdir):
-    print('creating the output folder because it does not exist')
-    os.makedirs(args.outputmeshdir)
-  path_meshes = args.outputmeshdir
+    if not os.path.isdir(args.outputmeshdir):
+      print('creating the output folder because it does not exist')
+      os.makedirs(args.outputmeshdir)
+    path_meshes = args.outputmeshdir
 
-if directory != '':
-    extractor_path = directory
-else:
-    extractor_path = subprocess.check_output('rospack find naoqi_meshes_extractor', stderr=subprocess.STDOUT, shell=True)[:-1]
-script_path = os.path.join(extractor_path , 'scripts')
+extractor_path = subprocess.check_output('rospack find naoqi_tools', stderr=subprocess.STDOUT, shell=True)[:-1]
+script_path = os.path.join(extractor_path , 'scripts', 'blender')
 
 if version:
     path_meshes = os.path.join(path_meshes, version)
@@ -79,21 +73,20 @@ if version:
 print("extractor path :" + extractor_path)
 
 # Export meshes as collada files and all the materials of the scene
-os.system(os.path.join(args.blenderdir , 'blender') + ' ' + os.path.join(extractor_path,'blend', os.path.basename(args.file)) + ' -P ' + script_path + '/io_export_visual.py -- ' + path_meshes + ' ' + robot)
+os.system('./run_blender_script.py -s io_export_visual.py -o ' + path_meshes + ' -f ' + args.file)
 
 # Import collada files one by one and export each of them as a single .mesh(OGRE) file
-os.system(args.blenderdir + '/blender -P ' + script_path + '/io_export_ogre.py -- ' + path_meshes)
+os.system('./run_blender_script.py -s io_export_ogre.py -i ' + path_meshes)
 
 # Normalize exported collada meshes to give them the right scale and orientation
-os.system(script_path + '/normalize_meshes.py -n '+ robot + ' -i ' + path_meshes + ' -s ' + str(scale))
+os.system('./run_blender_script.py -s normalize_meshes.py -i ' + path_meshes + ' --scale ' + str(scale))
 
 # Import all collada meshes, decimate them and export them as stl files
-os.system(args.blenderdir + '/blender --background -P '+ script_path + '/io_export_collision.py -- ' + path_meshes)
+os.system('./run_blender_script.py -s io_export_collision.py -i ' + path_meshes)
 
 # Remove files left by the OGRE exporter
 file_list = sorted(os.listdir(path_meshes))
 for file in file_list:
-    if file.endswith('.mesh.xml'):
+    if file.endswith('.mesh.xml') or file.endswith('.mesh') or file.endswith('.material'):
         print('removing ' + file)
         os.remove(os.path.join(path_meshes , file))
-
