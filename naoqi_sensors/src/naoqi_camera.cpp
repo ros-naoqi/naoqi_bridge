@@ -373,7 +373,7 @@ namespace naoqicamera_driver
             image->header.stamp = ros::Time::now();
         else { 
             // use NAOqi timestamp
-            image->header.stamp = ros::Time(al_image[4],
+            image->header.stamp = ros::Time((int)al_image[4],
                 (int)al_image[5] * 1000);
         }
 
