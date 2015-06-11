@@ -10,7 +10,7 @@ include_directories(${OCTOMAP_INCLUDE_DIRS})
 
 # add the boost Python module
 add_library(octomap_python octomap_python.cpp)
-target_link_libraries(octomap_python ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(octomap_python ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 set_target_properties(octomap_python PROPERTIES
                       LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_PYTHON_DESTINATION}/boost
                       OUTPUT_NAME octomap_python
