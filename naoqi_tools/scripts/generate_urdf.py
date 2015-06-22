@@ -28,6 +28,7 @@ from __future__ import print_function
 import sys
 import argparse
 from naoqi_tools.urdf import URDF
+import copy
 import naoqi_tools.gazeboUrdf
 import naoqi_tools.urdf as ur
 import naoqi_tools.nao_dictionaries as dico
@@ -137,12 +138,40 @@ def REP120_compatibility():
 
         robot.add_joint(ur.Joint('base_footprint_joint', 'Tibia','base_footprint', 'fixed', None, ur.Pose((OFFSETS_DICO['BaseFootprintOffsetX'],OFFSETS_DICO['BaseFootprintOffsetY'],OFFSETS_DICO['BaseFootprintOffsetZ']),(OFFSETS_DICO['BaseFootprintRotX'],OFFSETS_DICO['BaseFootprintRotY'],OFFSETS_DICO['BaseFootprintRotZ']))))
 
+        # rename the laser frames to sensor frames (they are actually not used for computation
+        laser_links = [ c for c in robot.links.keys() if 'surrounding' in c.lower() ]
+        for joint in robot.joints.values():
+            if joint.child in laser_links:
+                laser_frame = joint.child
+                laser_device_frame = laser_frame[:-5] + 'device_frame'
+                # get the old joint to have the device frame as a child
+                joint.child = laser_device_frame
+                # but also create a joint with the projected frame as a child
+                robot.add_link(ur.Link(laser_device_frame))
+                joint_new = copy.deepcopy(joint)
+                joint_new.name = joint.name[:-17] + 'projected_sensor_fixedjoint'
+                joint_new.child = laser_frame
+                joint_new.origin.rotation[0] = 0
+                joint_new.origin.rotation[1] = 0
+                joint_new.origin.position[2] = -0.334
+                if 'left' in laser_frame.lower():
+                    # the following line is a temporary fix that should be fixed upstream
+                    joint_new.origin.rotation[2] = math.pi/2.0 + 0.1864836732051034
+                elif 'right' in laser_frame.lower():
+                    # the following line is a temporary fix that should be fixed upstream
+                    joint_new.origin.position[0] = -0.018
+                    # the following line is a temporary fix that should be fixed upstream
+                    joint_new.origin.rotation[2] = -math.pi/2.0 - 0.1864836732051034
+                elif 'front' in laser_frame.lower():
+                    joint_new.origin.rotation[2] = 0
+                robot.add_joint(joint_new)
+
     # add an optical frame for each robot
     camera_frames = [ c for c in robot.links.keys() if 'camera' in c.lower() ]
     for camera_frame in camera_frames:
         camera_optical_frame = camera_frame[:-6] + '_optical_frame'
         robot.add_link(ur.Link(camera_optical_frame))
-        robot.add_joint(ur.Joint('%s_joint' % camera_optical_frame, camera_frame, camera_optical_frame, 'fixed', None,
+        robot.add_joint(ur.Joint('%s_fixedjoint' % camera_optical_frame, camera_frame, camera_optical_frame, 'fixed', None,
                                      ur.Pose((0,0,0),(-math.pi/2.0,0,-math.pi/2.0))))
 
     # add dummy physics for gazebo simulation
@@ -248,7 +277,7 @@ def create_visual_xacro():
 	    root.appendChild(node)
             robot.links[link].visual = None
 	    robot.links[link].collision = None
-    filename = OUTPUT[0:OUTPUT.find('.')] + '_visual_collisions.xacro'
+    filename = OUTPUT[0:OUTPUT.rfind('.')] + '_visual_collisions.xacro'
     write_comments_in_xacro(doc, filename)
 
 
@@ -285,7 +314,7 @@ def export_robot_element(element):
                     root.appendChild(i.to_xml(doc))
         except AttributeError:
             pass
-    filename = OUTPUT[0:OUTPUT.find('.')] + '_' + str(element) + '.xacro'
+    filename = OUTPUT[0:OUTPUT.rfind('.')] + '_' + str(element) + '.xacro'
     print('exporting ' + element + ' xacro')
     write_comments_in_xacro(doc, filename)
 
@@ -321,14 +350,14 @@ def export_robot_to_xacro_files():
 #    export_robot_element('Gazebo')
 #    root.appendChild(ur.short(doc,'xacro:include','filename', NAME + '_Gazebo.xacro'))
     root.appendChild(ur.short(doc,'xacro:include','filename', NAME + '_sensors.xacro'))
-    export_list_to_xacro(['_frame'],OUTPUT[0:OUTPUT.find('.')] + '_sensors.xacro')
+    export_list_to_xacro(['_frame'],OUTPUT[0:OUTPUT.rfind('.')] + '_sensors.xacro')
     root.appendChild(ur.short(doc,'xacro:include','filename', NAME + '_fingers.xacro'))
-    export_list_to_xacro(['Finger','Thumb'],OUTPUT[0:OUTPUT.find('.')] + '_fingers.xacro')
+    export_list_to_xacro(['Finger','Thumb'],OUTPUT[0:OUTPUT.rfind('.')] + '_fingers.xacro')
     if NAME == 'pepper':
         root.appendChild(ur.short(doc,'xacro:include','filename', NAME + '_wheels.xacro'))
-        export_list_to_xacro(['Wheel'],OUTPUT[0:OUTPUT.find('.')] + '_wheels.xacro')
+        export_list_to_xacro(['Wheel'],OUTPUT[0:OUTPUT.rfind('.')] + '_wheels.xacro')
 
-    filename = OUTPUT[0:OUTPUT.find('.')]+ '_robot.xacro'
+    filename = OUTPUT[0:OUTPUT.rfind('.')]+ '_robot.xacro'
     write_comments_in_xacro(doc,filename)
     print('output directory : ' + OUTPUT[0:OUTPUT.rfind('/')+1])
 
@@ -398,7 +427,7 @@ def export_kinematic_chain_to_xacro(keyword,baseChain='base_link',tipRefChain='d
                             print("unknown element" + chain2[i])
                 else:
                     duplicate =0
-        filename = OUTPUT[0:OUTPUT.find('.')] + '_' + keyword + str('.xacro')
+        filename = OUTPUT[0:OUTPUT.rfind('.')] + '_' + keyword + str('.xacro')
         write_comments_in_xacro(doc, filename)
 
 def write_comments_in_xacro(doc,filename):
@@ -552,8 +581,9 @@ elif robot.name.lower().find('juliette') or robot.name.lower().find('pepper'):
     VISU_DICO = ''
     XACRO_DICO = PEPPER_XACRO_DICO
     print("PROCESSING PEPPER ROBOT")
-    MESHPKG = "_description"
+    MESHPKG = "_meshes"
     SCALE = 0.1
+    VERSION = '1.0'
 
 for element in robot.elements:
     if type(element) == naoqi_tools.urdf.Material:
@@ -566,7 +596,7 @@ except:
     print("unable to find "+ NAME + "_description package")
     sys.exit(0)
 OUTPUT = os.path.join(pathdescription,'urdf', NAME + VERSION +  '_generated_urdf', NAME + '.urdf')
-print("processing " + NAME + " :" + VERSION + " robot's urdf file")
+print("processing " + NAME + " (" + VERSION + ") robot's urdf file in " + OUTPUT)
 cmd = "rospack find "+ NAME + MESHPKG
 try:
     path_mesh_pkg = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)[:-1]
@@ -577,13 +607,14 @@ except:
 define_materials()
 if args.REP120=='true':
     REP120_compatibility()
+
+for link in robot.links:
+    adjustMeshPath(path_mesh_pkg,link)
+
 if args.xacro == 'robot':
     export_robot_element('material')
     export_robot_to_xacro_files()
 elif args.xacro == 'urdf':
-    print(OUTPUT)
-    for link in robot.links:
-        adjustMeshPath(path_mesh_pkg,link)
     robot.write_xml(OUTPUT)
 else:
     export_kinematic_chain_to_xacro(args.xacro)
