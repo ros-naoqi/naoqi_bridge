@@ -29,32 +29,12 @@ import lxml.etree as le
 from operator import attrgetter
 
 #
-# Check required arguments
-if len(sys.argv) != 4:
-    print ("Usage: python xmldiff.py <diffcommand> <filename1> <filename2>")
-    quit()
-
-
-#
 # Prepares the location of the temporary file that will be created by xmldiff
 def createFileObj(prefix, name):
     return { 
         "filename" : os.path.abspath(name),
         "tmpfilename" : "." + prefix + "." + os.path.basename(name)
     }
-
-
-#
-# Function to sort XML elements by id 
-#  (where the elements have an 'id' attribute that can be cast to an int)
-def sortbyid(elem):
-    id = elem.get('id')
-    if id:
-        try:
-            return int(id)
-        except ValueError:
-            return 0
-    return 0
 
 
 #
@@ -66,6 +46,11 @@ def sortbytext(elem):
     else:
         return ''
 
+def sortbytag(elem):
+    keys = [elem.tag]
+    for key in sorted(elem.keys()):
+        keys.append(elem.get(key))
+    return keys
 
 #
 # Function to sort XML attributes alphabetically by key
@@ -94,9 +79,8 @@ def sortElements(items, newroot):
     #   unmodified.
     #
     # We do this by performing three sorts in the reverse order
-    items = sorted(items, key=sortbyid)
     items = sorted(items, key=sortbytext)
-    items = sorted(items, key=attrgetter('tag'))
+    items = sorted(items, key=sortbytag)
 
     # Once sorted, we sort each of the items
     for item in items:
@@ -142,21 +126,22 @@ def sortFile(fileobj):
 
 #
 # sort each of the specified files
-filefrom = createFileObj("from", sys.argv[2])
-sortFile(filefrom)
-fileto = createFileObj("to", sys.argv[3])
-sortFile(fileto)
+def compareFiles(filename1, filename2):
+    filefrom = createFileObj("from", filename1)
+    sortFile(filefrom)
+    fileto = createFileObj("to", filename2)
+    sortFile(fileto)
 
-#
-# invoke the requested diff command to compare the two sorted files
-if platform.system() == "Windows":
-    sp = subprocess.Popen([ "cmd", "/c", sys.argv[1] + " " + filefrom['tmpfilename'] + " " + fileto['tmpfilename'] ])
-    sp.communicate()
-else:
-    sp = subprocess.Popen([ "/bin/bash", "-i", "-c", sys.argv[1] + " " + os.path.abspath(filefrom['tmpfilename']) + " " + os.path.abspath(fileto['tmpfilename']) ])
-    sp.communicate()
+    #
+    # invoke the requested diff command to compare the two sorted files
+    if platform.system() == "Windows":
+        sp = subprocess.Popen([ "cmd", "/c", 'diff ' + filefrom['tmpfilename'] + " " + fileto['tmpfilename'] ], stdout=subprocess.PIPE, shell=True)
+    else:
+        sp = subprocess.Popen([ 'diff ' + os.path.abspath(filefrom['tmpfilename']) + " " + os.path.abspath(fileto['tmpfilename']) ], stdout=subprocess.PIPE, shell=True)
+    stdout = sp.communicate()[0]
 
-#
-# cleanup - delete the temporary sorted files after the diff terminates
-os.remove(filefrom['tmpfilename'])
-os.remove(fileto['tmpfilename'])
+    #
+    # cleanup - delete the temporary sorted files after the diff terminates
+    os.remove(filefrom['tmpfilename'])
+    os.remove(fileto['tmpfilename'])
+    return stdout
