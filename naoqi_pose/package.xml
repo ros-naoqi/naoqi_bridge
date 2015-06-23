@@ -1,6 +1,6 @@
 <package>
-  <name>nao_pose</name>
-  <version>0.5.7</version>
+  <name>naoqi_pose</name>
+  <version>0.4.7</version>
   <description>
       <p>
           This package contains nodes for managing Nao's poses.
@@ -9,9 +9,9 @@
   <maintainer email="severin.lemaignan@epfl.ch">Séverin Lemaignan</maintainer>
   <license>BSD</license>
 
-  <url>http://ros.org/wiki/nao_pose</url>
-  <url type="bugtracker">https://github.com/ros-nao/nao_robot/issues</url>
-  <url type="repository">https://github.com/ros-nao/nao_robot</url>
+  <url>http://ros.org/wiki/naoqi_pose</url>
+  <url type="bugtracker">https://github.com/ros-naoqi/naoqi_bridge/issues</url>
+  <url type="repository">https://github.com/ros-naoqi/naoqi_bridge</url>
   <author>Armin Hornung</author>
   <author>Séverin Lemaignan</author>
 
