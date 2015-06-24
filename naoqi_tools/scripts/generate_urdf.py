@@ -153,12 +153,14 @@ def REP120_compatibility():
                 joint_new.child = laser_frame
                 joint_new.origin.rotation[0] = 0
                 joint_new.origin.rotation[1] = 0
+                # set it on the ground
                 joint_new.origin.position[2] = -0.334
                 if 'left' in laser_frame.lower():
                     # the following line is a temporary fix that should be fixed upstream
                     joint_new.origin.rotation[2] = math.pi/2.0 + 0.1864836732051034
                 elif 'right' in laser_frame.lower():
                     # the following line is a temporary fix that should be fixed upstream
+                    joint.origin.position[0] = -0.018
                     joint_new.origin.position[0] = -0.018
                     # the following line is a temporary fix that should be fixed upstream
                     joint_new.origin.rotation[2] = -math.pi/2.0 - 0.1864836732051034
