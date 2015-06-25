@@ -2,8 +2,8 @@
 Changelog for package naoqi_pose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.8 (2015-06-25)
+------------------
 * fix package name/version for nao_pose -> naoqi_pose
 * properly install Python scripts
   This fixes `#19 <https://github.com/ros-naoqi/naoqi_bridge/issues/19>`_

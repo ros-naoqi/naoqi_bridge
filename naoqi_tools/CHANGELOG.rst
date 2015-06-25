@@ -2,8 +2,8 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.8 (2015-06-25)
+------------------
 * also fix the right laser frames
 * add an executable to compare xacro files
 * add xmldiff to compare XML files

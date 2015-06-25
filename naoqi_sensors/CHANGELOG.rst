@@ -2,8 +2,8 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.8 (2015-06-25)
+------------------
 * Missing dependency of libpython
 * hotfix: complete cast of alimage into ros::time
 * Use different ros time constructor

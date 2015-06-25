@@ -2,8 +2,8 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.8 (2015-06-25)
+------------------
 * remove Groovy compatibility
 * Contributors: Vincent Rabaud
 
