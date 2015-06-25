@@ -2,6 +2,11 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* remove Groovy compatibility
+* Contributors: Vincent Rabaud
+
 0.4.7 (2015-03-30)
 ------------------
 * MOVETO: transform moveTo commands in /base_footprint frame.

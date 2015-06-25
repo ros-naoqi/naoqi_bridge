@@ -2,6 +2,22 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Missing dependency of libpython
+* hotfix: complete cast of alimage into ros::time
+* Use different ros time constructor
+* Fix time conversion in cpp camera driver
+  The timestamp of the image and diagnostic messages from the cpp driver of the
+  camera contains "random" data.
+  The Aldebaran doc [1,2] states that element 4 contains seconds and element 5
+  contains microseconds. In the code these are swapped. Also see the python
+  node where the conversion is done correctly.
+  [1] http://doc.aldebaran.com/2-1/naoqi/vision/alvideodevice-api.html#image
+  [2] http://doc.aldebaran.com/1-14/naoqi/vision/alvideodevice-api.html#image
+* remove Groovy compatibility
+* Contributors: Jon Dybeck, Karsten Knese, Kenta Yonekura, Vincent Rabaud
+
 0.4.7 (2015-03-30)
 ------------------
 * install octomap_python

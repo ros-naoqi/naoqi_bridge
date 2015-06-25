@@ -2,6 +2,15 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* also fix the right laser frames
+* add an executable to compare xacro files
+* add xmldiff to compare XML files
+* add specific laser frames for Pepper and misc bugfixes
+* use the conventional functions for mesh processing
+* Contributors: Vincent Rabaud
+
 0.4.7 (2015-03-30)
 ------------------
 
