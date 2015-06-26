@@ -230,7 +230,7 @@ def create_visual_xacro():
     global VISU_DICO
     global OFFSETS_DICO
     global MESHPKG
-    prefix = "xacro:insert_visu_"
+    prefix = "insert_visu_"
     doc = Document()
     root = doc.createElement("robot")
     doc.appendChild(root)
@@ -259,8 +259,8 @@ def create_visual_xacro():
     for link in robot.links:
         (tempVisu,tempCol) = adjustMeshPath(path_mesh_pkg,link)
         if robot.links[link].visual != None:
-            robot.links[link].xacro = prefix + robot.links[link].name
-            node = ur.short(doc,'xacro:macro','name',robot.links[link].xacro)
+            robot.links[link].xacro = 'xacro:' + prefix + robot.links[link].name
+            node = ur.short(doc,'xacro:macro','name', prefix + robot.links[link].name)
             if NAME=='nao':
             # add xacro condition macro to handle the absence of meshes on the system
 	        node2 = ur.short(doc,'xacro:unless','value',"${meshes_installed}")
