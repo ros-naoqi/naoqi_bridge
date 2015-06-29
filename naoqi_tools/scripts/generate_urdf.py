@@ -358,6 +358,8 @@ def export_robot_to_xacro_files():
     if NAME == 'pepper':
         root.appendChild(ur.short(doc,'xacro:include','filename', NAME + '_wheels.xacro'))
         export_list_to_xacro(['Wheel'],OUTPUT[0:OUTPUT.rfind('.')] + '_wheels.xacro')
+    if NAME == 'romeo':
+        root.appendChild(ur.short(doc,'xacro:include','filename', 'romeo_cap.xacro'))
 
     filename = OUTPUT[0:OUTPUT.rfind('.')]+ '_robot.xacro'
     write_comments_in_xacro(doc,filename)
