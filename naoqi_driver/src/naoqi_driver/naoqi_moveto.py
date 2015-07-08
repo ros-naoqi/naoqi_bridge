@@ -32,7 +32,7 @@ class MoveToListener(NaoqiNode):
         self.connectNaoQi()
         self.listener = tf.TransformListener()
 
-        self.subscriber = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.callback)
+        self.goal_sub = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.goalCB)
 
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
@@ -42,7 +42,7 @@ class MoveToListener(NaoqiNode):
         if self.motionProxy is None:
             exit(1)
 
-    def callback(self, poseStamped):
+    def goalCB(self, poseStamped):
         # reset timestamp because of bug: https://github.com/ros/geometry/issues/82
         poseStamped.header.stamp = rospy.Time(0)
         try:
