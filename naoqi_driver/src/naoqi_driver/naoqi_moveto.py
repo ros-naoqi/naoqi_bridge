@@ -21,6 +21,7 @@ import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Twist
 import almath
 import tf
 from tf.transformations import euler_from_quaternion
@@ -33,6 +34,7 @@ class MoveToListener(NaoqiNode):
         self.listener = tf.TransformListener()
 
         self.goal_sub = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.goalCB)
+        self.cvel_sub = rospy.Subscriber("/cmd_vel", Twist, self.cvelCB)
 
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
@@ -53,3 +55,11 @@ class MoveToListener(NaoqiNode):
         quat = robotToTarget1.pose.orientation
         (roll,pitch,yaw) = euler_from_quaternion((quat.x, quat.y, quat.z, quat.w))
         self.motionProxy.moveTo(robotToTarget1.pose.position.x, robotToTarget1.pose.position.y, yaw)
+
+    def cvelCB(self, twist):
+        rospy.logdebug("cmd_vel: %f %f %f", twist.linear.x, twist.linear.y, twist.angular.z)
+        eps = 1e-3 # maybe 0,0,0 is a special command in motionProxy...
+        if abs(twist.linear.x)<eps and abs(twist.linear.y)<eps and abs(twist.angular.z)<eps:
+            self.motionProxy.moveToward(0,0,0)
+        else:
+            self.motionProxy.moveToward(twist.linear.x, twist.linear.y, twist.angular.z)
