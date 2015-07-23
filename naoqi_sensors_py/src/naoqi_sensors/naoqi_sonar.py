@@ -82,11 +82,11 @@ class SonarPublisher(NaoqiNode):
                 except RuntimeError as e:
                     rospy.loginfo( 'key not found, correct robot ?', e )
                     break
-    
+
                 # publish messages
                 self.publisher.publish(sonar.msg)
                 #sleep
                 self.sonarRate.sleep()
-            
+
         #exit sonar subscription
-        self.sonarProxy.unsubscribe(self.NAOQI_SONAR_SUB_NAME)
+        #self.sonarProxy.unsubscribe(self.NAOQI_SONAR_SUB_NAME)

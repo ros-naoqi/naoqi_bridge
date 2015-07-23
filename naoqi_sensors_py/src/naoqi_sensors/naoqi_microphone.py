@@ -21,8 +21,8 @@ import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
 
 from dynamic_reconfigure.server import Server
-from naoqi_sensors.cfg import NaoqiMicrophoneConfig
-from naoqi_msgs.msg import AudioBuffer
+from naoqi_sensors_py.cfg import NaoqiMicrophoneConfig
+from naoqi_bridge_msgs.msg import AudioBuffer
 
 from naoqi import ALModule, ALBroker, ALProxy
 

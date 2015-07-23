@@ -41,7 +41,7 @@ from naoqi_driver.naoqi_node import NaoqiNode
 import camera_info_manager
 
 from dynamic_reconfigure.server import Server
-from naoqi_sensors.cfg import NaoqiCameraConfig
+from naoqi_sensors_py.cfg import NaoqiCameraConfig
 
 # import resolutions
 from naoqi_sensors.vision_definitions import k960p, k4VGA, kVGA, kQVGA, kQQVGA

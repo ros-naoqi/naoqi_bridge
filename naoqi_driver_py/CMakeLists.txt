@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
     tf
     sensor_msgs
     geometry_msgs
-    naoqi_msgs
+    naoqi_bridge_msgs
     dynamic_reconfigure
     diagnostic_aggregator
     diagnostic_msgs)
