@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(naoqi_driver)
+project(naoqi_driver_py)
 
 # Tell CMake where to find "FindNAOqi.cmake"
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -22,22 +22,16 @@ find_package(NAOqi QUIET COMPONENTS
     alvalue
 )
 
-find_package(Boost QUIET COMPONENTS program_options signals)
-
 # This will install python libraries
 catkin_python_setup()
 
  # auto-generate dynamic reconfiguration GUI before catkin_package()
 generate_dynamic_reconfigure_options(cfg/NaoqiSpeech.cfg)
 
-if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
-  message(STATUS "NAOqi C++ SDK found; C++ nodes will be built")
-
-  # Information for other packages to import this module
-  catkin_package(
-    INCLUDE_DIRS include
-    CFG_EXTRAS naoqi_driver-extras.cmake
-  )
+# Information for other packages to import this module
+catkin_package(
+  CFG_EXTRAS naoqi_driver-extras.cmake
+)
 
   #install(FILES naoqi_analyzer_plugins.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
