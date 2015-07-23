@@ -6,7 +6,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Find all required modules for compilation
 find_package(catkin REQUIRED COMPONENTS
-    roscpp
     tf
     sensor_msgs
     geometry_msgs
@@ -37,53 +36,10 @@ if( ${NAOqi_FOUND} AND ${Boost_FOUND} )
   # Information for other packages to import this module
   catkin_package(
     INCLUDE_DIRS include
-    LIBRARIES naoqi_node
     CFG_EXTRAS naoqi_driver-extras.cmake
   )
 
-  include_directories(
-    include
-    ${catkin_INCLUDE_DIRS}
-    ${Boost_INCLUDE_DIRS}
-    ${NAOqi_INCLUDE_DIRS}
-    )
-
-  add_library(naoqi_node src/naoqi_node.cpp)
-  target_link_libraries(naoqi_node
-                        ${catkin_LIBRARIES}
-                        ${NAOqi_LIBRARIES}
-                        ${Boost_LIBRARIES}
-                        )
-
-  add_executable(naoqi_joint_states_cpp src/naoqi_joint_states.cpp)
-  target_link_libraries(naoqi_joint_states_cpp
-                        naoqi_node
-                       ${catkin_LIBRARIES}
-                       ${NAOqi_LIBRARIES}
-                       ${Boost_LIBRARIES}
-                       )
-  add_dependencies(naoqi_joint_states_cpp ${catkin_EXPORTED_TARGETS})
-
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/
-          DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  )
-  install(TARGETS naoqi_node
-          LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-          )
-  install(TARGETS naoqi_joint_states_cpp
-          RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
-else()
-  message(STATUS "Cannot find NAOqi C++ sdk; C++ nodes will NOT be built")
-  catkin_package(CFG_EXTRAS naoqi_driver-extras.cmake)
-endif()
-
-# add a diagnostic analyzer plugin
-add_library(naoqi_diagnostic_analyzers src/naoqi_joints_analyzer.cpp)
-include_directories(${catkin_INCLUDE_DIRS})
-target_link_libraries(naoqi_diagnostic_analyzers ${catkin_LIBRARIES})
-install(TARGETS naoqi_diagnostic_analyzers DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
-
-install(FILES naoqi_analyzer_plugins.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+  #install(FILES naoqi_analyzer_plugins.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 #And this will install python nodes
 catkin_install_python(PROGRAMS nodes/naoqi_joint_states.py nodes/naoqi_logger.py nodes/naoqi_moveto.py

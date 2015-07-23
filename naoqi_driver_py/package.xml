@@ -37,7 +37,6 @@
   <build_depend>geometry_msgs</build_depend>
   <build_depend>naoqi_msgs</build_depend>
   <build_depend>pluginlib</build_depend>
-  <build_depend>roscpp</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>nav_msgs</build_depend>
   <build_depend>tf</build_depend>
@@ -45,7 +44,6 @@
   <run_depend>actionlib</run_depend>
   <run_depend>diagnostic_aggregator</run_depend>
   <run_depend>rospy</run_depend>
-  <run_depend>roscpp</run_depend>
   <!--<run_depend>python-dbus</run_depend>-->
   <run_depend>roslaunch</run_depend>
   <run_depend>std_msgs</run_depend>
