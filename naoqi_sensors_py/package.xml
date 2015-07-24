@@ -36,7 +36,7 @@
   <build_depend>driver_base</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>image_transport</build_depend>
-  <build_depend>naoqi_driver</build_depend>
+  <build_depend>naoqi_driver_py</build_depend>
   <build_depend>nodelet</build_depend>
   <build_depend>octomap</build_depend>
   <build_depend>octomap_msgs</build_depend>
@@ -51,7 +51,7 @@
   <run_depend>diagnostic_updater</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>image_transport</run_depend>
-  <run_depend>naoqi_driver</run_depend>
+  <run_depend>naoqi_driver_py</run_depend>
   <run_depend>nodelet</run_depend>
   <run_depend>octomap</run_depend>
   <run_depend>roscpp</run_depend>

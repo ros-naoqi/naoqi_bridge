@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   tf
-  naoqi_driver
+  naoqi_driver_py
 )
 
 find_package(NAOqi QUIET COMPONENTS
