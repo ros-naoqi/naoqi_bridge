@@ -1,0 +1,44 @@
+
+<launch>
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
+
+  <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
+  <arg name="source" default="0" /> <!-- top, bottom, depth -->
+  <arg name="resolution" default="1" />
+  <arg name="color_space" default="13" />
+  <arg name="frame_rate" default="15" />
+  <arg name="use_ros_time" default="True" />
+  <arg name="auto_exposition" default="1" />
+  <arg name="auto_exposure_algo" default="0" />
+  <arg name="exposure" default="128" />
+  <arg name="gain" default="128" />
+  <arg name="brightness" default="128" />
+  <arg name="contrast" default="64" />
+  <arg name="saturation" default="128" />
+  <arg name="hue" default="0" />
+  <arg name="sharpness" default="0" />
+  <arg name="auto_white_balance" default="1" />
+  <arg name="white_balance" default="-50" />
+  <node pkg="naoqi_sensors_py" type="camera.py" name="camera" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen">
+     <param name="calibration_file_bottom" type="string" value="file://$(find naoqi_sensors_py)/share/nao_camera_bottom_640x480.yaml"/>
+     <param name="calibration_file_top" type="string" value="file://$(find naoqi_sensors_py)/share/nao_camera_top_640x480.yaml"/>
+     <param name="resolution" type="int" value="$(arg resolution)" /> <!--QQVGA=0, QVGA=1, VGA=2 -->
+     <param name="color_space" type="int" value="$(arg color_space)" /> <!-- 9 = YUV422, 11 = RGB, 13 = BGR -->
+     <param name="frame_rate" type="int" value="$(arg frame_rate)" />
+     <param name="source" type="int" value="$(arg source)" /> --> <!-- 0 = top, 1 = bottom -->
+     <param name="auto_exposition" type="int" value="$(arg auto_exposition)" /> <!-- 0 = off, 1 = auto -->
+     <param name="auto_exposure_algo" type="int" value="$(arg auto_exposure_algo)" /> <!-- 0 = average, 1 = weighted, 2 = adaptive hightlights, 3 = adaptive lowlights-->
+     <param name="exposure" type="int" value="$(arg exposure)" />
+     <param name="gain" type="int" value="$(arg gain)" />
+     <param name="brightness" type="int" value="$(arg brightness)" />
+     <param name="contrast" type="int" value="$(arg contrast)" />
+     <param name="saturation" type="int" value="$(arg saturation)" />
+     <param name="hue" type="int" value="$(arg hue)" />
+     <param name="sharpness" type="int" value="$(arg sharpness)" />
+     <param name="auto_white_balance" type="int" value="$(arg auto_white_balance)" />
+     <param name="white_balance" type="int" value="$(arg white_balance)" />
+     <param name="use_ros_time" type="bool" value="$(arg use_ros_time)" />
+  </node>
+
+</launch>

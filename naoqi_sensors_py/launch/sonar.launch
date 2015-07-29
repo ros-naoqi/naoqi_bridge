@@ -1,0 +1,16 @@
+<launch>
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
+
+  <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
+
+  <arg name="memory_key" />
+  <arg name="frame_id" />
+  <arg name="sonar_rate" value="10" />
+  <node pkg="naoqi_sensors_py" type="sonar.py" name="naoqi_sonar" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen">
+    <param name="memory_key" value="$(arg memory_key)" />
+    <param name="frame_id" value="$(arg frame_id)" />
+    <param name="sonar_rate" value="$(arg sonar_rate)" />
+  </node>
+
+</launch>
