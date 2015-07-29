@@ -50,12 +50,6 @@ install(FILES launch/camera.launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
 
-# install pluginlib definition for the nodelet. In the case the plugin is not compiled
-# this is still useful to not display an error from the package.xml parsing
-# (the plugin is exported there no matter what)
-install(FILES naoqicamera_nodelet.xml
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-
 # install camera files
 install(DIRECTORY share
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
