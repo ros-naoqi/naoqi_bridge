@@ -57,7 +57,6 @@
   <run_depend>nav_msgs</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
 
-  <conflict>nao_driver</conflict>
 
   <export>
     <diagnostic_aggregator plugin="${prefix}/naoqi_analyzer_plugins.xml" />
