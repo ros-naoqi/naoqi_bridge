@@ -2,6 +2,18 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* update package.xml description
+* remove wrongly set conflict tag
+* Merge branch 'naoqi_py'
+* delete legacy msg package
+* rename packages
+* remove cpp library builds
+* remove cpp code
+* rename packages to *_py
+* Contributors: Karsten Knese
+
 0.4.8 (2015-06-25)
 ------------------
 * remove Groovy compatibility

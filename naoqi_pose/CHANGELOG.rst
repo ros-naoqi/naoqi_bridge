@@ -2,6 +2,11 @@
 Changelog for package naoqi_pose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* delete legacy msg package
+* Contributors: Karsten Knese
+
 0.4.8 (2015-06-25)
 ------------------
 * fix package name/version for nao_pose -> naoqi_pose

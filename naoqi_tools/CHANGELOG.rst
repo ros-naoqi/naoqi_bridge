@@ -2,6 +2,12 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* make sure we add the cap for Romeo
+* fix bad macro names
+* Contributors: Vincent Rabaud
+
 0.4.8 (2015-06-25)
 ------------------
 * also fix the right laser frames

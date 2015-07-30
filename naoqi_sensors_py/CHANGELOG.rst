@@ -2,6 +2,17 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* renaming packag to _py
+* change package dependencies to *_py
+* delete legacy msg package
+* rename packages
+* remove cpp version
+* remove camera nodelet
+* rename packages to *_py
+* Contributors: Karsten Knese
+
 0.4.8 (2015-06-25)
 ------------------
 * Missing dependency of libpython
