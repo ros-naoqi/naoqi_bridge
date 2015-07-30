@@ -2,8 +2,8 @@
 Changelog for package naoqi_pose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2015-07-30)
+------------------
 * delete legacy msg package
 * Contributors: Karsten Knese
 

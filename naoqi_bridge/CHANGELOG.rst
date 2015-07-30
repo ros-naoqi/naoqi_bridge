@@ -2,8 +2,8 @@
 Changelog for package naoqi_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2015-07-30)
+------------------
 * rename naoqi_rosbridge to naoqi_driver
 * add naoqi_rosbridge dep
 * delete legacy msg package

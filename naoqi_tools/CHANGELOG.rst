@@ -2,8 +2,8 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2015-07-30)
+------------------
 * make sure we add the cap for Romeo
 * fix bad macro names
 * Contributors: Vincent Rabaud

@@ -2,8 +2,8 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2015-07-30)
+------------------
 * update package.xml description
 * remove wrongly set conflict tag
 * Merge branch 'naoqi_py'
