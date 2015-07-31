@@ -2,6 +2,11 @@
 Changelog for package naoqi_pose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* rename naoqi_msgs to naoqi_bridge_msgs
+* Contributors: Karsten Knese
+
 0.5.0 (2015-07-30)
 ------------------
 * delete legacy msg package

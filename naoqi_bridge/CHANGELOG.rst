@@ -2,6 +2,11 @@
 Changelog for package naoqi_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* cleanup meta package.xml
+* Contributors: Karsten Knese
+
 0.5.0 (2015-07-30)
 ------------------
 * rename naoqi_rosbridge to naoqi_driver
