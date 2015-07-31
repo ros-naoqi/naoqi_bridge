@@ -2,8 +2,8 @@
 Changelog for package naoqi_pose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2015-07-31)
+------------------
 * generate changelog
 * generate changelog
 * rename naoqi_msgs to naoqi_bridge_msgs
