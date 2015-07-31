@@ -10,10 +10,13 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <run_depend>naoqi_apps</run_depend>
+  <run_depend>naoqi_bridge_msgs</run_depend>
   <run_depend>naoqi_driver</run_depend>
   <run_depend>naoqi_driver_py</run_depend>
-  <run_depend>naoqi_bridge_msgs</run_depend>
+  <run_depend>naoqi_pose</run_depend>
   <run_depend>naoqi_sensors_py</run_depend>
+  <run_depend>naoqi_tools</run_depend>
 
   <export>
     <metapackage/>
