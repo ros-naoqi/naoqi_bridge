@@ -4,6 +4,10 @@ Changelog for package naoqi_pose
 
 Forthcoming
 -----------
+* generate changelog
+* rename naoqi_msgs to naoqi_bridge_msgs
+* Contributors: Karsten Knese
+
 * rename naoqi_msgs to naoqi_bridge_msgs
 * Contributors: Karsten Knese
 

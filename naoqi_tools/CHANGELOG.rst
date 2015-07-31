@@ -4,6 +4,8 @@ Changelog for package naoqi_tools
 
 Forthcoming
 -----------
+* generate changelog
+* Contributors: Karsten Knese
 
 0.5.0 (2015-07-30)
 ------------------

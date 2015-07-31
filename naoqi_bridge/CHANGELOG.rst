@@ -4,6 +4,10 @@ Changelog for package naoqi_bridge
 
 Forthcoming
 -----------
+* generate changelog
+* cleanup meta package.xml
+* Contributors: Karsten Knese
+
 * cleanup meta package.xml
 * Contributors: Karsten Knese
 
