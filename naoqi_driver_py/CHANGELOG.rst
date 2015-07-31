@@ -5,6 +5,10 @@ Changelog for package naoqi_driver
 Forthcoming
 -----------
 * generate changelog
+* generate changelog
+* Contributors: Karsten Knese
+
+* generate changelog
 * Contributors: Karsten Knese
 
 0.5.0 (2015-07-30)
