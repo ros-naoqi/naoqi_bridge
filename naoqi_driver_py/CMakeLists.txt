@@ -33,8 +33,6 @@ catkin_package(
   CFG_EXTRAS naoqi_driver-extras.cmake
 )
 
-  #install(FILES naoqi_analyzer_plugins.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-
 #And this will install python nodes
 catkin_install_python(PROGRAMS nodes/naoqi_joint_states.py nodes/naoqi_logger.py nodes/naoqi_moveto.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

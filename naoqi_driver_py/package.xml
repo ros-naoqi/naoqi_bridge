@@ -56,10 +56,4 @@
   <run_depend>humanoid_nav_msgs</run_depend>
   <run_depend>nav_msgs</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
-
-
-  <export>
-    <diagnostic_aggregator plugin="${prefix}/naoqi_analyzer_plugins.xml" />
-  </export>
-
 </package>
