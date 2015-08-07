@@ -40,11 +40,14 @@ boost::python::tuple octomap_str_to_tuple(const std::string &str_msg)
   std::stringstream ss;
   ss << str_msg;
   ss.seekg(0);
-  octomap::OcTree* octree = dynamic_cast<octomap::OcTree*>(octomap::OcTree::read(ss));
-
+  octomap::OcTree* octree = static_cast<octomap::OcTree*>(octomap::OcTree::read(ss));
+  if (!octree) {
+    std::cout << "Cast failed.";
+    return boost::python::make_tuple();
+  }
   octomap_msgs::Octomap msg;
-  bool res = octomap_msgs::fullMapToMsg(*octree, msg);
-
+  bool res = octomap_msgs::binaryMapToMsg(*octree, msg);
+  delete(octree);
   return boost::python::make_tuple(msg.binary, msg.id, msg.resolution, std_vector_to_py_list(msg.data));
 }
 

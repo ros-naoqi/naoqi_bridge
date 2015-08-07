@@ -30,7 +30,7 @@ class SonarSensor(object):
     SONAR_FREQ = 10
     SONAR_MIN_RANGE = 0.25
     SONAR_MAX_RANGE = 2.55
-    SONAR_FOV = 0.523598776
+    SONAR_FOV = 1.05
 
     def __init__(self, memoryKey, frameID, rosTopic):
         self.memoryKey = memoryKey

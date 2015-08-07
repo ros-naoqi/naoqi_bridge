@@ -21,7 +21,7 @@ import rospy
 from octomap_msgs.msg import Octomap
 
 from naoqi_driver.naoqi_node import NaoqiNode
-from naoqi_sensors.boost.octomap_python import octomap_str_to_tuple
+from naoqi_sensors_py.boost.octomap_python import octomap_str_to_tuple
 
 class NaoqiOctomap(NaoqiNode):
     def __init__(self):
