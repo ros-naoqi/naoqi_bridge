@@ -1,6 +1,6 @@
 <package>
   <name>naoqi_driver_py</name>
-  <version>0.5.1</version>
+  <version>0.5.2</version>
   <description>
     <p>
       Python implementation of the driver package for the Naoqi robot, providing access to walking commands,
