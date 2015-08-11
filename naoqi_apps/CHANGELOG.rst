@@ -2,6 +2,9 @@
 Changelog for package naoqi_apps
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.5.1 (2015-07-31)
 ------------------
 * generate changelog
