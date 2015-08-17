@@ -84,6 +84,8 @@ class PoseController(NaoqiNode):
         self.disableStiffnessSrv = rospy.Service("body_stiffness/disable", Empty, self.handleStiffnessOffSrv)
         self.wakeUpSrv = rospy.Service("wakeup", Empty, self.handleWakeUpSrv)
         self.restSrv = rospy.Service("rest", Empty, self.handleRestSrv)
+        self.enableLifeSrv = rospy.Service("life/enable", Empty, self.handleLifeSrv)
+        self.disableLifeSrv = rospy.Service("life/disable", Empty, self.handleLifeOffSrv)
 
 
         #Start simple action servers
@@ -129,6 +131,10 @@ class PoseController(NaoqiNode):
 
         # optional, newly introduced in 1.14
         self.robotPostureProxy = self.get_proxy("ALRobotPosture")
+
+        # get a proxy to autonomous life
+        self.lifeProxy = self.get_proxy("ALAutonomousLife")
+
 
     def handleJointAngles(self, msg):
         rospy.logdebug("Received a joint angle target")
@@ -182,6 +188,24 @@ class PoseController(NaoqiNode):
             return EmptyResponse()
         except RuntimeError,e:
             rospy.logerr("Exception caught:\n%s", e)
+            return None
+
+    def handleLifeSrv(self, req):
+        try:
+            self.lifeProxy.setState("solitary")
+            rospy.loginfo("set life state to solitary")
+            return EmptyResponse()
+        except RuntimeError, e:
+            rospy.logerr("Exception while setting life state:\n%s", e)
+            return None
+
+    def handleLifeOffSrv(self, req):
+        try:
+            self.lifeProxy.setState("disabled")
+            rospy.loginfo("set life state to disabled")
+            return EmptyResponse()
+        except RuntimeError, e:
+            rospy.logerr("Exception while disabling life state:\n%s", e)
             return None
 
     def jointTrajectoryGoalMsgToAL(self, goal):
