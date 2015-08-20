@@ -177,7 +177,8 @@ def REP120_compatibility():
                                      ur.Pose((0,0,0),(-math.pi/2.0,0,-math.pi/2.0))))
 
     # add dummy physics for gazebo simulation
-    add_dummy_inertia(['Finger','Thumb','gripper'])
+    add_dummy_inertia(['Finger','Thumb','gripper','Fsr'])
+    add_dummy_collision(['Fsr'])
 
 def add_transmission_tags():
     global robot
@@ -212,6 +213,16 @@ def add_dummy_inertia(list):
             if robot.links[link].name.find(string) != -1:
                 robot.links[link].inertial=ur.Inertial(1.1e-9,0.0,0.0,1.1e-9,
                                                        0.0,1.1e-9,2e-06)
+
+def add_dummy_collision(list):
+  """
+  This function add a Box collision tag to every links containing keyword provided in list :
+  """
+  global robot
+  for string in list:
+    for link in robot.links:
+      if robot.links[link].name.find(string) != -1:
+        robot.links[link].collision=ur.Collision(ur.Box([0.01,0.01,0.005]),ur.Pose((0,0,0),(0,0,0)))
 
 ##################
 ##### Meshes #####
