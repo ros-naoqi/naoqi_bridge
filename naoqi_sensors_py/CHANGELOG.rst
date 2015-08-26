@@ -2,6 +2,11 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* remove useless dependencies
+* Contributors: Vincent Rabaud
+
 0.5.2 (2015-08-11)
 ------------------
 * naoqi_sensors_py no longer contains nodelt plugins

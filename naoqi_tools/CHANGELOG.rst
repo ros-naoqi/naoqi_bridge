@@ -2,6 +2,11 @@
 Changelog for package naoqi_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* add add_dummy_collision function for gazebo simulation
+* Contributors: Mikael Arguedas
+
 0.5.2 (2015-08-11)
 ------------------
 

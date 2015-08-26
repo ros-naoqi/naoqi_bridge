@@ -2,6 +2,11 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* remove useless dependencies
+* Contributors: Vincent Rabaud
+
 0.5.2 (2015-08-11)
 ------------------
 * really remove the .xml for diagnostics
