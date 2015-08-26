@@ -2,8 +2,8 @@
 Changelog for package naoqi_pose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.3 (2015-08-26)
+------------------
 * add services for life
 * Contributors: Karsten Knese
 

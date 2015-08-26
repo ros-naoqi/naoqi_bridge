@@ -2,8 +2,8 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.3 (2015-08-26)
+------------------
 * remove useless dependencies
 * Contributors: Vincent Rabaud
 
