@@ -6,20 +6,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Find all required modules for compilation
 find_package(catkin REQUIRED COMPONENTS
-    tf
-    sensor_msgs
-    geometry_msgs
-    naoqi_bridge_msgs
     dynamic_reconfigure
-    diagnostic_aggregator
-    diagnostic_msgs)
-
-find_package(NAOqi QUIET COMPONENTS
-    alcommon
-    alvision
-    alproxies
-    alerror
-    alvalue
 )
 
 # This will install python libraries

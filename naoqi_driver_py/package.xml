@@ -30,29 +30,16 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>boost</build_depend>
-  <build_depend>diagnostic_aggregator</build_depend>
-  <build_depend>diagnostic_msgs</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>naoqi_bridge_msgs</build_depend>
-  <build_depend>pluginlib</build_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <build_depend>nav_msgs</build_depend>
-  <build_depend>tf</build_depend>
 
   <run_depend>actionlib</run_depend>
-  <run_depend>diagnostic_aggregator</run_depend>
   <run_depend>rospy</run_depend>
   <!--<run_depend>python-dbus</run_depend>-->
   <run_depend>roslaunch</run_depend>
-  <run_depend>std_msgs</run_depend>
   <run_depend>std_srvs</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>sensor_msgs</run_depend>
-  <run_depend>diagnostic_msgs</run_depend>
   <run_depend>naoqi_bridge_msgs</run_depend>
-  <run_depend>pluginlib</run_depend>
   <run_depend>humanoid_nav_msgs</run_depend>
   <run_depend>nav_msgs</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>

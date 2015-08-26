@@ -4,24 +4,9 @@ project(naoqi_sensors_py)
 # Find catkin macros and libraries, also other catkin packages.
 find_package(catkin REQUIRED COMPONENTS
   camera_info_manager
-  diagnostic_updater
   driver_base
   dynamic_reconfigure
-  image_transport
-  nodelet
   octomap_msgs
-  roscpp
-  sensor_msgs
-  tf
-  naoqi_driver_py
-)
-
-find_package(NAOqi QUIET COMPONENTS
-    alcommon
-    alvision
-    alproxies
-    alerror
-    alvalue
 )
 
 # deal with the Python code
