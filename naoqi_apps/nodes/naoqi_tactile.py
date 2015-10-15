@@ -113,8 +113,12 @@ class NaoTactile(ALModule):
         self.bumperRightButton = Bumper.right;
         self.bumperLeftButton = Bumper.left;
         self.bumperBackButton = Bumper.back;
-        self.handRight = HandTouch.right;
-        self.handLeft = HandTouch.left;
+        self.handRightBack = HandTouch.right_back;
+        self.handRightLeft = HandTouch.right_left;
+        self.handRightRight = HandTouch.right_right;
+        self.handLeftBack = HandTouch.left_back;
+        self.handLeftLeft = HandTouch.left_left;
+        self.handLeftRight = HandTouch.left_right;
 
         self.subscribe()
 
@@ -209,17 +213,17 @@ class NaoTactile(ALModule):
     def onHandChanged(self, strVarName, value, strMessage):
         "Called when hand status changes in ALMemory"
         if strVarName == "HandRightBackTouched":
-            self.hand.hand = self.handRight
+            self.hand.hand = self.handRightBack
         elif strVarName == "HandRightLeftTouched":
-            self.hand.hand = self.handRight
+            self.hand.hand = self.handRightLeft
         elif strVarName == "HandRightRightTouched":
-            self.hand.hand = self.handRight
+            self.hand.hand = self.handRightRight
         elif strVarName == "HandLeftBackTouched":
-            self.hand.hand = self.handLeft
+            self.hand.hand = self.handLeftBack
         elif strVarName == "HandLeftLeftTouched":
-            self.hand.hand = self.handLeft
+            self.hand.hand = self.handLeftLeft
         elif strVarName == "HandLeftRightTouched":
-            self.hand.hand = self.handLeft
+            self.hand.hand = self.handLeftRight
 
         self.hand.state = int(value);
         self.handPub.publish(self.hand)
