@@ -113,12 +113,12 @@ class NaoTactile(ALModule):
         self.bumperRightButton = Bumper.right;
         self.bumperLeftButton = Bumper.left;
         self.bumperBackButton = Bumper.back;
-        self.handRightBack = HandTouch.right_back;
-        self.handRightLeft = HandTouch.right_left;
-        self.handRightRight = HandTouch.right_right;
-        self.handLeftBack = HandTouch.left_back;
-        self.handLeftLeft = HandTouch.left_left;
-        self.handLeftRight = HandTouch.left_right;
+        self.handRightBack = HandTouch.RIGHT_BACK;
+        self.handRightLeft = HandTouch.RIGHT_LEFT;
+        self.handRightRight = HandTouch.RIGHT_RIGHT;
+        self.handLeftBack = HandTouch.LEFT_BACK;
+        self.handLeftLeft = HandTouch.LEFT_LEFT;
+        self.handLeftRight = HandTouch.LEFT_RIGHT;
 
         self.subscribe()
 
