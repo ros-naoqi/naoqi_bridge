@@ -129,6 +129,10 @@ class NaoqiJointStates(NaoqiNode):
                  # odometry data:
                 odomData = self.motionProxy.getPosition('Torso', motion.SPACE_WORLD, True)
                 positionData = self.motionProxy.getAngles('Body', self.useJointSensors)
+                if self.useJointSensors: # get reference data when available
+                    referenceData = self.motionProxy.getAngles('Body', False)
+                else:
+                    referenceData = positionData
                 stiffnessData = self.motionProxy.getStiffnesses('Body')
             except RuntimeError, e:
                 print "Error accessing ALMemory, exiting...\n"
@@ -199,6 +203,7 @@ class NaoqiJointStates(NaoqiNode):
             self.jointState.header.stamp = timestamp
             self.jointState.header.frame_id = self.base_frameID
             self.jointState.position = positionData
+            self.jointState.effort = map(lambda x, y: x - y, positionData, referenceData)
 
             # simulated model misses some joints, we need to fill:
             if (len(self.jointState.position) == 22):
