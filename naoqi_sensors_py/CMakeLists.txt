@@ -4,7 +4,6 @@ project(naoqi_sensors_py)
 # Find catkin macros and libraries, also other catkin packages.
 find_package(catkin REQUIRED COMPONENTS
   camera_info_manager
-  driver_base
   dynamic_reconfigure
   octomap_msgs
 )

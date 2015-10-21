@@ -32,7 +32,6 @@
 
   <build_depend>boost</build_depend>
   <build_depend>camera_info_manager</build_depend>
-  <build_depend>driver_base</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>naoqi_driver_py</build_depend>
   <build_depend>octomap</build_depend>
