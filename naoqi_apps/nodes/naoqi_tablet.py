@@ -44,7 +44,6 @@ class NaoqiTablet(NaoqiNode):
     def handleShowImageSrv(self, req):
         try:
             self.image_path = "http://198.18.0.1/apps/img/" + str(req.file_name.data)
-            rospy.loginfo(self.image_path)
             if self.tabletProxy.showImage(self.image_path) == True:
                 rospy.loginfo("Ok, I'll show you " + str(req.file_name.data) + " !")
             else:
