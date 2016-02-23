@@ -44,12 +44,16 @@ class NaoqiTablet(NaoqiNode):
     def handleShowImageSrv(self, req):
         try:
             self.image_path = "http://198.18.0.1/apps/img/" + str(req.file_name.data)
+            res = ShowImageResponse()
             if self.tabletProxy.showImage(self.image_path) == True:
                 rospy.loginfo("Ok, I'll show you " + str(req.file_name.data) + " !")
+                res.status.data = True
+               
             else:
                 rospy.loginfo("Please confirm the file name and " + str(req.file_name.data) + " really exists under /home/nao/.local/share/PackageManager/apps/img/html.")
+                res.status.data = False
             self.image_path = ""
-            return ShowImageResponse()
+            return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
             return None
