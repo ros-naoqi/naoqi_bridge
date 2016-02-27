@@ -113,39 +113,42 @@ class NaoqiExternalCollisionAvoidance(NaoqiNode):
 
     def handleSetExternalCollisionProtectionEnabled(self, req):
         try:
-            if req.name.number == 0:
+            if req.name.data == 0:
                 target_name = "All"
-            if req.name.number == 1:
+            if req.name.data == 1:
                 target_name = "Move"
-            if req.name.number == 2:
+            if req.name.data == 2:
                 target_name = "Arms"
-            if req.name.number == 3:
+            if req.name.data == 3:
                 target_name = "LArm"
-            if req.name.number == 4:
+            if req.name.data == 4:
                 target_name = "RArm"
-            self.motionProxy.setExternalCollisionProtectionEnabled(target_name, req.status)
-            if self.motionProxy.getExternalCollisionProtectionEnabled(target_name)== True:
-                rospy.loginfo("Current External Collision Protection Status of " + target_name + ": Enabled")
-            else:
-                rospy.loginfo("Current External Collision Protection Status of " + target_name + ": Disabled")
-                if (target_name == "All" or target_name == "Move") and req.status == False:
-                    rospy.loginfo("CAUTION: YOU DEACTIVATED SAFETY REFLEXES. BE CAREFUL TO THE SAFETY OF THE ROBOT AND PEOPLE.")
-            return SetExternalCollisionProtectionEnabledResponse()
+            res = SetExternalCollisionProtectionEnabledResponse()
+            res.status = False
+            if self.motionProxy.setExternalCollisionProtectionEnabled(target_name, req.status) == None:
+                res.status = True
+                if self.motionProxy.getExternalCollisionProtectionEnabled(target_name)== True:
+                    rospy.loginfo("Current External Collision Protection Status of " + target_name + ": Enabled")
+                else:
+                    rospy.loginfo("Current External Collision Protection Status of " + target_name + ": Disabled")
+                    if (target_name == "All" or target_name == "Move") and req.status == False:
+                        rospy.loginfo("CAUTION: YOU DEACTIVATED SAFETY REFLEXES. BE CAREFUL TO THE SAFETY OF THE ROBOT AND PEOPLE.")
+            return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            return res
 
     def handleGetExternalCollisionProtectionEnabled(self, req):
         try:
-            if req.name.number == 0:
+            if req.name.data == 0:
                 target_name = "All"
-            if req.name.number == 1:
+            if req.name.data == 1:
                 target_name = "Move"
-            if req.name.number == 2:
+            if req.name.data == 2:
                 target_name = "Arms"
-            if req.name.number == 3:
+            if req.name.data == 3:
                 target_name = "LArm"
-            if req.name.number == 4:
+            if req.name.data == 4:
                 target_name = "RArm"
             if self.motionProxy.getExternalCollisionProtectionEnabled(target_name)== True: 
                 rospy.loginfo("Current External Collision Protection Status of " + target_name + ": Enabled")
