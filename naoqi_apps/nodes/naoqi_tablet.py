@@ -23,7 +23,11 @@ from std_srvs.srv import (
     Empty,)
 from naoqi_bridge_msgs.srv import ( 
     ShowImageResponse,
-    ShowImage,)
+    ShowImage,
+    SetFolderPathResponse,
+    SetFolderPath,
+    GetFolderPathResponse,
+    GetFolderPath)
 
 class NaoqiTablet(NaoqiNode):
     def __init__(self):
@@ -31,9 +35,12 @@ class NaoqiTablet(NaoqiNode):
         self.connectNaoQi()
         
         self.image_path = ""
+        self.image_folder = "img/"
         self.showImageSrv = rospy.Service("show_image", ShowImage, self.handleShowImageSrv)
         self.hideImageSrv = rospy.Service("hide_image", Empty, self.handleHideImageSrv)
         self.showWebViewSrv = rospy.Service("show_webview", ShowImage, self.handleShowWebviewSrv)
+        self.setImagePathSrv = rospy.Service("set_show_image_folder_path", SetFolderPath, self.handleSetFolderPathSrv)
+        self.getImagePathSrv = rospy.Service("get_show_image_folder_path", GetFolderPath, self.handleGetFolderPathSrv)
         rospy.loginfo("naoqi_tablet initialized")
     
     def connectNaoQi(self):
@@ -44,14 +51,14 @@ class NaoqiTablet(NaoqiNode):
         
     def handleShowImageSrv(self, req):
         try:
-            self.image_path = "http://198.18.0.1/apps/img/" + str(req.file_name.data)
+            self.image_path = "http://198.18.0.1/apps/"+ self.image_folder + str(req.file_name.data)
             res = ShowImageResponse()
             if self.tabletProxy.showImage(self.image_path) == True:
                 rospy.loginfo("Ok, I'll show you " + str(req.file_name.data) + " !")
                 res.status.data = True
                
             else:
-                rospy.loginfo("Please confirm the file name and " + str(req.file_name.data) + " really exists under /home/nao/.local/share/PackageManager/apps/img/html.")
+                rospy.loginfo("Please confirm the file name and " + str(req.file_name.data) + " really exists under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
                 res.status.data = False
             self.image_path = ""
             return res
@@ -70,21 +77,43 @@ class NaoqiTablet(NaoqiNode):
         
     def handleShowWebviewSrv(self, req):
         try:
-            self.image_path = "http://198.18.0.1/apps/img/" + str(req.file_name.data)
+            self.image_path = "http://198.18.0.1/apps/" + self.image_folder + str(req.file_name.data)
             res = ShowImageResponse()
             if self.tabletProxy.showWebview(self.image_path) == True:
                 rospy.loginfo("Ok, I'll show you " + str(req.file_name.data) + " !")
                 res.status.data = True
                
             else:
-                rospy.loginfo("Please confirm the file name and " + str(req.file_name.data) + " really exists under /home/nao/.local/share/PackageManager/apps/img/html.")
+                rospy.loginfo("Please confirm the file name and " + str(req.file_name.data) + " really exists under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
                 res.status.data = False
             self.image_path = ""
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
             return None
-            
+    def handleSetFolderPathSrv(self, req):
+        try:
+            self.image_folder = req.folder_path.data
+            if self.image_folder[0]=="/":
+                self.image_folder = self.image_folder.strip("/")
+            if self.image_folder[len(self.image_folder)-1] != "/":
+                self.image_folder += "/"
+            rospy.loginfo("ALTabletService: ShowImage will show pictures under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html/." )
+            return SetFolderPathResponse()
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+    
+    def handleGetFolderPathSrv(self, req):
+        try:
+            res = GetFolderPathResponse()
+            res.folder_path.data = "/home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html/"
+            rospy.loginfo("ALTabletService: ShowImage will show pictures under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
     def run(self):
         while self.is_looping():
             try:
