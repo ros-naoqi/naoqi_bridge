@@ -85,7 +85,7 @@ class NaoqiTablet(NaoqiNode):
             self.tabletProxy.loadApplication(req.app_name.data)
             res = ShowAppResponse()
             if self.tabletProxy.showWebview() == True:
-                rospy.loginfo("Ok, I'll show you " + req.app_name.data + "app !")
+                rospy.loginfo("Ok, I'll show you " + req.app_name.data + " app !")
                 res.status.data = True
                
             else:
