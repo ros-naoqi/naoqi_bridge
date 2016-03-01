@@ -22,12 +22,8 @@ from std_srvs.srv import (
     EmptyResponse,
     Empty,)
 from naoqi_bridge_msgs.srv import ( 
-    ShowImageResponse,
-    ShowImage,
-    ShowAppResponse,
-    ShowApp,
-    ShowWebviewResponse,
-    ShowWebview,
+    ShowResourceResponse,
+    ShowResource,
     SetFolderPathResponse,
     SetFolderPath,
     GetFolderPathResponse,
@@ -40,10 +36,10 @@ class NaoqiTablet(NaoqiNode):
         
         self.image_path = ""
         self.image_folder = "img/"
-        self.showImageSrv = rospy.Service("show_image", ShowImage, self.handleShowImageSrv)
+        self.showImageSrv = rospy.Service("show_image", ShowResource, self.handleShowImageSrv)
         self.hideImageSrv = rospy.Service("hide_image", Empty, self.handleHideImageSrv)
-        self.showAppSrv = rospy.Service("show_app", ShowApp, self.handleShowAppSrv)
-        self.showWebViewSrv = rospy.Service("show_webview", ShowWebview, self.handleShowWebviewSrv)
+        self.showAppSrv = rospy.Service("show_app", ShowResource, self.handleShowAppSrv)
+        self.showWebViewSrv = rospy.Service("show_webview", ShowResource, self.handleShowWebviewSrv)
         self.setImagePathSrv = rospy.Service("set_show_image_folder_path", SetFolderPath, self.handleSetFolderPathSrv)
         self.getImagePathSrv = rospy.Service("get_show_image_folder_path", GetFolderPath, self.handleGetFolderPathSrv)
         rospy.loginfo("naoqi_tablet initialized")
@@ -56,15 +52,15 @@ class NaoqiTablet(NaoqiNode):
         
     def handleShowImageSrv(self, req):
         try:
-            self.image_path = "http://198.18.0.1/apps/"+ self.image_folder + str(req.file_name.data)
-            res = ShowImageResponse()
+            self.image_path = "http://198.18.0.1/apps/"+ self.image_folder + str(req.name.data)
+            res = ShowResourceResponse()
             if self.tabletProxy.showImage(self.image_path) == True:
-                rospy.loginfo("Ok, I'll show you " + str(req.file_name.data) + " !")
-                res.status.data = True
+                rospy.loginfo("Ok, I'll show you " + str(req.name.data) + " !")
+                res.success.data = True
                
             else:
-                rospy.loginfo("Please confirm the file name and " + str(req.file_name.data) + " really exists under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
-                res.status.data = False
+                rospy.loginfo("Please confirm the file name and " + str(req.name.data) + " really exists under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
+                res.success.data = False
             self.image_path = ""
             return res
         except RuntimeError, e:
@@ -82,30 +78,30 @@ class NaoqiTablet(NaoqiNode):
 
     def handleShowAppSrv(self, req):
         try:
-            self.tabletProxy.loadApplication(req.app_name.data)
-            res = ShowAppResponse()
+            self.tabletProxy.loadApplication(req.name.data)
+            res = ShowResourceResponse()
             if self.tabletProxy.showWebview() == True:
-                rospy.loginfo("Ok, I'll show you " + req.app_name.data + " app !")
-                res.status.data = True
+                rospy.loginfo("Ok, I'll show you " + req.name.data + " app !")
+                res.success.data = True
                
             else:
-                rospy.loginfo("Please confirm the app name " + req.app_name.data + "really exists. In addtion, be sure that the index.html must be in a folder html in the behavior folder.")
-                res.status.data = False
+                rospy.loginfo("Please confirm the app name " + req.name.data + "really exists. In addtion, be sure that the index.html must be in a folder html in the behavior folder.")
+                res.success.data = False
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
             return None
     def handleShowWebviewSrv(self, req):
         try:
-            self.tabletProxy.loadUrl(req.url.data)
-            res = ShowWebviewResponse()
+            self.tabletProxy.loadUrl(req.name.data)
+            res = ShowResourceResponse()
             if self.tabletProxy.showWebview() == True:
-                rospy.loginfo("Ok, I'll show you " + str(req.url.data) + " !")
-                res.status.data = True
+                rospy.loginfo("Ok, I'll show you " + str(req.name.data) + " !")
+                res.success.data = True
                
             else:
-                rospy.loginfo("Please confirm the url '" + str(req.url.data) + "' really exists.")
-                res.status.data = False
+                rospy.loginfo("Please confirm the url '" + str(req.name.data) + "' really exists.")
+                res.success.data = False
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
