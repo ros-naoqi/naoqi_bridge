@@ -25,14 +25,18 @@ import os
 from xmldiff.xmldiff import compareFiles
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Compares all the .xacro in two folders.')
+    parser = argparse.ArgumentParser(
+        description='Compares all the .xacro in two folders.')
     parser.add_argument('folder1')
     parser.add_argument('folder2')
     args = parser.parse_args()
-    files1 = set([ i for i in os.listdir(args.folder1) if i.endswith('.xacro')])
-    files2 = set([ i for i in os.listdir(args.folder2) if i.endswith('.xacro')])
+    files1 = set([i for i in os.listdir(args.folder1)
+                 if i.endswith('.xacro')])
+    files2 = set([i for i in os.listdir(args.folder2)
+                 if i.endswith('.xacro')])
     for i in files1.intersection(files2):
-        diff = compareFiles(os.path.join(args.folder1, i), os.path.join(args.folder2, i))
+        diff = compareFiles(os.path.join(args.folder1, i),
+                            os.path.join(args.folder2, i))
         if diff:
             print('---------------------------------------------------------')
             print('File %s in common' % i)
