@@ -2,6 +2,11 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'add_fake_effort' of https://github.com/k-okada/naoqi_bridge into k-okada-add_fake_effort
+* Contributors: Vincent Rabaud
+
 0.5.3 (2015-08-26)
 ------------------
 * remove useless dependencies

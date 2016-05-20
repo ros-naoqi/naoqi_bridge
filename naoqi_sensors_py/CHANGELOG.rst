@@ -2,6 +2,11 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* remove the dependency on driver_base
+* Contributors: Vincent Rabaud
+
 0.5.3 (2015-08-26)
 ------------------
 * remove useless dependencies
