@@ -19,6 +19,8 @@
     <node pkg="naoqi_driver_py" type="naoqi_joint_states.py" name="naoqi_joint_states" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
 
   <!-- start robot agnostic nodes -->
+  <param name="cmd_vel_topic" type="string" value="cmd_vel" />
+  <param name="move_base_simple_topic" type="string" value="move_base_simple/goal" />
   <node pkg="naoqi_driver_py" type="naoqi_moveto.py" name="naoqi_moveto" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen"/>
   <node pkg="naoqi_driver_py" type="naoqi_logger.py" name="nao_logger" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
 </launch>
