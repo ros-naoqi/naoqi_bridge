@@ -29,15 +29,13 @@ from tf.transformations import euler_from_quaternion
 class MoveToListener(NaoqiNode):
 
     def __init__(self):
-        global cmd_vel_topic, move_base_simple_topic
         NaoqiNode.__init__(self, 'naoqi_moveto_listener')
         self.connectNaoQi()
         self.listener = tf.TransformListener()
-        cmd_vel_topic = rospy.get_param('cmd_vel_topic')
-        move_base_simple_topic = rospy.get_param('move_base_simple_topic')
 
-        self.goal_sub = rospy.Subscriber(move_base_simple_topic, PoseStamped, self.goalCB)
-        self.cvel_sub = rospy.Subscriber(cmd_vel_topic, Twist, self.cvelCB)
+        self.goal_sub = rospy.Subscriber('move_base_simple/goal', PoseStamped, self.goalCB)
+        self.cvel_sub = rospy.Subscriber('cmd_vel', Twist, self.cvelCB)
+
 
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
