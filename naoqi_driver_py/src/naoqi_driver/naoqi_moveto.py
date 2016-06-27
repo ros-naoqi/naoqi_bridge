@@ -33,8 +33,9 @@ class MoveToListener(NaoqiNode):
         self.connectNaoQi()
         self.listener = tf.TransformListener()
 
-        self.goal_sub = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.goalCB)
-        self.cvel_sub = rospy.Subscriber("/cmd_vel", Twist, self.cvelCB)
+        self.goal_sub = rospy.Subscriber('move_base_simple/goal', PoseStamped, self.goalCB)
+        self.cvel_sub = rospy.Subscriber('cmd_vel', Twist, self.cvelCB)
+
 
     # (re-) connect to NaoQI:
     def connectNaoQi(self):
