@@ -150,11 +150,10 @@ class NaoqiExternalCollisionAvoidance(NaoqiNode):
                 target_name = "LArm"
             if req.name.data == 4:
                 target_name = "RArm"
-            if self.motionProxy.getExternalCollisionProtectionEnabled(target_name)== True: 
-                rospy.loginfo("Current External Collision Protection Status of " + target_name + ": Enabled")
-            else:
-                rospy.loginfo("Current External Collision Protection Status of " + target_name + ": Disabled")
-            return GetExternalCollisionProtectionEnabledResponse()
+            res = GetExternalCollisionProtectionEnabledResponse()
+            res.status = self.motionProxy.getExternalCollisionProtectionEnabled(target_name)
+            rospy.loginfo("Current External Collision Protection Status of " + target_name + ": " + str (res.status))
+            return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
             return None
