@@ -15,7 +15,7 @@
   </description>
   <author>Armin Hornung</author>
   <maintainer email="severin.lemaignan@epfl.ch">Severin Lemaignan</maintainer>
-  <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
+  <maintainer email="surya.ambrose@gmail.com">Surya Ambrose</maintainer>
   <license>BSD</license>
 
   <url>http://ros.org/wiki/naoqi_driver</url>

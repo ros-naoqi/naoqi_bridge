@@ -3,7 +3,7 @@
   <version>0.5.4</version>
   <description>Package bridging NAOqi to executing things on the robot.</description>
   <author>Vincent Rabaud</author>
-  <maintainer email="vincent.rabaud@gmail.com">Vincent Rabaud</maintainer>
+  <maintainer email="surya.ambrose@gmail.com">Surya Ambrose</maintainer>
   <license>Apache 2.0</license>
 
   <url type="website">http://ros.org/wiki/nao</url>
