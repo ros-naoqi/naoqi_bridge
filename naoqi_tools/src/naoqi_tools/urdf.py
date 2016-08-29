@@ -1117,7 +1117,7 @@ class URDF(object):
         if branchorder is None:
             branchorder = 0
 
-        while self.child_map is in child:
+        while self.child_map in child:
             children = self.child_map[link]
             l = len(children)
             child = children[min(branchorder, l - 1)][1]

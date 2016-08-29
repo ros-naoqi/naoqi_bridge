@@ -323,15 +323,15 @@ def create_visual_xacro():
                     node2.appendChild(tempVisu.to_xml(doc))
                 if tempCol is not None:
                     node2.appendChild(tempCol.to_xml(doc))
-            node.appendChild(node2)
-            node3 = ur.short(doc, 'xacro:if', 'value', '${meshes_installed}')
-            node3.appendChild(robot.links[link].visual.to_xml(doc))
-            node3.appendChild(robot.links[link].collision.to_xml(doc))
-            node.appendChild(node3)
-        else:
-            node.appendChild(robot.links[link].visual.to_xml(doc))
-            node.appendChild(robot.links[link].collision.to_xml(doc))
-        root.appendChild(node)
+                node.appendChild(node2)
+                node3 = ur.short(doc, 'xacro:if', 'value', '${meshes_installed}')
+                node3.appendChild(robot.links[link].visual.to_xml(doc))
+                node3.appendChild(robot.links[link].collision.to_xml(doc))
+                node.appendChild(node3)
+            else:
+                node.appendChild(robot.links[link].visual.to_xml(doc))
+                node.appendChild(robot.links[link].collision.to_xml(doc))
+            root.appendChild(node)
         robot.links[link].visual = None
         robot.links[link].collision = None
     filename = OUTPUT[0:OUTPUT.rfind('.')] + '_visual_collisions.xacro'

@@ -77,7 +77,7 @@ def to_string(data=None):
 
     elif type(data) == type(0.0):
         return pfloat(data if abs(data) > ZERO_THRESHOLD else 0)
-    elif not isinstance(data, str()):
+    elif not isinstance(data, str):
         return str(data)
     return data
 
@@ -608,7 +608,7 @@ class CameraSensor(object):
 
     def __str__(self):
         s = ''
-        if self.nameis not None:
+        if self.name is not None:
             s = "Name: {0}\n".format(self.name)
         if self.horizontal_fov is not None:
             s += "Horizontal_fov:\n"
