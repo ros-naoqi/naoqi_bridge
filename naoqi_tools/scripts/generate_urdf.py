@@ -410,14 +410,14 @@ def export_robot_to_xacro_files():
         filenamerobot = NAME + '_' + i + '.xacro'
         root.appendChild(ur.short(doc, 'xacro:include', 'filename',
             filenamerobot))
-# # Transmission elements not available from Aldebaran libraries yet
-#    export_robot_element('Transmission')
-#    root.appendChild(ur.short(doc, 'xacro:include', 'filename', NAME +
-#        '_Transmission.xacro'))
-# # Gazebo Plugin not available from Aldebaran libraries yet
-#    export_robot_element('Gazebo')
-#    root.appendChild(ur.short(doc, 'xacro:include', 'filename', NAME +
-#        '_Gazebo.xacro'))
+    # Transmission elements not available from Aldebaran libraries yet
+    export_robot_element('Transmission')
+    root.appendChild(ur.short(doc, 'xacro:include', 'filename', NAME +
+        '_Transmission.xacro'))
+    # Gazebo Plugin not available from Aldebaran libraries yet
+    export_robot_element('Gazebo')
+    root.appendChild(ur.short(doc, 'xacro:include', 'filename', NAME +
+        '_Gazebo.xacro'))
     root.appendChild(ur.short(doc, 'xacro:include', 'filename', NAME +
         '_sensors.xacro'))
     export_list_to_xacro(['_frame'], OUTPUT[0:OUTPUT.rfind('.')] +
