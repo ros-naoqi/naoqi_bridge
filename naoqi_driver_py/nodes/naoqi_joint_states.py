@@ -77,6 +77,7 @@ class NaoqiJointStates(NaoqiNode):
 
         # use sensor values or commanded (open-loop) values for joint angles
         self.useJointSensors = rospy.get_param('~use_joint_sensors', True) # (set to False in simulation!)
+        self.useOdometry = rospy.get_param('~use_odometry', True)
         # init. messages:
         self.torsoOdom = Odometry()
         self.torsoOdom.header.frame_id = rospy.get_param('~odom_frame_id', "odom")
@@ -155,9 +156,10 @@ class NaoqiJointStates(NaoqiNode):
             self.torsoOdom.pose.pose.orientation.z = q[2]
             self.torsoOdom.pose.pose.orientation.w = q[3]
 
-            t = self.torsoOdom.pose.pose.position
-            q = self.torsoOdom.pose.pose.orientation
-            self.tf_br.sendTransform((t.x, t.y, t.z), (q.x, q.y, q.z, q.w),
+            if self.useOdometry:
+                t = self.torsoOdom.pose.pose.position
+                q = self.torsoOdom.pose.pose.orientation
+                self.tf_br.sendTransform((t.x, t.y, t.z), (q.x, q.y, q.z, q.w),
                                      timestamp, self.base_frameID, self.torsoOdom.header.frame_id)
 
             self.torsoOdomPub.publish(self.torsoOdom)
