@@ -13,9 +13,10 @@
   -->
   <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
 
-  <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
-  <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
-  <arg name="use_odometry" default="true" />
+  <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" doc="Robot IP address. On robot or Local NaoQI" />
+  <arg name="nao_port" default="$(optenv NAO_PORT 9559)" doc="NaoQI port number" />
+
+  <arg name="use_odometry" default="true" doc="flag to publish odometry from naoqi_driver default:true "/>
 
     <node pkg="naoqi_driver_py" type="naoqi_joint_states.py" name="naoqi_joint_states" required="true" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)">
         <param name="use_odometry" type="bool" value="$(arg use_odometry)" />
