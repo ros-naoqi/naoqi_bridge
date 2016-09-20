@@ -2,8 +2,8 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.5 (2016-09-19)
+------------------
 * set Surya as the maintainer
 * Contributors: Vincent Rabaud
 

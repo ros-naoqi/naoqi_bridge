@@ -2,8 +2,8 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.5 (2016-09-19)
+------------------
 * add doc to args
 * disable odom with param and get arg from launch file
 * set Surya as the maintainer

@@ -1,6 +1,6 @@
 <package>
   <name>naoqi_apps</name>
-  <version>0.5.4</version>
+  <version>0.5.5</version>
   <description>Package bridging NAOqi to executing things on the robot.</description>
   <author>Vincent Rabaud</author>
   <maintainer email="surya.ambrose@gmail.com">Surya Ambrose</maintainer>
