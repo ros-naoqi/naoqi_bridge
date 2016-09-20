@@ -2,6 +2,15 @@
 Changelog for package naoqi_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* add doc to args
+* disable odom with param and get arg from launch file
+* set Surya as the maintainer
+* cmd_vel and move_base_simple/goal topic names renamed without '/' at first
+* parametrize topic names
+* Contributors: Igor Rodriguez, Kei Okada, Naoki-Kameyama, Vincent Rabaud
+
 0.5.4 (2016-05-20)
 ------------------
 * Merge branch 'add_fake_effort' of https://github.com/k-okada/naoqi_bridge into k-okada-add_fake_effort
@@ -35,7 +44,7 @@ Changelog for package naoqi_driver
 * rename packages
 * remove cpp library builds
 * remove cpp code
-* rename packages to *_py
+* rename packages to <*>_py
 * Contributors: Karsten Knese
 
 0.4.8 (2015-06-25)

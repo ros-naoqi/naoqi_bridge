@@ -2,6 +2,11 @@
 Changelog for package naoqi_sensors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* set Surya as the maintainer
+* Contributors: Vincent Rabaud
+
 0.5.4 (2016-05-20)
 ------------------
 * remove the dependency on driver_base
@@ -31,12 +36,12 @@ Changelog for package naoqi_sensors
 0.5.0 (2015-07-30)
 ------------------
 * renaming packag to _py
-* change package dependencies to *_py
+* change package dependencies to <*>_py
 * delete legacy msg package
 * rename packages
 * remove cpp version
 * remove camera nodelet
-* rename packages to *_py
+* rename packages to <*>_py
 * Contributors: Karsten Knese
 
 0.4.8 (2015-06-25)

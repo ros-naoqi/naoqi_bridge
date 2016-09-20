@@ -2,6 +2,11 @@
 Changelog for package naoqi_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* set Surya as the maintainer
+* Contributors: Vincent Rabaud
+
 0.5.4 (2016-05-20)
 ------------------
 
