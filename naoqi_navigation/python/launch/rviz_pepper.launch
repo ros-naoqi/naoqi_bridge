@@ -1,0 +1,6 @@
+<launch>
+ <include file="$(find pepper_description)/launch/pepper_publisher.launch" />
+ <param name="use_sim_time" type="bool" value="true"/>
+ <node pkg="rviz" type="rviz" output="screen" name="rviz" />
+</launch>
+

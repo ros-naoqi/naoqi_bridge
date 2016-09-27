@@ -1,0 +1,10 @@
+<launch>
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
+  <arg name="nao_ip"            default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port"          default="$(optenv NAO_PORT 9559)" />
+  <node pkg="naoqi_navigation" type="pod.py" name="naoqi_pod" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)"
+    output="screen"/>
+  <node pkg="naoqi_navigation" type="localization.py" name="localization" args="--pip=$(arg nao_ip)
+    --pport=$(arg nao_port)" output="screen"/>
+</launch>
+
