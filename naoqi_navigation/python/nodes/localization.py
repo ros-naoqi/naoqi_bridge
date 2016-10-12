@@ -56,8 +56,19 @@ class ParticlesPublisher(NaoqiNode):
 
         self.navigation = self.get_proxy("ALNavigation")
         self.motion = self.get_proxy("ALMotion")
-        if self.navigation is None:
-            exit(1)
+        if self.navigation is None or self.motion is None:
+            rospy.logerr("Unable to reach ALMotion and ALNavigation.")
+            exit(0)
+        version_array = self.get_proxy("ALSystem").systemVersion().split('.')
+        if len(version_array) < 3:
+            rospy.logerr("Unable to deduce the system version.")
+            exit(0)
+        version_tuple = (int(version_array[0]), int(version_array[1]), int(version_array[2]))
+        min_version = (2, 5, 2)
+        if version_tuple < min_version:
+            rospy.logerr("Naoqi version " + str(min_version) + " required for localization. Yours is " + str(version_tuple))
+            exit(0)
+
 
     def get_ros_quaternion(self, almath_quaternion):
         output = Quaternion()
