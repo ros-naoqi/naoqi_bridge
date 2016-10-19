@@ -90,7 +90,7 @@ class NaoqiSoundLocalization (NaoqiNode):
             try:
                 r = rospy.Rate(5)
                 sound = self.memProxy.getData("ALSoundLocalization/SoundLocated")
-                if (len(sound)) > 0 and sound != self.pre_sound_localization:
+                if sound is not None and (len(sound)) > 0 and sound != self.pre_sound_localization:
                     self.soundLocalization.header.stamp = rospy.get_rostime()
                     self.soundLocalization.azimuth = sound[1][0]
                     self.soundLocalization.elevation = sound[1][1]
