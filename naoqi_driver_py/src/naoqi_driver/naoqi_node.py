@@ -83,7 +83,7 @@ class NaoqiNode(Thread):
                           help="port of parent broker. Default is 9559.", metavar="PORT")
 
         import sys
-        args = parser.parse_args(args=rospy.myargv(argv=sys.argv)[1:])
+        args, unknown = parser.parse_known_args(args=rospy.myargv(argv=sys.argv)[1:])
         self.pip = args.pip
         self.pport = args.pport
 
