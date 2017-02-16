@@ -21,7 +21,8 @@ __author__ = 'lsouchet'
 import rospy
 from geometry_msgs.msg import Point32
 from visualization_msgs.msg import Marker
-from visualization_msgs.msg import MarkerArray
+from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Path
 
 #import NAO dependencies
 from naoqi_driver.naoqi_node import NaoqiNode
@@ -47,6 +48,7 @@ class ParticlesPublisher(NaoqiNode):
         self.publishers["uncertainty"] = rospy.Publisher('localization_uncertainty', Marker)
         self.publishers["map_tf"] = rospy.Publisher('/tf', TFMessage, latch=True)
         self.publishers["map"] = rospy.Publisher('naoqi_exploration_map', OccupancyGrid , queue_size=None)
+        self.publishers["exploration_path"] = rospy.Publisher('naoqi_exploration_path', Path, queue_size=None)
         self.frequency = 2
         self.rate = rospy.Rate(self.frequency)
 
@@ -109,6 +111,7 @@ class ParticlesPublisher(NaoqiNode):
             try:
                 motion_to_robot = almath.Pose2D(self.motion.getRobotPosition(True))
                 localization = self.navigation.getRobotPositionInMap()
+                exploration_path = self.navigation.getExplorationPath()
             except Exception as e:
                 navigation_tf_msg.transforms.append(self.get_navigation_tf(almath.Pose2D()))
                 self.publishers["map_tf"].publish(navigation_tf_msg)
@@ -150,6 +153,16 @@ class ParticlesPublisher(NaoqiNode):
                     map_marker.info.origin.position.y = aggregated_map[3][1]
                     map_marker.data = aggregated_map[4]
                     self.publishers["map"].publish(map_marker)
+            if self.publishers["exploration_path"].get_num_connections() > 0:
+                path = Path()
+                path.header.stamp = rospy.Time.now()
+                path.header.frame_id = "/map"
+                for node in exploration_path:
+                    current_node = PoseStamped()
+                    current_node.pose.position.x = node[0]
+                    current_node.pose.position.y = node[1]
+                    path.poses.append(current_node)
+                self.publishers["exploration_path"].publish(path)
             self.rate.sleep()
 
 if __name__ == '__main__':
