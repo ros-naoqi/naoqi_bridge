@@ -24,6 +24,6 @@ install(DIRECTORY launch
 )
 
 catkin_install_python(PROGRAMS
-  nodes/pod.py nodes/localization.py
+  nodes/pod.py nodes/localization.py nodes/exploration.py nodes/loading_map.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

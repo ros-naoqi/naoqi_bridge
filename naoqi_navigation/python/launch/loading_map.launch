@@ -1,0 +1,12 @@
+<launch>
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
+  <arg name="nao_ip"            default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port"          default="$(optenv NAO_PORT 9559)" />
+  <arg name="path_to_map"       default="" />
+
+  <node pkg="naoqi_navigation" type="loading_map.py" name="loading_map" args="--pip=$(arg nao_ip)
+    --pport=$(arg nao_port)" output="screen">
+    <param name="path_to_map"   value="$(arg path_to_map)" />
+  </node>
+</launch>
+
