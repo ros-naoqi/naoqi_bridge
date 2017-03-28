@@ -20,7 +20,7 @@ import rospy
 #import NAO dependencies
 from naoqi_driver.naoqi_node import NaoqiNode
 
-class Exploration(NaoqiNode):
+class LoadingMap(NaoqiNode):
 
     def __init__(self):
         NaoqiNode.__init__(self, 'loading_map')
@@ -67,8 +67,8 @@ class Exploration(NaoqiNode):
 
 
 if __name__ == '__main__':
-    rospy.loginfo("Exploration based on Naoqi")
-    pub = Exploration()
+    rospy.loginfo("LoadingMap based on Naoqi")
+    pub = LoadingMap()
 
     #load the map and relocalize
     raw_input("Move Pepper to the position that corresponds to\
