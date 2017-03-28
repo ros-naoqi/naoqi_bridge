@@ -1,0 +1,13 @@
+<launch>
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
+  <arg name="nao_ip"            default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port"          default="$(optenv NAO_PORT 9559)" />
+  <arg name="radius"            default="5" />
+
+  <node pkg="naoqi_navigation" type="exploration.py" name="exploration" args="--pip=$(arg nao_ip)
+    --pport=$(arg nao_port)" output="screen">
+    <param name="radius"        value="$(arg radius)" />
+  </node>
+
+</launch>
+
