@@ -1,19 +1,21 @@
 <launch>
   <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
-  <arg name="nao_ip"            default="$(optenv NAO_IP 127.0.0.1)" />
-  <arg name="nao_port"          default="$(optenv NAO_PORT 9559)" />
-  <arg name="force_python" default="true" />
+  <arg name="nao_ip"              default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port"            default="$(optenv NAO_PORT 9559)" />
+  <arg name="network_interface"   default="eth0" />
+  <arg name="force_python"        default="true" />
 
   <node pkg="rviz" type="rviz" output="screen" name="rviz" />
   <include file="$(find pepper_description)/launch/pepper_publisher.launch" />
 
   <!-- nao driver works for pepper -->
   <include file="$(find naoqi_driver_py)/launch/naoqi_driver.launch">
-    <arg name="nao_ip"    value="$(arg nao_ip)" />
+    <arg name="nao_ip"            value="$(arg nao_ip)" />
+    <arg name="network_interface" value="$(arg network_interface)" />
   </include>
 
   <include file="$(find naoqi_navigation)/launch/navigation.launch">
-    <arg name="nao_ip" value="$(arg nao_ip)" />
+    <arg name="nao_ip"            value="$(arg nao_ip)" />
   </include>
 </launch>
 
