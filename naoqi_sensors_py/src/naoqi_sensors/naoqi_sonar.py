@@ -85,8 +85,9 @@ class SonarPublisher(NaoqiNode):
 
                 # publish messages
                 self.publisher.publish(sonar.msg)
-                #sleep
-                self.sonarRate.sleep()
+
+            #sleep
+            self.sonarRate.sleep()
 
         #exit sonar subscription
         #self.sonarProxy.unsubscribe(self.NAOQI_SONAR_SUB_NAME)
