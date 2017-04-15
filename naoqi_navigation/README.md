@@ -1,6 +1,6 @@
-#Navigation RVIZ
+# Navigation RVIZ
 
-##Overview
+## Overview
 
 Some tools are available for visualization of the features provided by ALNavigation and ALRecharge modules.
 
@@ -8,9 +8,9 @@ These tools use the ROS Visualization framework rviz (http://wiki.ros.org/rviz).
 
 This documentation will focus on setup and use on a Ubuntu 14.04 machine using ros-indigo distribution.
 
-##Installation
+## Installation
 
-###Ros core installation
+### Ros core installation
 
 First, we need to install ros core framework on the machine, because rviz uses ros middleware for message transfer.
 
@@ -20,11 +20,11 @@ Basically, you will need to:
 
     sudo apt-get install ros-indigo-base
 
-###Naoqi packages
+### Naoqi packages
 
 You will now install Naoqi packages for rviz. Some of them are distributed through Ubuntu package manager, some other are Aldebaran private and will need to be built manually.
 
-####Prebuilt Packages
+#### Prebuilt Packages
 
     # install rviz
     sudo apt-get install ros-indigo-rviz ros-indigo-naoqi-bridge
@@ -32,7 +32,7 @@ You will now install Naoqi packages for rviz. Some of them are distributed throu
     ros-indigo-pepper-description ros-indigo-pepper-meshes
     ros-indigo-octomap-msgs
 
-####Custom build packages
+#### Custom build packages
 
 To build the navigation-specific packages, you will need to use catkin.
 
@@ -49,7 +49,7 @@ You will then need to create a catkin worktreea and clone the naoqi_bridge repo.
 
 Now you should have all what is needed to visualize navigation features in Rviz.
 
-##Running Rviz
+## Running Rviz
 
 Each time, you want to use those features, you will need to source two files to find the correct libs.
 
