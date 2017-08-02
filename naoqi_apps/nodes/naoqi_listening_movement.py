@@ -18,20 +18,20 @@
 # 
 import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
-from naoqi_bridge_msgs.srv import ( 
-    IsActiveResponse,
-    IsActive,
-    SetEnabledResponse,
-    SetEnabled,)
+from std_srvs.srv import (
+    SetBoolResponse,
+    SetBool,
+    TriggerResponse,
+    Trigger
+)
 
 class NaoqiListeningMovement(NaoqiNode):
     def __init__(self):
         NaoqiNode.__init__(self, 'naoqi_listening_movement')
         self.connectNaoQi()
         
-        self.SetEnabledSrv = rospy.Service("listening_movement_set_enabled", SetEnabled, self.handleSetEnabledSrv)
-        self.IsEnabledSrv = rospy.Service("listening_movement_is_enabled", IsActive, self.handleIsEnabledSrv)
-        self.IsRunningSrv = rospy.Service("listening_movement_is_running", IsActive, self.handleIsRunningSrv)
+        self.SetEnabledSrv = rospy.Service("listening_movement_set_enabled", SetBool, self.handleSetEnabledSrv)
+        self.IsEnabledSrv = rospy.Service("listening_movement_is_enabled", Trigger, self.handleIsEnabledSrv)
         rospy.loginfo("naoqi_listening_movement initialized")
 
     def connectNaoQi(self):
@@ -41,10 +41,10 @@ class NaoqiListeningMovement(NaoqiNode):
             exit(1)
     
     def handleSetEnabledSrv(self, req):
-        res = SetEnabledResponse()
+        res = SetBoolResponse()
         res.success = False
         try:
-            self.listeningMovementProxy.setEnabled(req.enabled)
+            self.listeningMovementProxy.setEnabled(req.data)
             res.success = True
             return res
         except RuntimeError, e:
@@ -53,17 +53,8 @@ class NaoqiListeningMovement(NaoqiNode):
 
     def handleIsEnabledSrv(self, req):
         try:
-            res = IsActiveResponse()
-            res.status = self.listeningMovementProxy.isEnabled()
-            return  res
-        except RuntimeError, e:
-            rospy.logerr("Exception caught:\n%s", e)
-            return None
-
-    def handleIsRunningSrv(self, req):
-        try:
-            res = IsActiveResponse()
-            res.status = self.listeningMovementProxy.isRunning()
+            res = TriggerResponse()
+            res.success = self.listeningMovementProxy.isEnabled()
             return  res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
