@@ -85,13 +85,11 @@ class NaoqiMic (ALModule, NaoqiNode):
     def run(self):
         r=rospy.Rate(2)
         while self.is_looping():
-            if self.pub_audio_.get_num_connections() == 0:
-                if self.isSubscribed:
-                    rospy.loginfo('Unsubscribing from audio bridge as nobody listens to the topics.')
-                    self.release()
-                continue
+            if self.pub_audio_.get_num_connections() == 0 and self.isSubscribed:
+                rospy.loginfo('Unsubscribing from audio bridge as nobody listens to the topics.')
+                self.release()
 
-            if not self.isSubscribed:
+            elif self.pub_audio_.get_num_connections() > 0 and not self.isSubscribed:
                 self.reconfigure(self.config, 0)
 
             r.sleep()
