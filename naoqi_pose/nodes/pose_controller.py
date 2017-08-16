@@ -45,6 +45,9 @@ from naoqi_bridge_msgs.msg import(
     BodyPoseWithSpeedAction,
     BodyPoseWithSpeedGoal,
     BodyPoseWithSpeedResult)
+from naoqi_bridge_msgs.srv import(
+    GetAlifeState,
+    GetAlifeStateResponse)
 
 from naoqi_driver.naoqi_node import NaoqiNode
 
@@ -86,6 +89,7 @@ class PoseController(NaoqiNode):
         self.restSrv = rospy.Service("rest", Empty, self.handleRestSrv)
         self.enableLifeSrv = rospy.Service("life/enable", Empty, self.handleLifeSrv)
         self.disableLifeSrv = rospy.Service("life/disable", Empty, self.handleLifeOffSrv)
+        self.getLifeStateSrv = rospy.Service("life/getState", GetAlifeState, self.handlegetLifeSrv)
 
 
         #Start simple action servers
@@ -207,7 +211,17 @@ class PoseController(NaoqiNode):
         except RuntimeError, e:
             rospy.logerr("Exception while disabling life state:\n%s", e)
             return None
-
+            
+    def handlegetLifeSrv(self, req):
+        try:
+            res = GetAlifeStateResponse()
+            res.status.data = str (self.lifeProxy.getState())
+            rospy.loginfo("Current Life State: " + res.status.data)
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception while getting life state:\n%s", e)
+            return None
+            
     def jointTrajectoryGoalMsgToAL(self, goal):
         """Helper, convert action goal msg to Aldebraran-style arrays for NaoQI"""
         names = list(goal.trajectory.joint_names)
