@@ -48,7 +48,7 @@ from naoqi_bridge_msgs.msg import(
 
 from naoqi_driver.naoqi_node import NaoqiNode
 
-from std_srvs.srv import Empty, EmptyResponse
+from std_srvs.srv import Empty, EmptyResponse, Trigger, TriggerResponse
 from sensor_msgs.msg import JointState
 
 class PoseController(NaoqiNode):
@@ -86,6 +86,7 @@ class PoseController(NaoqiNode):
         self.restSrv = rospy.Service("rest", Empty, self.handleRestSrv)
         self.enableLifeSrv = rospy.Service("life/enable", Empty, self.handleLifeSrv)
         self.disableLifeSrv = rospy.Service("life/disable", Empty, self.handleLifeOffSrv)
+        self.getLifeSrv = rospy.Service("life/get_state", Trigger, self.handleGetLifeSrv)
 
 
         #Start simple action servers
@@ -206,6 +207,17 @@ class PoseController(NaoqiNode):
             return EmptyResponse()
         except RuntimeError, e:
             rospy.logerr("Exception while disabling life state:\n%s", e)
+            return None
+
+    def handleGetLifeSrv(self, req):
+        try:
+            res = TriggerResponse()
+            res.success = True
+            res.message = self.lifeProxy.getState()
+            rospy.loginfo("current life state is " + str(res.message))
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception while getting life state:\n%s", e)
             return None
 
     def jointTrajectoryGoalMsgToAL(self, goal):
