@@ -48,6 +48,7 @@ from naoqi_bridge_msgs.msg import(
 
 from naoqi_driver.naoqi_node import NaoqiNode
 
+from std_msgs.msg import String
 from std_srvs.srv import Empty, EmptyResponse, Trigger, TriggerResponse
 from sensor_msgs.msg import JointState
 
@@ -78,6 +79,8 @@ class PoseController(NaoqiNode):
         if initStiffness > 0.0 and initStiffness <= 1.0:
             self.motionProxy.stiffnessInterpolation('Body', initStiffness, 0.5)
 
+        # advertise topics:
+        self.getLifeStatePub = rospy.Publisher("get_life_state", String, queue_size=10)
 
         # start services / actions:
         self.enableStiffnessSrv = rospy.Service("body_stiffness/enable", Empty, self.handleStiffnessSrv)
@@ -419,9 +422,23 @@ class PoseController(NaoqiNode):
         #~ Return success
         self.bodyPoseWithSpeedServer.set_succeeded()
 
+    def run(self):
+        while self.is_looping():
+            try:
+                if self.getLifeStatePub.get_num_connections() > 0:
+                    get_life_state_msg = String()
+                    get_life_state_msg.data = self.lifeProxy.getState()
+                    self.getLifeStatePub.publish(get_life_state_msg)
+
+            except RuntimeError, e:
+                print "Error accessing ALMotion, ALRobotPosture, ALAutonomousLife, exiting...\n"
+                print e
+                rospy.signal_shutdown("No NaoQI available anymore")
+
 if __name__ == '__main__':
 
     controller = PoseController()
+    controller.start()
     rospy.loginfo("nao pose_controller running...")
     rospy.spin()
 
