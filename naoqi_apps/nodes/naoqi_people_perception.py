@@ -248,7 +248,7 @@ class NaoqiPeoplePerception (NaoqiNode):
                             if (len (data_list)) > 0:
                                 gender_data = self.memProxy.getData(gender)
                                 if (len (gender_data) > 0):
-                                    face_characteristics_msg.person_gender.gender = gender_data[0]
+                                    face_characteristics_msg.person_gender.gender = int(gender_data[0])
                                     face_characteristics_msg.person_gender.confidence = gender_data[1]
 
                             # SmileProperties
@@ -259,6 +259,54 @@ class NaoqiPeoplePerception (NaoqiNode):
                                     face_characteristics_msg.person_smile.smile_degree = smile_data[0]
                                     face_characteristics_msg.person_smile.confidence = smile_data[1]
                             
+                            # ALGazeAnalysis
+                            gaze_analysis_msg = people_perception_msg.gaze_analysis
+
+                            eye_opening_degree = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/EyeOpeningDegree"
+                            gaze_direction = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/GazeDirection"
+                            head_angles = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/HeadAngles"
+                            is_looking_at_robot = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/IsLookingAtRobot"
+                            looking_at_robot_score = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/LookingAtRobotScore"
+
+                            # EyeOpeningDegree
+                            data_list = self.memProxy.getDataList(eye_opening_degree)
+                            if (len (data_list)) > 0:
+                                eye_opening_degree_data = self.memProxy.getData(eye_opening_degree)
+                                if len(eye_opening_degree_data) > 0:
+                                    gaze_analysis_msg.eye_opening_degree_left = eye_opening_degree_data[0]
+                                    gaze_analysis_msg.eye_opening_degree_right = eye_opening_degree_data[1]
+
+                            # GazeDirection
+                            data_list = self.memProxy.getDataList(gaze_direction)
+                            if (len (data_list)) > 0:
+                                gaze_direction_data = self.memProxy.getData(gaze_direction)
+                                if (len (gaze_direction_data) > 0):
+                                    gaze_analysis_msg.gaze_direction_yaw = gaze_direction_data[0]
+                                    gaze_analysis_msg.gaze_direction_pitch = gaze_direction_data[1]
+
+                            # HeadAngles
+                            data_list = self.memProxy.getDataList(head_angles)
+                            if (len (data_list)) > 0:
+                                head_angles_data = self.memProxy.getData(head_angles)
+                                if (len (head_angles_data) > 0):
+                                    gaze_analysis_msg.head_angles_yaw = head_angles_data[0]
+                                    gaze_analysis_msg.head_angles_pitch = head_angles_data[1]
+                                    gaze_analysis_msg.head_angles_roll = head_angles_data[2]
+
+                            # IsLookingAtRobot
+                            data_list = self.memProxy.getDataList(is_looking_at_robot)
+                            if (len (data_list)) > 0:
+                                is_looking_at_robot_data = self.memProxy.getData(is_looking_at_robot)
+                                if is_looking_at_robot_data is not None:
+                                    gaze_analysis_msg.is_looking_at_robot = is_looking_at_robot_data
+
+                            # LookingAtRobotScore
+                            data_list = self.memProxy.getDataList(looking_at_robot_score)
+                            if (len (data_list)) > 0:
+                                looking_at_robot_score_data = self.memProxy.getData(looking_at_robot_score)
+                                if looking_at_robot_score_data is not None:
+                                    gaze_analysis_msg.looking_at_robot_score = looking_at_robot_score_data
+
                             self.peoplePerceptionPub.publish(people_perception_msg)
                         self.pre_people_detected_list = people_detected_list[1]
 
