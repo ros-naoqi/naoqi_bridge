@@ -36,8 +36,8 @@ class NaoqiPeoplePerception (NaoqiNode):
     def run(self):
         while self.is_looping():
             try:
-                # PeopleDetected
                 if self.peoplePerceptionPub.get_num_connections() > 0:
+                    # ALPeoplePerception
                     people_detected_list = self.memProxy.getData("PeoplePerception/PeopleDetected")
                     if people_detected_list != None and (len (people_detected_list) > 0) and people_detected_list[1] != self.pre_people_detected_list:
                         people_perception_msg = PeoplePerception()
@@ -161,6 +161,103 @@ class NaoqiPeoplePerception (NaoqiNode):
                                     people_detected_msg.hsv.x = shirt_color_hsv_data[0]
                                     people_detected_msg.hsv.y = shirt_color_hsv_data[1]
                                     people_detected_msg.hsv.z = shirt_color_hsv_data[2]
+
+                            # ALFaceCharacteristics
+                            face_characteristics_msg = people_perception_msg.face_characteristics
+                            
+                            age = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/AgeProperties"
+                            expression = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/ExpressionProperties"
+                            facial_parts = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/FacialPartsProperties"
+                            gender = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/GenderProperties"
+                            smile = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/SmileProperties"
+
+                            # AgeProperties
+                            data_list = self.memProxy.getDataList(age)
+                            if (len (data_list)) > 0:
+                                age_data = self.memProxy.getData(age)
+                                if (len (age_data) > 0):
+                                    face_characteristics_msg.person_age.age = age_data[0]
+                                    face_characteristics_msg.person_age.confidence = age_data[1]
+
+                            # ExpressionProperties
+                            data_list =  self.memProxy.getDataList(expression)
+                            if (len (data_list)) > 0:
+                                expression_data = self.memProxy.getData(expression)
+                                if (len (expression_data) > 0):
+                                    face_characteristics_msg.person_expression.neutral = expression_data[0]
+                                    face_characteristics_msg.person_expression.happy = expression_data[1]
+                                    face_characteristics_msg.person_expression.surprised = expression_data[2]
+                                    face_characteristics_msg.person_expression.angry = expression_data[3]
+                                    face_characteristics_msg.person_expression.sad = expression_data[4]
+
+                            # FacialPartsProperties
+                            data_list = self.memProxy.getDataList(facial_parts)
+                            if (len (data_list)) > 0:
+                                facial_parts_data = self.memProxy.getData(facial_parts)
+                                if (len (facial_parts_data) > 0):
+                                    face_characteristics_msg.person_facial_parts.left_eye_center_point_x = facial_parts_data[0][0][0]
+                                    face_characteristics_msg.person_facial_parts.left_eye_center_point_y = facial_parts_data[0][0][1]
+                                    face_characteristics_msg.person_facial_parts.left_eye_center_confidence = facial_parts_data[0][1]
+
+                                    face_characteristics_msg.person_facial_parts.right_eye_center_point_x = facial_parts_data[1][0][0]
+                                    face_characteristics_msg.person_facial_parts.right_eye_center_point_y = facial_parts_data[1][0][1]
+                                    face_characteristics_msg.person_facial_parts.right_eye_center_confidence = facial_parts_data[1][1]
+
+                                    face_characteristics_msg.person_facial_parts.mouth_center_point_x = facial_parts_data[2][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_center_point_y = facial_parts_data[2][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_center_confidence = facial_parts_data[2][1]
+
+                                    face_characteristics_msg.person_facial_parts.left_eye_inner_limit_x = facial_parts_data[3][0][0]
+                                    face_characteristics_msg.person_facial_parts.left_eye_inner_limit_y = facial_parts_data[3][0][1]
+                                    face_characteristics_msg.person_facial_parts.left_eye_inner_limit_confidence = facial_parts_data[3][1]
+
+                                    face_characteristics_msg.person_facial_parts.left_eye_outer_limit_x = facial_parts_data[4][0][0]
+                                    face_characteristics_msg.person_facial_parts.left_eye_outer_limit_y = facial_parts_data[4][0][1]
+                                    face_characteristics_msg.person_facial_parts.left_eye_outer_limit_confidence = facial_parts_data[4][1]
+
+                                    face_characteristics_msg.person_facial_parts.right_eye_inner_limit_x = facial_parts_data[5][0][0]
+                                    face_characteristics_msg.person_facial_parts.right_eye_inner_limit_y = facial_parts_data[5][0][1]
+                                    face_characteristics_msg.person_facial_parts.right_eye_inner_limit_confidence = facial_parts_data[5][1]
+
+                                    face_characteristics_msg.person_facial_parts.right_eye_outer_limit_x = facial_parts_data[6][0][0]
+                                    face_characteristics_msg.person_facial_parts.right_eye_outer_limit_y = facial_parts_data[6][0][1]
+                                    face_characteristics_msg.person_facial_parts.right_eye_outer_limit_confidence = facial_parts_data[6][1]
+
+                                    face_characteristics_msg.person_facial_parts.mouth_left_limit_x = facial_parts_data[7][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_left_limit_y = facial_parts_data[7][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_left_limit_confidence = facial_parts_data[7][1]
+
+                                    face_characteristics_msg.person_facial_parts.mouth_right_limit_x = facial_parts_data[8][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_right_limit_y = facial_parts_data[8][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_right_limit_confidence = facial_parts_data[8][1]
+
+                                    face_characteristics_msg.person_facial_parts.nose_left_limit_x = facial_parts_data[9][0][0]
+                                    face_characteristics_msg.person_facial_parts.nose_left_limit_y = facial_parts_data[9][0][1]
+                                    face_characteristics_msg.person_facial_parts.nose_left_limit_confidence = facial_parts_data[9][1]
+
+                                    face_characteristics_msg.person_facial_parts.nose_right_limit_x = facial_parts_data[10][0][0]
+                                    face_characteristics_msg.person_facial_parts.nose_right_limit_y = facial_parts_data[10][0][1]
+                                    face_characteristics_msg.person_facial_parts.nose_right_limit_confidence = facial_parts_data[10][1]
+
+                                    face_characteristics_msg.person_facial_parts.mouth_upper_limit_x = facial_parts_data[11][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_upper_limit_y = facial_parts_data[11][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_upper_limit_confidence = facial_parts_data[11][1]
+
+                            # GenderProperties
+                            data_list =  self.memProxy.getDataList(gender)
+                            if (len (data_list)) > 0:
+                                gender_data = self.memProxy.getData(gender)
+                                if (len (gender_data) > 0):
+                                    face_characteristics_msg.person_gender.gender = gender_data[0]
+                                    face_characteristics_msg.person_gender.confidence = gender_data[1]
+
+                            # SmileProperties
+                            data_list =  self.memProxy.getDataList(smile)
+                            if (len (data_list)) > 0:
+                                smile_data = self.memProxy.getData(smile)
+                                if (len (smile_data) > 0):
+                                    face_characteristics_msg.person_smile.smile_degree = smile_data[0]
+                                    face_characteristics_msg.person_smile.confidence = smile_data[1]
                             
                             self.peoplePerceptionPub.publish(people_perception_msg)
                         self.pre_people_detected_list = people_detected_list[1]
