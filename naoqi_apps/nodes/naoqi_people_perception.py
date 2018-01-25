@@ -307,6 +307,14 @@ class NaoqiPeoplePerception (NaoqiNode):
                                 if looking_at_robot_score_data is not None:
                                     gaze_analysis_msg.looking_at_robot_score = looking_at_robot_score_data
 
+                            # ALEngagementZones
+                            engagement_zones = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/EngagementZone"
+                            data_list = self.memProxy.getDataList(engagement_zones)
+                            if (len (data_list)) > 0:
+                                engagement_zones_data = self.memProxy.getData(engagement_zones)
+                                if engagement_zones_data is not None:
+                                    people_perception_msg.engagement_zone_of_person = engagement_zones_data
+
                             self.peoplePerceptionPub.publish(people_perception_msg)
                         self.pre_people_detected_list = people_detected_list[1]
 
