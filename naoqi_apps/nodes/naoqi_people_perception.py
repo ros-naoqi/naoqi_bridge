@@ -195,52 +195,52 @@ class NaoqiPeoplePerception (NaoqiNode):
                             if (len (data_list)) > 0:
                                 facial_parts_data = self.memProxy.getData(facial_parts)
                                 if (len (facial_parts_data) > 0):
-                                    face_characteristics_msg.person_facial_parts.left_eye_center_point_x = facial_parts_data[0][0][0]
-                                    face_characteristics_msg.person_facial_parts.left_eye_center_point_y = facial_parts_data[0][0][1]
+                                    face_characteristics_msg.person_facial_parts.left_eye_center_point.x = facial_parts_data[0][0][0]
+                                    face_characteristics_msg.person_facial_parts.left_eye_center_point.y = facial_parts_data[0][0][1]
                                     face_characteristics_msg.person_facial_parts.left_eye_center_confidence = facial_parts_data[0][1]
 
-                                    face_characteristics_msg.person_facial_parts.right_eye_center_point_x = facial_parts_data[1][0][0]
-                                    face_characteristics_msg.person_facial_parts.right_eye_center_point_y = facial_parts_data[1][0][1]
+                                    face_characteristics_msg.person_facial_parts.right_eye_center_point.x = facial_parts_data[1][0][0]
+                                    face_characteristics_msg.person_facial_parts.right_eye_center_point.y = facial_parts_data[1][0][1]
                                     face_characteristics_msg.person_facial_parts.right_eye_center_confidence = facial_parts_data[1][1]
 
-                                    face_characteristics_msg.person_facial_parts.mouth_center_point_x = facial_parts_data[2][0][0]
-                                    face_characteristics_msg.person_facial_parts.mouth_center_point_y = facial_parts_data[2][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_center_point.x = facial_parts_data[2][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_center_point.y = facial_parts_data[2][0][1]
                                     face_characteristics_msg.person_facial_parts.mouth_center_confidence = facial_parts_data[2][1]
 
-                                    face_characteristics_msg.person_facial_parts.left_eye_inner_limit_x = facial_parts_data[3][0][0]
-                                    face_characteristics_msg.person_facial_parts.left_eye_inner_limit_y = facial_parts_data[3][0][1]
+                                    face_characteristics_msg.person_facial_parts.left_eye_inner_limit.x = facial_parts_data[3][0][0]
+                                    face_characteristics_msg.person_facial_parts.left_eye_inner_limit.y = facial_parts_data[3][0][1]
                                     face_characteristics_msg.person_facial_parts.left_eye_inner_limit_confidence = facial_parts_data[3][1]
 
-                                    face_characteristics_msg.person_facial_parts.left_eye_outer_limit_x = facial_parts_data[4][0][0]
-                                    face_characteristics_msg.person_facial_parts.left_eye_outer_limit_y = facial_parts_data[4][0][1]
+                                    face_characteristics_msg.person_facial_parts.left_eye_outer_limit.x = facial_parts_data[4][0][0]
+                                    face_characteristics_msg.person_facial_parts.left_eye_outer_limit.y = facial_parts_data[4][0][1]
                                     face_characteristics_msg.person_facial_parts.left_eye_outer_limit_confidence = facial_parts_data[4][1]
 
-                                    face_characteristics_msg.person_facial_parts.right_eye_inner_limit_x = facial_parts_data[5][0][0]
-                                    face_characteristics_msg.person_facial_parts.right_eye_inner_limit_y = facial_parts_data[5][0][1]
+                                    face_characteristics_msg.person_facial_parts.right_eye_inner_limit.x = facial_parts_data[5][0][0]
+                                    face_characteristics_msg.person_facial_parts.right_eye_inner_limit.y = facial_parts_data[5][0][1]
                                     face_characteristics_msg.person_facial_parts.right_eye_inner_limit_confidence = facial_parts_data[5][1]
 
-                                    face_characteristics_msg.person_facial_parts.right_eye_outer_limit_x = facial_parts_data[6][0][0]
-                                    face_characteristics_msg.person_facial_parts.right_eye_outer_limit_y = facial_parts_data[6][0][1]
+                                    face_characteristics_msg.person_facial_parts.right_eye_outer_limit.x = facial_parts_data[6][0][0]
+                                    face_characteristics_msg.person_facial_parts.right_eye_outer_limit.y = facial_parts_data[6][0][1]
                                     face_characteristics_msg.person_facial_parts.right_eye_outer_limit_confidence = facial_parts_data[6][1]
 
-                                    face_characteristics_msg.person_facial_parts.mouth_left_limit_x = facial_parts_data[7][0][0]
-                                    face_characteristics_msg.person_facial_parts.mouth_left_limit_y = facial_parts_data[7][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_left_limit.x = facial_parts_data[7][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_left_limit.y = facial_parts_data[7][0][1]
                                     face_characteristics_msg.person_facial_parts.mouth_left_limit_confidence = facial_parts_data[7][1]
 
-                                    face_characteristics_msg.person_facial_parts.mouth_right_limit_x = facial_parts_data[8][0][0]
-                                    face_characteristics_msg.person_facial_parts.mouth_right_limit_y = facial_parts_data[8][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_right_limit.x = facial_parts_data[8][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_right_limit.y = facial_parts_data[8][0][1]
                                     face_characteristics_msg.person_facial_parts.mouth_right_limit_confidence = facial_parts_data[8][1]
 
-                                    face_characteristics_msg.person_facial_parts.nose_left_limit_x = facial_parts_data[9][0][0]
-                                    face_characteristics_msg.person_facial_parts.nose_left_limit_y = facial_parts_data[9][0][1]
+                                    face_characteristics_msg.person_facial_parts.nose_left_limit.x = facial_parts_data[9][0][0]
+                                    face_characteristics_msg.person_facial_parts.nose_left_limit.y = facial_parts_data[9][0][1]
                                     face_characteristics_msg.person_facial_parts.nose_left_limit_confidence = facial_parts_data[9][1]
 
-                                    face_characteristics_msg.person_facial_parts.nose_right_limit_x = facial_parts_data[10][0][0]
-                                    face_characteristics_msg.person_facial_parts.nose_right_limit_y = facial_parts_data[10][0][1]
+                                    face_characteristics_msg.person_facial_parts.nose_right_limit.x = facial_parts_data[10][0][0]
+                                    face_characteristics_msg.person_facial_parts.nose_right_limit.y = facial_parts_data[10][0][1]
                                     face_characteristics_msg.person_facial_parts.nose_right_limit_confidence = facial_parts_data[10][1]
 
-                                    face_characteristics_msg.person_facial_parts.mouth_upper_limit_x = facial_parts_data[11][0][0]
-                                    face_characteristics_msg.person_facial_parts.mouth_upper_limit_y = facial_parts_data[11][0][1]
+                                    face_characteristics_msg.person_facial_parts.mouth_upper_limit.x = facial_parts_data[11][0][0]
+                                    face_characteristics_msg.person_facial_parts.mouth_upper_limit.y = facial_parts_data[11][0][1]
                                     face_characteristics_msg.person_facial_parts.mouth_upper_limit_confidence = facial_parts_data[11][1]
 
                             # GenderProperties
@@ -273,25 +273,25 @@ class NaoqiPeoplePerception (NaoqiNode):
                             if (len (data_list)) > 0:
                                 eye_opening_degree_data = self.memProxy.getData(eye_opening_degree)
                                 if len(eye_opening_degree_data) > 0:
-                                    gaze_analysis_msg.eye_opening_degree_left = eye_opening_degree_data[0]
-                                    gaze_analysis_msg.eye_opening_degree_right = eye_opening_degree_data[1]
+                                    gaze_analysis_msg.eye_opening_degree.append(eye_opening_degree_data[0])
+                                    gaze_analysis_msg.eye_opening_degree.append(eye_opening_degree_data[1])
 
                             # GazeDirection
                             data_list = self.memProxy.getDataList(gaze_direction)
                             if (len (data_list)) > 0:
                                 gaze_direction_data = self.memProxy.getData(gaze_direction)
                                 if (len (gaze_direction_data) > 0):
-                                    gaze_analysis_msg.gaze_direction_yaw = gaze_direction_data[0]
-                                    gaze_analysis_msg.gaze_direction_pitch = gaze_direction_data[1]
+                                    gaze_analysis_msg.gaze_direction.append(gaze_direction_data[0])
+                                    gaze_analysis_msg.gaze_direction.append(gaze_direction_data[1])
 
                             # HeadAngles
                             data_list = self.memProxy.getDataList(head_angles)
                             if (len (data_list)) > 0:
                                 head_angles_data = self.memProxy.getData(head_angles)
                                 if (len (head_angles_data) > 0):
-                                    gaze_analysis_msg.head_angles_yaw = head_angles_data[0]
-                                    gaze_analysis_msg.head_angles_pitch = head_angles_data[1]
-                                    gaze_analysis_msg.head_angles_roll = head_angles_data[2]
+                                    gaze_analysis_msg.head_angles.append(head_angles_data[0])
+                                    gaze_analysis_msg.head_angles.append(head_angles_data[1])
+                                    gaze_analysis_msg.head_angles.append(head_angles_data[2])
 
                             # IsLookingAtRobot
                             data_list = self.memProxy.getDataList(is_looking_at_robot)
