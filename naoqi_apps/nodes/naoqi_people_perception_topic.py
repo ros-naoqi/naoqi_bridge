@@ -19,13 +19,13 @@ import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
 from naoqi_bridge_msgs.msg import PeoplePerception
 
-class NaoqiPeoplePerception (NaoqiNode):
+class NaoqiPeoplePerceptionTopic (NaoqiNode):
     def __init__(self):
-        NaoqiNode.__init__(self, 'naoqi_people_perception')
+        NaoqiNode.__init__(self, 'naoqi_people_perception_topic')
         self.connectNaoQi()
         self.pre_people_detected_list = None
         self.peoplePerceptionPub = rospy.Publisher("people_perception", PeoplePerception, queue_size=10)
-        rospy.loginfo("naoqi_people_perception is initialized")
+        rospy.loginfo("naoqi_people_perception_topic is initialized")
        
     def connectNaoQi(self):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
@@ -322,6 +322,6 @@ class NaoqiPeoplePerception (NaoqiNode):
                 pass
 
 if __name__ == '__main__':
-    peoplePerception = NaoqiPeoplePerception()
+    peoplePerception = NaoqiPeoplePerceptionTopic()
     peoplePerception.start()
     rospy.spin()
