@@ -35,6 +35,7 @@ class NaoqiGazeAnalysis (NaoqiNode):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.gazeProxy = self.get_proxy("ALGazeAnalysis")
         if self.gazeProxy is None:
+            rospy.logerr("Could not get a proxy to ALGazeAnalysis")
             exit(1)
 
     def handleSetGazeAnalysisTolerance(self, req):
