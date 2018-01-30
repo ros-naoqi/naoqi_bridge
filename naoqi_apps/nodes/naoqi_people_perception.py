@@ -57,6 +57,7 @@ class NaoqiPeoplePerception (NaoqiNode):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.peoplePerceptionProxy = self.get_proxy("ALPeoplePerception")
         if self.peoplePerceptionProxy is None:
+            rospy.logerr("Could not get a proxy to ALPeoplePerception")
             exit(1)
             
     def handleGetMaximumDetectionRange(self, req):
