@@ -37,6 +37,7 @@ class NaoqiFaceCharacteristics (NaoqiNode):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.faceC = self.get_proxy("ALFaceCharacteristics")
         if self.faceC is None:
+            rospy.logerr("Could not get a proxy to ALFaceCharacteristics")
             exit(1)
 
     def handleAnalyzeFaceCharacteristics (self, req):
