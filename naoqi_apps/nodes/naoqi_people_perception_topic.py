@@ -31,6 +31,7 @@ class NaoqiPeoplePerceptionTopic (NaoqiNode):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.memProxy = self.get_proxy("ALMemory")
         if self.memProxy is None:
+            rospy.logerr("Could not get a proxy to ALMemory")
             exit(1)
             
     def run(self):
