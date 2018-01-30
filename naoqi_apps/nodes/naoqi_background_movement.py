@@ -30,14 +30,15 @@ class NaoqiBackgroundMovement(NaoqiNode):
         NaoqiNode.__init__(self, 'naoqi_background_movement')
         self.connectNaoQi()
         
-        self.SetEnabledSrv = rospy.Service("background_movement_set_enabled", SetBool, self.handleSetEnabledSrv)
-        self.IsEnabledSrv = rospy.Service("background_movement_is_enabled", Trigger, self.handleIsEnabledSrv)
+        self.SetEnabledSrv = rospy.Service("background_movement/set_enabled", SetBool, self.handleSetEnabledSrv)
+        self.IsEnabledSrv = rospy.Service("background_movement/is_enabled", Trigger, self.handleIsEnabledSrv)
         rospy.loginfo("naoqi_background_movement initialized")
 
     def connectNaoQi(self):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.backgroundMovementProxy = self.get_proxy("ALBackgroundMovement")
         if self.backgroundMovementProxy is None:
+            rospy.logerr("Could not get a proxy to ALBackgroundMovement")
             exit(1)
     
     def handleSetEnabledSrv(self, req):
@@ -60,16 +61,6 @@ class NaoqiBackgroundMovement(NaoqiNode):
             rospy.logerr("Exception caught:\n%s", e)
             return None
 
-    def run(self):
-        while self.is_looping():
-            try:
-                pass
-            except RuntimeError, e:
-                print "Error accessing ALBackgroundMovement, exiting...\n"
-                print e
-                rospy.signal_shutdown("No NaoQI available anymore")
-
 if __name__ == '__main__':
     background_movement = NaoqiBackgroundMovement()
-    background_movement.start()
     rospy.spin()
