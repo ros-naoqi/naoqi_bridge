@@ -30,14 +30,15 @@ class NaoqiListeningMovement(NaoqiNode):
         NaoqiNode.__init__(self, 'naoqi_listening_movement')
         self.connectNaoQi()
         
-        self.SetEnabledSrv = rospy.Service("listening_movement_set_enabled", SetBool, self.handleSetEnabledSrv)
-        self.IsEnabledSrv = rospy.Service("listening_movement_is_enabled", Trigger, self.handleIsEnabledSrv)
+        self.SetEnabledSrv = rospy.Service("listening_movement/set_enabled", SetBool, self.handleSetEnabledSrv)
+        self.IsEnabledSrv = rospy.Service("listening_movement/is_enabled", Trigger, self.handleIsEnabledSrv)
         rospy.loginfo("naoqi_listening_movement initialized")
 
     def connectNaoQi(self):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.listeningMovementProxy = self.get_proxy("ALListeningMovement")
         if self.listeningMovementProxy is None:
+            rospy.logerr("Could not get a proxy to ALListeningMovement")
             exit(1)
     
     def handleSetEnabledSrv(self, req):
@@ -60,16 +61,6 @@ class NaoqiListeningMovement(NaoqiNode):
             rospy.logerr("Exception caught:\n%s", e)
             return None
 
-    def run(self):
-        while self.is_looping():
-            try:
-                pass
-            except RuntimeError, e:
-                print "Error accessing ALListeningMovement, exiting...\n"
-                print e
-                rospy.signal_shutdown("No NaoQI available anymore")
-
 if __name__ == '__main__':
     listening_movement = NaoqiListeningMovement()
-    listening_movement.start()
     rospy.spin()
