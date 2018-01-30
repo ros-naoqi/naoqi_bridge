@@ -47,6 +47,7 @@ class NaoqiEngagementZones(NaoqiNode):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.engagementProxy = self.get_proxy("ALEngagementZones")
         if self.engagementProxy is None:
+            rospy.logerr("Could not get a proxy to ALEngagementZones")
             exit(1)
     
     def handleComputeEngagementZoneBasedOn3DCoordinatesSrv(self, req):
