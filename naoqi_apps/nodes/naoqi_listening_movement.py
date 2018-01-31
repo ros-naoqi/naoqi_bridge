@@ -24,6 +24,7 @@ from std_srvs.srv import (
     TriggerResponse,
     Trigger
 )
+from distutils.version import LooseVersion
 
 class NaoqiListeningMovement(NaoqiNode):
     def __init__(self):
@@ -36,10 +37,19 @@ class NaoqiListeningMovement(NaoqiNode):
 
     def connectNaoQi(self):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
-        self.listeningMovementProxy = self.get_proxy("ALListeningMovement")
-        if self.listeningMovementProxy is None:
-            rospy.logerr("Could not get a proxy to ALListeningMovement")
+        self.systemProxy = self.get_proxy("ALSystem")
+        if self.systemProxy is None:
+            rospy.logerr("Could not get a proxy to ALSystem")
             exit(1)
+        else:
+            if LooseVersion(self.systemProxy.systemVersion()) < LooseVersion("2.4"):
+                rospy.logerr("Naoqi version of your robot is " + str(self.systemProxy.systemVersion()) + ", which doesn't have a proxy to ALListeningMovement.")
+                exit(1)
+            else:
+                self.listeningMovementProxy = self.get_proxy("ALListeningMovement")
+                if self.listeningMovementProxy is None:
+                    rospy.logerr("Could not get a proxy to ALListeningMovement")
+                    exit(1)
     
     def handleSetEnabledSrv(self, req):
         res = SetBoolResponse()
