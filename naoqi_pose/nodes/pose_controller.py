@@ -48,7 +48,8 @@ from naoqi_bridge_msgs.msg import(
 
 from naoqi_driver.naoqi_node import NaoqiNode
 
-from std_srvs.srv import Empty, EmptyResponse
+from std_msgs.msg import String
+from std_srvs.srv import Empty, EmptyResponse, Trigger, TriggerResponse
 from sensor_msgs.msg import JointState
 
 class PoseController(NaoqiNode):
@@ -78,6 +79,8 @@ class PoseController(NaoqiNode):
         if initStiffness > 0.0 and initStiffness <= 1.0:
             self.motionProxy.stiffnessInterpolation('Body', initStiffness, 0.5)
 
+        # advertise topics:
+        self.getLifeStatePub = rospy.Publisher("get_life_state", String, queue_size=10)
 
         # start services / actions:
         self.enableStiffnessSrv = rospy.Service("body_stiffness/enable", Empty, self.handleStiffnessSrv)
@@ -86,6 +89,7 @@ class PoseController(NaoqiNode):
         self.restSrv = rospy.Service("rest", Empty, self.handleRestSrv)
         self.enableLifeSrv = rospy.Service("life/enable", Empty, self.handleLifeSrv)
         self.disableLifeSrv = rospy.Service("life/disable", Empty, self.handleLifeOffSrv)
+        self.getLifeSrv = rospy.Service("life/get_state", Trigger, self.handleGetLifeSrv)
 
 
         #Start simple action servers
@@ -206,6 +210,17 @@ class PoseController(NaoqiNode):
             return EmptyResponse()
         except RuntimeError, e:
             rospy.logerr("Exception while disabling life state:\n%s", e)
+            return None
+
+    def handleGetLifeSrv(self, req):
+        try:
+            res = TriggerResponse()
+            res.success = True
+            res.message = self.lifeProxy.getState()
+            rospy.loginfo("current life state is " + str(res.message))
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception while getting life state:\n%s", e)
             return None
 
     def jointTrajectoryGoalMsgToAL(self, goal):
@@ -407,9 +422,23 @@ class PoseController(NaoqiNode):
         #~ Return success
         self.bodyPoseWithSpeedServer.set_succeeded()
 
+    def run(self):
+        while self.is_looping():
+            try:
+                if self.getLifeStatePub.get_num_connections() > 0:
+                    get_life_state_msg = String()
+                    get_life_state_msg.data = self.lifeProxy.getState()
+                    self.getLifeStatePub.publish(get_life_state_msg)
+
+            except RuntimeError, e:
+                print "Error accessing ALMotion, ALRobotPosture, ALAutonomousLife, exiting...\n"
+                print e
+                rospy.signal_shutdown("No NaoQI available anymore")
+
 if __name__ == '__main__':
 
     controller = PoseController()
+    controller.start()
     rospy.loginfo("nao pose_controller running...")
     rospy.spin()
 
