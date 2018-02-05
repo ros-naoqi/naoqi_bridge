@@ -18,24 +18,17 @@
 # 
 import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
-from std_msgs.msg import String 
-from std_srvs.srv import (
-    EmptyResponse,
-    Empty)
 from naoqi_bridge_msgs.msg import (
+    ExternalCollisionProtectionNames,
     MoveFailed, 
     ChainVelocityClipped)
 from naoqi_bridge_msgs.srv import ( 
+    GetFloatResponse,
+    GetFloat,
+    SetFloatResponse,
+    SetFloat,
     GetChainClosestObstaclePositionResponse,
     GetChainClosestObstaclePosition,
-    SetTangentialSecurityDistanceResponse,
-    SetTangentialSecurityDistance, 
-    GetTangentialSecurityDistanceResponse,
-    GetTangentialSecurityDistance, 
-    SetOrthogonalSecurityDistanceResponse,
-    SetOrthogonalSecurityDistance,
-    GetOrthogonalSecurityDistanceResponse,
-    GetOrthogonalSecurityDistance,
     SetExternalCollisionProtectionEnabledResponse,
     SetExternalCollisionProtectionEnabled,
     GetExternalCollisionProtectionEnabledResponse,
@@ -43,37 +36,48 @@ from naoqi_bridge_msgs.srv import (
 
 class NaoqiExternalCollisionAvoidance(NaoqiNode):
     def __init__(self):
-        NaoqiNode.__init__(self, 'naoqi_externalCollisionAvoidance')
+        NaoqiNode.__init__(self, 'naoqi_external_collision_avoidance')
         self.connectNaoQi()
         
         self.moveFailed = MoveFailed()
         self.previousMoveFailed = ""
         self.chainVelocityClipped = ChainVelocityClipped()
         self.previousChainVelocityClipped = ""
-        self.getChainClosesObstaclePositionSrv = rospy.Service("get_chain_closest_obstacle_position",GetChainClosestObstaclePosition , self.handleGetChainClosestObstaclePosition) 
+        self.getChainClosesObstaclePositionSrv = rospy.Service("get_chain_closest_obstacle_position", GetChainClosestObstaclePosition , self.handleGetChainClosestObstaclePosition) 
         self.getExternalCollisionProtectionEnabledSrv = rospy.Service("get_external_collision_protection_status", GetExternalCollisionProtectionEnabled, self.handleGetExternalCollisionProtectionEnabled)
-        self.getOrthogonalSecurityDistanceSrv = rospy.Service("get_orthogonal_distance", GetOrthogonalSecurityDistance, self.handleGetOrthogonalSecurityDistance)
-        self.getTangentialSecurityDistanceSrv = rospy.Service("get_tangential_distance", GetTangentialSecurityDistance, self.handleGetTangentialSecurityDistance)
+        self.getOrthogonalSecurityDistanceSrv = rospy.Service("get_orthogonal_distance", GetFloat, self.handleGetOrthogonalSecurityDistance)
+        self.getTangentialSecurityDistanceSrv = rospy.Service("get_tangential_distance", GetFloat, self.handleGetTangentialSecurityDistance)
         self.setExternalCollisionProtectionEnabledSrv = rospy.Service("set_external_collision_protection_status", SetExternalCollisionProtectionEnabled, self.handleSetExternalCollisionProtectionEnabled)
-        self.setOrthogonalSecurityDistanceSrv = rospy.Service("set_orthogonal_distance", SetOrthogonalSecurityDistance, self.handleSetOrthogonalSecurityDistance)
-        self.setTangentialSecurityDistanceSrv = rospy.Service("set_tangential_distance", SetTangentialSecurityDistance, self.handleSetTangentialSecurityDistance)
+        self.setOrthogonalSecurityDistanceSrv = rospy.Service("set_orthogonal_distance", SetFloat, self.handleSetOrthogonalSecurityDistance)
+        self.setTangentialSecurityDistanceSrv = rospy.Service("set_tangential_distance", SetFloat, self.handleSetTangentialSecurityDistance)
         self.chainVelocityClippedPub = rospy.Publisher("chain_velocity_clipped", ChainVelocityClipped, queue_size=10) 
         self.moveFailedPub = rospy.Publisher("move_failed", MoveFailed, queue_size=10)       
-        rospy.loginfo("naoqi_externalCollisionAvoidance initialized")
+        rospy.loginfo("naoqi_external_collision_avoidance initialized")
 
     def connectNaoQi(self):
         rospy.loginfo("Connecting to NaoQi at %s:%d", self.pip, self.pport)
         self.memProxy = self.get_proxy("ALMemory")
         self.motionProxy = self.get_proxy("ALMotion")
-        if self.memProxy is None or self.motionProxy is None:
+        if self.memProxy is None:
+            rospy.logerr("Could not get a proxy to ALMemory")
+            exit(1)
+        if self.motionProxy is None:
+            rospy.logerr("Could not get a proxy to ALMotion")
             exit(1)
         
     def handleGetChainClosestObstaclePosition(self, req):
         try:
-            if req.arm.data == 0:
+            if req.arm.data == req.arm.LARM:
                 arm="LArm"
-            else:
+            elif req.arm.data == req.arm.RARM:
                 arm="RArm"
+            else:
+                rospy.logerr("Arm type should be LArm or RArm.")
+                return None
+            if not (req.frame.data == req.frame.FRAME_TORSO or req.frame.data == req.frame.FRAME_ROBOT or req.frame.data == req.frame.FRAME_WORLD):
+                rospy.logerr("Frame type should be FRAME_TORSO or FRAME_ROBOT or FRAME_WORLD.")
+                return None
+
             position = self.motionProxy.getChainClosestObstaclePosition(arm, req.frame.data)
             res = GetChainClosestObstaclePositionResponse()
             res.obstacle_position.x = position[0]
@@ -86,41 +90,39 @@ class NaoqiExternalCollisionAvoidance(NaoqiNode):
             
     def handleSetOrthogonalSecurityDistance(self, req):
         try:
-            res = SetOrthogonalSecurityDistanceResponse()
-            if (req.orthogonal_distance > 0.001 or req.orthogonal_distance == 0.001):
-                self.motionProxy.setOrthogonalSecurityDistance(req.orthogonal_distance)
-                rospy.loginfo("Orthogonal security distance is set to " + str(req.orthogonal_distance))
+            res = SetFloatResponse()
+            if (req.data > 0.001 or req.data == 0.001):
+                self.motionProxy.setOrthogonalSecurityDistance(req.data)
+                rospy.loginfo("Orthogonal security distance is set to " + str(req.data))
                 res.success = True
-                return res
             else:
                 rospy.loginfo("Orthogonal security distance should be 0.001, or more than 0.001")
                 res.success = False
-                return res
+            return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
             return None
         
     def handleSetTangentialSecurityDistance(self, req):
         try:
-            res = SetTangentialSecurityDistanceResponse()
-            if (req.tangential_distance > 0.001 or req.tangential_distance == 0.001):
-                self.motionProxy.setTangentialSecurityDistance(req.tangential_distance)
-                rospy.loginfo("Tangential security distance is set to " + str(req.tangential_distance))
+            res = SetFloatResponse()
+            if (req.data > 0.001 or req.data == 0.001):
+                self.motionProxy.setTangentialSecurityDistance(req.data)
+                rospy.loginfo("Tangential security distance is set to " + str(req.data))
                 res.success = True
-                return res
             else:
                 rospy.loginfo("Tangential distance should be 0.001, or more than 0.001")
                 res.success = False
-                return res
+            return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
             return None
         
     def handleGetOrthogonalSecurityDistance(self, req):
         try:
-            rospy.loginfo("Current Orthogonal Security Distance: " + str(self.motionProxy.getOrthogonalSecurityDistance()))
-            res = GetOrthogonalSecurityDistanceResponse()
-            res.orthogonal_distance = self.motionProxy.getOrthogonalSecurityDistance()
+            res = GetFloatResponse()
+            res.data = self.motionProxy.getOrthogonalSecurityDistance()
+            rospy.loginfo("Current Orthogonal Security Distance: " + str(res.data))
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
@@ -128,9 +130,9 @@ class NaoqiExternalCollisionAvoidance(NaoqiNode):
 
     def handleGetTangentialSecurityDistance(self, req):
         try:
-            rospy.loginfo("Current Tangential Security Distance: " + str(self.motionProxy.getTangentialSecurityDistance()))
-            res = GetTangentialSecurityDistanceResponse()
-            res.tangential_distance = self.motionProxy.getTangentialSecurityDistance()
+            res = GetFloatResponse()
+            res.data = self.motionProxy.getTangentialSecurityDistance()
+            rospy.loginfo("Current Tangential Security Distance: " + str(res.data))
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
@@ -138,15 +140,15 @@ class NaoqiExternalCollisionAvoidance(NaoqiNode):
 
     def handleSetExternalCollisionProtectionEnabled(self, req):
         try:
-            if req.name.data == 0:
+            if req.name.data == ExternalCollisionProtectionNames.ALL:
                 target_name = "All"
-            if req.name.data == 1:
+            elif req.name.data == ExternalCollisionProtectionNames.MOVE:
                 target_name = "Move"
-            if req.name.data == 2:
+            elif req.name.data == ExternalCollisionProtectionNames.ARMS:
                 target_name = "Arms"
-            if req.name.data == 3:
+            elif req.name.data == ExternalCollisionProtectionNames.LARM:
                 target_name = "LArm"
-            if req.name.data == 4:
+            elif req.name.data == ExternalCollisionProtectionNames.RARM:
                 target_name = "RArm"
             res = SetExternalCollisionProtectionEnabledResponse()
             res.success = False
@@ -165,15 +167,15 @@ class NaoqiExternalCollisionAvoidance(NaoqiNode):
 
     def handleGetExternalCollisionProtectionEnabled(self, req):
         try:
-            if req.name.data == 0:
+            if req.name.data == ExternalCollisionProtectionNames.ALL:
                 target_name = "All"
-            if req.name.data == 1:
+            if req.name.data == ExternalCollisionProtectionNames.MOVE:
                 target_name = "Move"
-            if req.name.data == 2:
+            if req.name.data == ExternalCollisionProtectionNames.ARMS:
                 target_name = "Arms"
-            if req.name.data == 3:
+            if req.name.data == ExternalCollisionProtectionNames.LARM:
                 target_name = "LArm"
-            if req.name.data == 4:
+            if req.name.data == ExternalCollisionProtectionNames.RARM:
                 target_name = "RArm"
             res = GetExternalCollisionProtectionEnabledResponse()
             res.status = self.motionProxy.getExternalCollisionProtectionEnabled(target_name)
@@ -186,36 +188,43 @@ class NaoqiExternalCollisionAvoidance(NaoqiNode):
     def run(self):
         while self.is_looping():
             try:
-                moveFailedData = self.memProxy.getData("ALMotion/MoveFailed")
-                if moveFailedData != self.previousMoveFailed:
-                    self.moveFailed.header.stamp = rospy.get_rostime()
-                    self.moveFailed.header.frame_id = "FRAME_WORLD"
-                    self.moveFailed.cause = moveFailedData[0]
-                    self.moveFailed.status = moveFailedData[1]
-                    self.moveFailed.obstacle_position.data = []
-                    if moveFailedData[2]:
-                        for i in range (len(moveFailedData[2])):
-                            self.moveFailed.obstacle_position.data.append((moveFailedData[2])[i])
-                    self.moveFailedPub.publish(self.moveFailed)
-                    self.previousMoveFailed = moveFailedData
-                chainVelocityClippedData = self.memProxy.getData("ALMotion/Safety/ChainVelocityClipped")
-                if chainVelocityClippedData != None and chainVelocityClippedData != self.previousChainVelocityClipped:
-                    for i in range(len(chainVelocityClippedData)):
-                        self.chainVelocityClipped.header.stamp = rospy.get_rostime()
-                        self.chainVelocityClipped.header.frame_id = "FRAME_WORLD"
-                        if (chainVelocityClippedData[i])[0] == "Head":
-                            self.chainVelocityClipped.chain.data = 0
-                        if (chainVelocityClippedData[i])[0] == "Leg":
-                            self.chainVelocityClipped.chain.data = 1
-                        if (chainVelocityClippedData[i])[0] == "LArm":
-                            self.chainVelocityClipped.chain.data = 2
-                        if (chainVelocityClippedData[i])[0] == "RArm":
-                            self.chainVelocityClipped.chain.data = 3
-                        self.chainVelocityClipped.obstacle_position.x = ((chainVelocityClippedData[i])[1])[0]
-                        self.chainVelocityClipped.obstacle_position.y = ((chainVelocityClippedData[i])[1])[1]
-                        self.chainVelocityClipped.obstacle_position.z = ((chainVelocityClippedData[i])[1])[2]
-                        self.chainVelocityClippedPub.publish(self.chainVelocityClipped) 
-                    self.previousChainVelocityClipped = chainVelocityClippedData
+                if self.moveFailedPub.get_num_connections() > 0:
+                    moveFailedData = self.memProxy.getData("ALMotion/MoveFailed")
+                    if moveFailedData != self.previousMoveFailed:
+                        self.moveFailed.header.stamp = rospy.get_rostime()
+                        self.moveFailed.header.frame_id = "FRAME_WORLD"
+                        self.moveFailed.cause = moveFailedData[0]
+                        self.moveFailed.status = moveFailedData[1]
+                        if moveFailedData[2] and len(moveFailedData[2]) == 3:
+                            self.moveFailed.position.x = (moveFailedData[2])[0]
+                            self.moveFailed.position.y = (moveFailedData[2])[1]
+                            self.moveFailed.position.z = (moveFailedData[2])[2]
+                        self.moveFailedPub.publish(self.moveFailed)
+                        self.previousMoveFailed = moveFailedData
+                if self.chainVelocityClippedPub.get_num_connections() > 0:
+                    chainVelocityClippedData = self.memProxy.getData("ALMotion/Safety/ChainVelocityClipped")
+                    if chainVelocityClippedData != None and chainVelocityClippedData != self.previousChainVelocityClipped:
+                        for i in range(len(chainVelocityClippedData)):
+                            self.chainVelocityClipped.header.stamp = rospy.get_rostime()
+                            self.chainVelocityClipped.header.frame_id = "FRAME_WORLD"
+                            if (chainVelocityClippedData[i])[0] == "Head":
+                                self.chainVelocityClipped.chain.data = self.chainVelocityClipped.chain.HEAD
+                            elif (chainVelocityClippedData[i])[0] == "Leg":
+                                self.chainVelocityClipped.chain.data = self.chainVelocityClipped.chain.LEG
+                            elif (chainVelocityClippedData[i])[0] == "LArm":
+                                self.chainVelocityClipped.chain.data = self.chainVelocityClipped.chain.LARM
+                            elif (chainVelocityClippedData[i])[0] == "RArm":
+                                self.chainVelocityClipped.chain.data = self.chainVelocityClipped.chain.RARM
+                            elif (chainVelocityClippedData[i])[0] == "LLeg":
+                                self.chainVelocityClipped.chain.data = self.chainVelocityClipped.chain.LLEG
+                            elif (chainVelocityClippedData[i])[0] == "RLeg":
+                                self.chainVelocityClipped.chain.data = self.chainVelocityClipped.chain.RLEG
+
+                            self.chainVelocityClipped.obstacle_position.x = ((chainVelocityClippedData[i])[1])[0]
+                            self.chainVelocityClipped.obstacle_position.y = ((chainVelocityClippedData[i])[1])[1]
+                            self.chainVelocityClipped.obstacle_position.z = ((chainVelocityClippedData[i])[1])[2]
+                            self.chainVelocityClippedPub.publish(self.chainVelocityClipped)
+                        self.previousChainVelocityClipped = chainVelocityClippedData
             except RuntimeError, e:
                 print "Error accessing ALMemory and ALMotion, exiting...\n"
                 print e
