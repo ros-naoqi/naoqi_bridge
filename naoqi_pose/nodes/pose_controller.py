@@ -58,6 +58,8 @@ class PoseController(NaoqiNode):
 
         self.connectNaoQi()
 
+        self.rate = 10
+
         # store the number of joints in each motion chain and collection, used for sanity checks
         self.collectionSize = {}
         for collectionName in ['Head', 'LArm', 'LLeg', 'RLeg', 'RArm', 'Body', 'BodyJoints', 'BodyActuators']:
@@ -434,6 +436,8 @@ class PoseController(NaoqiNode):
                 print "Error accessing ALMotion, ALRobotPosture, ALAutonomousLife, exiting...\n"
                 print e
                 rospy.signal_shutdown("No NaoQI available anymore")
+
+            self.rate.sleep()
 
 if __name__ == '__main__':
 
