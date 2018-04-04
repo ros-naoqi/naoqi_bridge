@@ -53,7 +53,7 @@ class NaoqiTablet(NaoqiNode):
                
             else:
                 rospy.loginfo("Please confirm the file name and " + str(req.data) + " really exists under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
-                res.success.data = False
+                res.success = False
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
