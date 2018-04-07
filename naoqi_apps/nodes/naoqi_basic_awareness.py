@@ -16,7 +16,13 @@ from naoqi_bridge_msgs.srv import (
     SetStringResponse,
     SetString,
     SetFloatResponse,
-    SetFloat
+    SetFloat,
+    GetFloatResponse,
+    GetFloat,
+    SetStimulusDetectionEnabledResponse,
+    SetStimulusDetectionEnabled,
+    TriggerStimulusResponse,
+    TriggerStimulus
 )
 
 class NaoqiBasicAwareness(NaoqiNode):
@@ -30,11 +36,19 @@ class NaoqiBasicAwareness(NaoqiNode):
         self.PauseAwarenessSrv = rospy.Service("basic_awareness/pause_awareness", Empty, self.handlePauseAwarenessSrv)
         self.ResumeAwarenessSrv = rospy.Service("basic_awareness/resume_awareness", Empty, self.handleResumeAwarenessSrv)
         self.IsAwarenessPausedSrv = rospy.Service("basic_awareness/is_awareness_paused", Trigger, self.handleIsAwarenessPausedSrv)
+        self.IsStimulusDetectionEnabledSrv = rospy.Service("basic_awareness/is_stimulus_detection_enabled", SetString, self.handleIsStimulusDetectionEnabledSrv)
+        self.SetStimulusDetectionEnabledSrv = rospy.Service("basic_awareness/set_stimulus_detection_enabled", SetStimulusDetectionEnabled, self.handleSetStimulusDetectionEnabledSrv)
         self.SetEngagementModeSrv = rospy.Service("basic_awareness/set_engagement_mode", SetString, self.handleSetEngagementModeSrv)
         self.GetEngagementModeSrv = rospy.Service("basic_awareness/get_engagement_mode", GetString, self.handleGetEngagementModeSrv)
         self.EngagePersonSrv = rospy.Service("basic_awareness/engage_person", SetFloat, self.handleEngagePersonSrv)
+        self.TriggerStimulusSrv = rospy.Service("basic_awareness/trigger_stimulus", TriggerStimulus, self.handleTriggerStimulusSrv)
         self.SetTrackingModeSrv = rospy.Service("basic_awareness/set_tracking_mode", SetString, self.handleSetTrackingModeSrv)
         self.GetTrackingModeSrv = rospy.Service("basic_awareness/get_tracking_mode", GetString, self.handleGetTrackingModeSrv)
+        self.SetLookStimulusSpeedSrv = rospy.Service("basic_awareness/set_look_stimulus_speed", SetFloat, self.handleSetLookStimulusSpeedSrv)
+        self.GetLookStimulusSpeedSrv = rospy.Service("basic_awareness/get_look_stimulus_speed", GetFloat, self.handleGetLookStimulusSpeedSrv)
+        self.SetLookBackSpeedSrv = rospy.Service("basic_awareness/set_look_back_speed", SetFloat, self.handleSetLookBackSpeedSrv)
+        self.GetLookBackSpeedSrv = rospy.Service("basic_awareness/get_look_back_speed", GetFloat, self.handleGetLookBackSpeedSrv)
+        self.ResetAllParametersSrv = rospy.Service("basic_awareness/reset_all_parameters", Empty, self.handleResetAllParametersSrv)
         
         rospy.loginfo("naoqi_basic_awareness initialized")
 
@@ -102,11 +116,22 @@ class NaoqiBasicAwareness(NaoqiNode):
             rospy.logerr("Exception caught:\n%s", e)
             return res
 
-    def handleIsAwarenessPausedSrv(self, req):
-        res = TriggerResponse()
+    def handleIsStimulusDetectionEnabledSrv(self, req):
+        res = SetStringResponse()
         res.success = False
         try:
-            res.success = self.basicAwarenessProxy.isAwarenessPaused()
+            res.success = self.basicAwarenessProxy.isStimulusDetectionEnabled(req.data)
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return res
+
+    def handleSetStimulusDetectionEnabledSrv(self, req):
+        res = SetStimulusDetectionEnabledResponse()
+        res.success = False
+        try:
+            self.basicAwarenessProxy.setStimulusDetectionEnabled(req.data, req.status)
+            res.success = True
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
@@ -141,10 +166,19 @@ class NaoqiBasicAwareness(NaoqiNode):
             rospy.logerr("Exception caught:\n%s", e)
             return None
 
+    def handleTriggerStimulusSrv(self, req):
+        res = TriggerStimulusResponse()
+        try:
+            res.people_id = self.basicAwarenessProxy.triggerStimulus([req.position.x, req.position.y, req.position.z])
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
     def handleSetTrackingModeSrv(self, req):
         res = SetStringResponse()
         res.success = False
-        try: 
+        try:
             self.basicAwarenessProxy.setTrackingMode(req.data)
             res.success = True
             return res
@@ -154,8 +188,57 @@ class NaoqiBasicAwareness(NaoqiNode):
 
     def handleGetTrackingModeSrv(self, req):
         res = GetStringResponse()
-        try: 
+        try:
             res.data = self.basicAwarenessProxy.getTrackingMode()
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
+    def handleSetLookStimulusSpeedSrv(self, req):
+        res = SetFloatResponse()
+        res.success = False
+        try:
+            self.basicAwarenessProxy.setParameter("LookStimulusSpeed", req.data)
+            res.success = True
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
+    def handleGetLookStimulusSpeedSrv(self, req):
+        res = GetFloatResponse()
+        try:
+            res.data = self.basicAwarenessProxy.getParameter("LookStimulusSpeed")
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
+    def handleSetLookBackSpeedSrv(self, req):
+        res = SetFloatResponse()
+        res.success = False
+        try:
+            self.basicAwarenessProxy.setParameter("LookBackSpeed", req.data)
+            res.success = True
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
+    def handleGetLookBackSpeedSrv(self, req):
+        res = GetFloatResponse()
+        try:
+            res.data = self.basicAwarenessProxy.getParameter("LookBackSpeed")
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
+    def handleResetAllParametersSrv(self, req):
+        try:
+            res = EmptyResponse()
+            self.basicAwarenessProxy.resetAllParameters()
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
