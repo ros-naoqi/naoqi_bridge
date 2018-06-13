@@ -216,7 +216,7 @@ class NaoqiFaceDetection (ALModule, NaoqiNode):
             try:
                 if self.faceDetectedPub.get_num_connections() > 0:
                     face_detected_data = self.memProxy.getData("FaceDetected")
-                    if len(face_detected_data) > 0:
+                    if face_detected_data is not None and len(face_detected_data) > 0:
                         face_detected_msg = FaceDetected()
                         face_detected_msg.header.stamp = rospy.get_rostime()
                         face_detected_msg.camera_id = face_detected_data[4]
