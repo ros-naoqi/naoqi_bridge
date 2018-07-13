@@ -269,12 +269,19 @@ class NaoqiFaceDetection (ALModule, NaoqiNode):
                         face_detected_msg.face_info.extra_info.mouth.right_limit_y = face_detected_data[1][0][1][8][3]
                         face_detected_msg.face_info.extra_info.mouth.top_limit_x = face_detected_data[1][0][1][8][4]
                         face_detected_msg.face_info.extra_info.mouth.top_limit_y = face_detected_data[1][0][1][8][5]
-             
-                        if len(face_detected_data[1][1]) > 0:
-                            face_detected_msg.time_filtered_reco_info.status = face_detected_data[1][1][0]
-                            if len(face_detected_data[1][1]) > 1 and len(face_detected_data[1][1][1]) > 0:
-                                for i in range(len(face_detected_data[1][1][1])):
-                                    face_detected_msg.time_filtered_reco_info.face_label.append(face_detected_data[1][1][1][i])
+
+                        # comment these parts until I can solve the error below:
+                        # ROSSerializationException: field time_filtered_reco_info.status must be unsigned integer type
+                        # if len(face_detected_data[1]) > 1:
+                        #     # face_detected_data[1][1] exists
+                        #     if len(face_detected_data[1][1]) > 0:
+                        #         face_detected_msg.time_filtered_reco_info.status = face_detected_data[1][1][0]
+                        #     else:
+                        #         face_detected_msg.time_filtered_reco_info.status = 0
+                        #     if len(face_detected_data[1][1]) > 1 and len(face_detected_data[1][1][1]) > 0:
+                        #         # face_detected_data[1][1][1] exists ([] or [label1] or [label1, label2] ...)
+                        #         for i in range(len(face_detected_data[1][1][1])):
+                        #             face_detected_msg.time_filtered_reco_info.face_label.append(face_detected_data[1][1][1][i])
                         self.faceDetectedPub.publish(face_detected_msg)
 
             except RuntimeError, e:
