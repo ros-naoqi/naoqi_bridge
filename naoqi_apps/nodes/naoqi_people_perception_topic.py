@@ -295,6 +295,8 @@ class NaoqiPeoplePerceptionTopic (NaoqiNode):
                                     gaze_analysis_msg.looking_at_robot_score = looking_at_robot_score_data
 
                             # ALEngagementZones
+                            # We need to enable life
+                            # http://doc.aldebaran.com/2-4/naoqi/peopleperception/alengagementzones-api.html#PeoplePerception/Person/%3CID%3E/EngagementZone
                             engagement_zones = "PeoplePerception/Person/" + str(people_detected_msg.people_id) + "/EngagementZone"
                             data_list = self.memProxy.getDataList(engagement_zones)
                             if (len (data_list)) > 0:
