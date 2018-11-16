@@ -58,7 +58,7 @@ class PoseController(NaoqiNode):
 
         self.connectNaoQi()
 
-        self.rate = 10
+        self.rate = rospy.Rate(10) 
 
         # store the number of joints in each motion chain and collection, used for sanity checks
         self.collectionSize = {}
