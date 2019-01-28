@@ -209,21 +209,21 @@ class NaoqiCam (NaoqiNode):
         camParams = []
 
         camParams.append( (kCameraAecAlgorithmID, new_config['auto_exposure_algo']) )
-        camParams.append( (kCameraContrastID, new_config['contrast']) )
+#        camParams.append( (kCameraContrastID, new_config['contrast']) )
         camParams.append( (kCameraSaturationID, new_config['saturation']) )
-        camParams.append( (kCameraHueID, new_config['hue']) ) # Migth be deprecated
+#        camParams.append( (kCameraHueID, new_config['hue']) ) # Migth be deprecated
         camParams.append( (kCameraSharpnessID, new_config['sharpness']) )
 
         camParams.append( (kCameraAutoWhiteBalanceID, new_config['auto_white_balance']) )
         if ( new_config['auto_white_balance']==0):
             camParams.append( (kCameraWhiteBalanceID, new_config['white_balance']) )
 
-        camParams.append( (kCameraAutoExpositionID, new_config['auto_exposition']) )
-        if ( new_config['auto_exposition']==0):
-            camParams.append( (kCameraGainID, new_config['gain']) )
-            camParams.append( (kCameraExposureID, new_config['exposure']) )
-        else:
-            camParams.append( (kCameraBrightnessID, new_config['brightness']) )
+#        camParams.append( (kCameraAutoExpositionID, new_config['auto_exposition']) )
+#        if ( new_config['auto_exposition']==0):
+#            camParams.append( (kCameraGainID, new_config['gain']) )
+#            camParams.append( (kCameraExposureID, new_config['exposure']) )
+#        else:
+#            camParams.append( (kCameraBrightnessID, new_config['brightness']) )
 
         return camParams
 
