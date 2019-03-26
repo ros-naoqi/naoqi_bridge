@@ -127,7 +127,9 @@ class NaoqiPhotoCapture(NaoqiNode):
         res = SetStringResponse()
         res.success = False
         try:
-            self.folderPath = req.data
+            # remove /
+            folderName = (req.data).replace("/", "")
+            self.folderPath = "/home/nao/.local/share/PackageManager/apps/"+ folderName +"/html/"
             rospy.loginfo("Picture Folder Path is set to " + self.folderPath)
             res.success = True
             return res
