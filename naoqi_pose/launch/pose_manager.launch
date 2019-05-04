@@ -2,7 +2,7 @@
 
   <arg name="nao_ip" default="$(optenv NAO_IP 127.0.0.1)" />
   <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
-
+  <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
 
   <node pkg="naoqi_pose" type="pose_controller.py" name="pose_controller" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen" />
 
