@@ -4,9 +4,9 @@
   <arg name="nao_port" default="$(optenv NAO_PORT 9559)" />
   <env name="PYTHONPATH" value="$(env PYTHONPATH)" />
 
-  <node pkg="naoqi_pose" type="pose_controller.py" name="pose_controller" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" output="screen" />
+  <node pkg="naoqi_pose" type="pose_controller.py" name="pose_controller" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" required="true" output="screen" />
 
-  <node pkg="naoqi_pose" type="pose_manager.py" name="pose_manager">
+  <node pkg="naoqi_pose" type="pose_manager.py" name="pose_manager" required="true">
     <rosparam file="$(find naoqi_pose)/config/basic_poses.yaml" command="load" ns="poses" />
     <!-- You can define here a path to a Choregraphe posture library (XAP file). -->
     <param name="xap" value="$(find naoqi_pose)/config/basic.xap" />
