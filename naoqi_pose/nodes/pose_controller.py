@@ -92,7 +92,7 @@ class PoseController(NaoqiNode):
         self.enableLifeSrv = rospy.Service("life/enable", Empty, self.handleLifeSrv)
         self.disableLifeSrv = rospy.Service("life/disable", Empty, self.handleLifeOffSrv)
         self.getLifeSrv = rospy.Service("life/get_state", Trigger, self.handleGetLifeSrv)
-
+        self.robotIsWakeUpSrv = rospy.Service("is_robot_wakeup", Trigger, self.handleRobotIsWakeUpSrv)
 
         #Start simple action servers
         self.jointTrajectoryServer = actionlib.SimpleActionServer("joint_trajectory", JointTrajectoryAction,
@@ -223,6 +223,16 @@ class PoseController(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception while getting life state:\n%s", e)
+            return None
+
+    def handleRobotIsWakeUpSrv(self, req):
+        try:
+            res = TriggerResponse()
+            res.success = self.motionProxy.robotIsWakeUp()
+            rospy.loginfo("robot is wakeup?: " + str(res.success))
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception while getting the status whether robot is wakeup:\n%s", e)
             return None
 
     def jointTrajectoryGoalMsgToAL(self, goal):
