@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from naoqi_driver.naoqi_node import NaoqiNode
-from std_srvs.srv import (
+from naoqi_bridge_msgs.srv import (
     SetStringResponse, 
     SetString
 )
