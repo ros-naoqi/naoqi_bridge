@@ -67,16 +67,16 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handleIsEnabledSrv(self, req):
         try:
             res = TriggerResponse()
-            res.success = self.basicAwarenessProxy.isEnabled()
+            res.success = self.basicAwarenessProxy.isEnable()
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleIsRunningSrv(self, req):
         res = TriggerResponse()
@@ -86,7 +86,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handlePauseAwarenessSrv(self, req):
         try:
@@ -95,7 +95,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleResumeAwarenessSrv(self, req):
         try:
@@ -104,7 +104,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleIsAwarenessPausedSrv(self, req):
         res = TriggerResponse()
@@ -114,7 +114,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handleIsStimulusDetectionEnabledSrv(self, req):
         res = SetStringResponse()
@@ -124,7 +124,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handleSetStimulusDetectionEnabledSrv(self, req):
         res = SetStimulusDetectionEnabledResponse()
@@ -135,7 +135,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handleSetEngagementModeSrv(self, req):
         res = SetStringResponse()
@@ -146,7 +146,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handleGetEngagementModeSrv(self, req):
         res = GetStringResponse()
@@ -155,7 +155,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleEngagePersonSrv(self, req):
         res = SetFloatResponse()
@@ -164,7 +164,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleTriggerStimulusSrv(self, req):
         res = TriggerStimulusResponse()
@@ -173,7 +173,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleSetTrackingModeSrv(self, req):
         res = SetStringResponse()
@@ -184,7 +184,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handleGetTrackingModeSrv(self, req):
         res = GetStringResponse()
@@ -193,7 +193,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleSetLookStimulusSpeedSrv(self, req):
         res = SetFloatResponse()
@@ -204,7 +204,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleGetLookStimulusSpeedSrv(self, req):
         res = GetFloatResponse()
@@ -213,7 +213,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleSetLookBackSpeedSrv(self, req):
         res = SetFloatResponse()
@@ -224,7 +224,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleGetLookBackSpeedSrv(self, req):
         res = GetFloatResponse()
@@ -233,7 +233,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
     def handleResetAllParametersSrv(self, req):
         try:
@@ -242,7 +242,7 @@ class NaoqiBasicAwareness(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
 if __name__ == '__main__':
     basic_awareness = NaoqiBasicAwareness()

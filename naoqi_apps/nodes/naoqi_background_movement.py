@@ -60,7 +60,7 @@ class NaoqiBackgroundMovement(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return res
+            rospy.signal_shutdown("service call failed")
 
     def handleIsEnabledSrv(self, req):
         try:
@@ -69,7 +69,7 @@ class NaoqiBackgroundMovement(NaoqiNode):
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
-            return None
+            rospy.signal_shutdown("service call failed")
 
 if __name__ == '__main__':
     background_movement = NaoqiBackgroundMovement()
