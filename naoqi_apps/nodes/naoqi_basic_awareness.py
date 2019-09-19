@@ -72,7 +72,7 @@ class NaoqiBasicAwareness(NaoqiNode):
     def handleIsEnabledSrv(self, req):
         try:
             res = TriggerResponse()
-            res.success = self.basicAwarenessProxy.isEnable()
+            res.success = self.basicAwarenessProxy.isEnabled()
             return res
         except RuntimeError, e:
             rospy.logerr("Exception caught:\n%s", e)
