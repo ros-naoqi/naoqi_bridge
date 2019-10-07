@@ -21,6 +21,7 @@ class NaoqiTablet(NaoqiNode):
         self.connectNaoQi()
         self.image_folder = "img/"
         self.showImageSrv = rospy.Service("show_image", SetString, self.handleShowImageSrv)
+        self.showImageNoCacheSrv = rospy.Service("show_image_no_cache", SetString, self.handleShowImageNoCacheSrv)
         self.hideImageSrv = rospy.Service("hide_image", Empty, self.handleHideImageSrv)
         self.showAppSrv = rospy.Service("show_app", SetString, self.handleShowAppSrv)
         self.showWebViewSrv = rospy.Service("show_webview", SetString, self.handleShowWebviewSrv)
@@ -51,6 +52,22 @@ class NaoqiTablet(NaoqiNode):
                 rospy.loginfo("Showing image: " + str(req.data))
                 res.success = True
                
+            else:
+                rospy.loginfo("Please confirm the file name and " + str(req.data) + " really exists under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
+                res.success = False
+            return res
+        except RuntimeError, e:
+            rospy.logerr("Exception caught:\n%s", e)
+            return None
+
+    def handleShowImageNoCacheSrv(self, req):
+        try:
+            image_path = "http://198.18.0.1/apps/"+ self.image_folder + str(req.data)
+            res = SetStringResponse()
+            if self.tabletProxy.showImageNoCache(image_path) == True:
+                rospy.loginfo("Showing image: " + str(req.data))
+                res.success = True
+
             else:
                 rospy.loginfo("Please confirm the file name and " + str(req.data) + " really exists under /home/nao/.local/share/PackageManager/apps/" + self.image_folder + "html.")
                 res.success = False
